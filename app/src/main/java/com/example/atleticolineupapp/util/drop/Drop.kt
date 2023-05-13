@@ -64,6 +64,5 @@ fun DropPaneContent(
                 modifier = modifier.align(Alignment.Center),
                 tint = Color.Red)
         }
-        Icon(Icons.Filled.Person, contentDescription = "", tint = Color.Red)
     }
 }

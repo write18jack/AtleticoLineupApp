@@ -3,7 +3,7 @@ package com.example.atleticolineupapp.util
 import androidx.annotation.DrawableRes
 import com.example.atleticolineupapp.R
 
-data class PlayerItem(val name: String, @DrawableRes val image: Int)
+data class PlayerItem(val name: String, @DrawableRes val image: Int, val key: Int = -1)
 
 val PlayerList = listOf(
     PlayerItem("GRIEZMANN", R.drawable.griezmann),

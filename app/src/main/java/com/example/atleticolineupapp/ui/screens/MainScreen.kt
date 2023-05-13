@@ -20,62 +20,48 @@ import com.example.atleticolineupapp.util.BottomBar
 import com.example.atleticolineupapp.util.drag.DragContainer
 import com.example.atleticolineupapp.util.drop.DropContainer
 import kotlinx.coroutines.launch
+import org.burnoutcrew.reorderable.NoDragCancelledAnimation
+import org.burnoutcrew.reorderable.rememberReorderableLazyGridState
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun MainScreen(
-    vm: SheetViewModelX = viewModel(),
+    vm: PlayersTabViewModel = viewModel(),
     vm2: FormationViewModel = viewModel()
 ) {
+    //state&scope of bottomSheet
     val sheetState = rememberSheetState()
     val scope = rememberCoroutineScope()
+    //bottomSheet expanded state
+    var isDroppingItem by remember { mutableStateOf(true) }
+    var isItemInBounds by remember { mutableStateOf(true) }
+
+    val reorderState = rememberReorderableLazyGridState(
+        dragCancelledAnimation = NoDragCancelledAnimation(),
+        onMove = vm::movePlayer
+    )
 
     var bottomSheetContent: (@Composable () -> Unit)? by remember {
         mutableStateOf(null)
     }
-
-    val state = vm.sheetHandler.handle()
     val constraintSetItem by vm2.constraintSetItem.collectAsState()
 
-    var isDroppingItem by remember { mutableStateOf(true) }
-    var isItemInBounds by remember { mutableStateOf(true) }
-
+    //when click backButton
     BackHandler(sheetState.isVisible) {
         scope.launch {
             sheetState.hide()
         }
     }
-
-//    ModalBottomSheetLayout(
-//        sheetState = sheetState,
-//        sheetBackgroundColor = Color.Transparent,
-//        sheetContent = {
-//            DropContainer(
-//                modifier = Modifier,
-//                onDrag = { isBounds, isDragging ->
-//                    isItemInBounds = isBounds
-//                    isDroppingItem = isDragging
-//                }
-//            ) {
-//                //itemのDragでPlayerTabを出るとclose
-//                if (isDroppingItem && !isItemInBounds) {
-//                    LaunchedEffect(Unit) {
-//                        vm.onHideSheet()
-//                    }
-//                }
-//                //formationTabタップ時にclose
-//                LaunchedEffect(key1 = constraintSetItem, block = {
-//                    vm.onHideSheet()
-//                })
-//                Box(
-//                    modifier = Modifier.defaultMinSize(minHeight = 1.dp)
-//                ) {
-//                    bottomSheetContent?.let { it() }
-//                }
-//            }
-//        }
-//    )
-
+    //itemのDragでPlayerTabを出るとclose
+    if (!isItemInBounds) {
+        LaunchedEffect(Unit) {
+            sheetState.hide()
+        }
+    }
+    //formationTabタップ時にclose
+    LaunchedEffect(key1 = constraintSetItem, block = {
+        sheetState.hide()
+    })
     DragContainer(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -90,10 +76,11 @@ fun MainScreen(
                 BottomBar(
                     openPlayerSheet = {
                         bottomSheetContent = {
-                            PlayerSlotSheet(modifier = Modifier)
+                            PlayerSlotSheet(players = vm.players)
                         }
-//                            sheetState.show()
-                        vm.onOpenSheet()
+                        scope.launch {
+                            sheetState.show()
+                        }
                     },
                     openFormationSheet = {
                         bottomSheetContent = {
@@ -101,8 +88,9 @@ fun MainScreen(
                                 onCLickTask = { vm2.constraintSetItem }
                             )
                         }
-//                            sheetState.show()
-                        vm.onOpenSheet()
+                        scope.launch {
+                            sheetState.show()
+                        }
                     }
                 )
             }
@@ -121,36 +109,18 @@ fun MainScreen(
                         isDroppingItem = isDragging
                     }
                 ) {
-                    //itemのDragでPlayerTabを出るとclose
-                    if (isDroppingItem && !isItemInBounds) {
-                        LaunchedEffect(Unit) {
-                            //sheetState.hide()
-                            vm.onHideSheet()
-                        }
-                    }
-                    //formationTabタップ時にclose
-                    LaunchedEffect(key1 = constraintSetItem, block = {
-//                            sheetState.hide()
-                        vm.onHideSheet()
-                    })
                     if (sheetState.isVisible) {
                         ModalBottomSheet(
-                            sheetState = state,
+                            sheetState = sheetState,
                             onDismissRequest = {
                                 scope.launch {
-//                                    sheetState.hide()
-                                    vm.onHideSheet()
+                                    sheetState.hide()
                                 }
                             },
                             containerColor = Color.Transparent,
-                            //contentColor = Color.Transparent
+                            contentColor = Color.Transparent
                         ) {
-                            Box(
-                                modifier = Modifier.defaultMinSize(minHeight = 1.dp)
-                            ) {
-                                bottomSheetContent?.let { it() }
-                            }
-//                            bottomSheetContent?.let { it() }
+                            bottomSheetContent?.let { it() }
                         }
                     }
                 }

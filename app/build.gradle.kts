@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = ("com.example.createvc")
-        minSdk = (30)
+        minSdk = (28)
         targetSdk = (33)
         versionCode = (1)
         versionName = ("1.0")
@@ -53,6 +53,7 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.1.0-alpha07")
     implementation(libs.bundles.android.ui)
     implementation("androidx.compose.ui:ui-tooling-preview:1.4.1")
+    implementation("org.burnoutcrew.composereorderable:reorderable:0.9.6")
 
     //test
     testImplementation(libs.bundles.test)
