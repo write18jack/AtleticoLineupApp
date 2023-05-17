@@ -28,20 +28,19 @@ import com.example.atleticolineupapp.util.drag.DragContainer
 import com.example.atleticolineupapp.util.drag.DragData
 import com.example.atleticolineupapp.util.drag.DragTarget
 import com.example.atleticolineupapp.util.drop.DropContainer
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun PlayerSlotSheet(
     modifier: Modifier = Modifier,
-    //reorderState: ReorderableLazyGridState,
+    lazyGridState: LazyGridState,
+    coroutineScope: CoroutineScope,
     players: List<PlayerItem>,
 ) {
 //    val reorderState = rememberReorderableLazyGridState(
 //        onMove = vm::movePlayer
 //    )
-    val lazyGridState = rememberLazyGridState()
-    val coroutineScope = rememberCoroutineScope()
-
     var isStartDroppingItem by remember { mutableStateOf(false) }
     var isStartScrollInBounds by remember { mutableStateOf(false) }
 
@@ -86,13 +85,13 @@ fun PlayerSlotSheet(
             //.detectReorderAfterLongPress(reorderState)
         ) {
             items(players, { it.key }) { item ->
-                Box {
+
                     //SlotCard()
                     PlayerCard(
                         player = item,
                         //checkDrag = isDragging
                     )
-                }
+
             }
         }
         DropContainer(
@@ -166,7 +165,7 @@ fun PlayerCard(player: PlayerItem) { //checkDrag: Boolean
     val dragData = DragData(type = MimeType.IMAGE_JPEG, data = dragImage)
     //val elevation = animateDpAsState(if (checkDrag) 50.dp else 0.dp)
 
-    DragTarget(modifier = Modifier.size(110.dp, 160.dp), dragData = dragData) {
+    DragTarget(modifier = Modifier.size(100.dp, 150.dp), dragData = dragData) {
         Card(
             shape = RoundedCornerShape(18.dp),
             modifier = Modifier
@@ -210,8 +209,8 @@ suspend fun ScrollableState.autoStartScroll(
     var previousValue = 0f
     scroll(MutatePriority.UserInput) {
         animate(
-            initialValue =  0f,
-            targetValue =  SCROLL_DX2,
+            initialValue = 0f,
+            targetValue = SCROLL_DX2,
             animationSpec = animationSpec
         ) { currentValue, _ ->
             previousValue += scrollBy(currentValue - previousValue)
@@ -238,6 +237,10 @@ suspend fun ScrollableState.autoEndScroll(
 @Composable
 fun ListPreview() {
     DragContainer(modifier = Modifier.fillMaxSize()) {
-        PlayerSlotSheet(players = PlayersTabViewModel().players)
+        PlayerSlotSheet(
+            lazyGridState = rememberLazyGridState(),
+            coroutineScope = rememberCoroutineScope(),
+            players = PlayersTabViewModel().players
+        )
     }
 }

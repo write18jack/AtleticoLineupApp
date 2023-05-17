@@ -3,8 +3,10 @@ package com.example.atleticolineupapp.util
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
@@ -14,16 +16,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.atleticolineupapp.ui.tab.SheetViewModel
 import com.example.atleticolineupapp.util.drop.DropContainer
+import java.util.function.BinaryOperator
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomBar(
     modifier: Modifier = Modifier,
     openPlayerSheet: () -> Unit,
     openFormationSheet: () -> Unit,
-    vm: SheetViewModel = viewModel()
+    modalBottomSheetState: ModalBottomSheetState,
+    isItemInBounds: Boolean,
+    isDroppingItem: Boolean
 ) {
-    var isDroppingItem by remember { mutableStateOf(false) }
-    var isItemInBounds by remember { mutableStateOf(false) }
+    var isLocalItemInBounds by remember { mutableStateOf(isItemInBounds) }
+    var isLocalDroppingItem by remember { mutableStateOf(isDroppingItem) }
+
+    if (isLocalDroppingItem && isLocalItemInBounds) {
+        LaunchedEffect(Unit) {
+            modalBottomSheetState.show()
+        }
+    }
+
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround
@@ -31,15 +44,10 @@ fun BottomBar(
         DropContainer(
             modifier = Modifier,
             onDrag = { isBounds, isDragging ->
-                isItemInBounds = isBounds
-                isDroppingItem = isDragging
+                isLocalItemInBounds = isBounds
+                isLocalDroppingItem = isDragging
             }
         ) {
-            if (isDroppingItem && isItemInBounds) {
-                LaunchedEffect(Unit) {
-                    vm.onOpenSheet()
-                }
-            }
             IconButton(
                 onClick = openPlayerSheet
             ) {

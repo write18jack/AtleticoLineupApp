@@ -1,6 +1,7 @@
 package com.example.atleticolineupapp.ui.tab
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -69,6 +70,7 @@ import com.example.atleticolineupapp.ui.formation.ManageFormation
 @Composable
 fun FormationSheet(
     modifier: Modifier = Modifier,
+    list: List<FormationItem>,
     onCLickTask: (manageFormation: ManageFormation)->Unit
 ){
     LazyColumn(
@@ -76,10 +78,13 @@ fun FormationSheet(
         verticalArrangement = Arrangement.spacedBy(5.dp),
         contentPadding = PaddingValues(5.dp)
     ){
-        items(formationItemList){
+        items(
+            items = list,
+            key = { item -> item.id }
+        ){FormationItem ->
             FormationCard(
-                formationItem = it,
-                onClick = { onCLickTask(it.manageFormation) }
+                formationItem = FormationItem,
+                onClick = { onCLickTask(FormationItem.manageFormation) }
             )
         }
     }
@@ -96,7 +101,13 @@ fun FormationCard(
             .background(Color.White, RoundedCornerShape(5.dp))
             .clickable(
                 onClick = onClick
-            ),
+            )
+            .border(
+                width = 2.dp,
+                color = Color.Black,
+                shape = RoundedCornerShape(5.dp)
+            )
+        ,
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -110,4 +121,5 @@ fun FormationCard(
 @Preview(showBackground = true)
 @Composable
 fun TabPreview(){
+
 }

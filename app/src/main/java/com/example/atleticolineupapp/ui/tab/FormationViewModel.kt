@@ -12,14 +12,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-data class FormationItem(val formation: String, var manageFormation: ManageFormation)
+data class FormationItem(
+    val id: Int,
+    val formation: String,
+    var manageFormation: ManageFormation,
+)
 
 val formationItemList = listOf(
-    FormationItem( "4-4-2", F442()),
-    FormationItem("4-3-3", F442()),
-    FormationItem("4-1-4-1", F4141()),
-    FormationItem("5-3-2", F532()),
-    FormationItem("3-1-4-2", F442())
+    FormationItem(id = 0, "4-4-2", F442()),
+    FormationItem(id = 1,"4-3-3", F442()),
+    FormationItem(id = 2,"4-1-4-1", F4141()),
+    FormationItem(id = 3,"5-3-2", F532()),
+    FormationItem(id = 4,"3-1-4-2", F442())
 )
 
 class FormationViewModel : ViewModel() {
@@ -35,7 +39,6 @@ class FormationViewModel : ViewModel() {
 //            task.constraintSet = item
 //        }
 //    }
-
     fun onChangeConstraintItem(newValue: ManageFormation){
         viewModelScope.launch {
             _constraintSetItem.value = newValue
