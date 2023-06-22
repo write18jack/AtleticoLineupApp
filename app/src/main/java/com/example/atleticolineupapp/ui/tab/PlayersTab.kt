@@ -125,14 +125,6 @@ fun PlayerSlotSheet(
 }
 
 @Composable
-fun ScrollTopCard(modifier: Modifier) {
-    Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(Color.Transparent)
-    ) {}
-}
-
-@Composable
 fun SlotCard() {
     Card(
         shape = RoundedCornerShape(18.dp),
@@ -165,7 +157,19 @@ fun PlayerCard(player: PlayerItem) { //checkDrag: Boolean
     val dragData = DragData(type = MimeType.IMAGE_JPEG, data = dragImage)
     //val elevation = animateDpAsState(if (checkDrag) 50.dp else 0.dp)
 
-    DragTarget(modifier = Modifier.size(100.dp, 150.dp), dragData = dragData) {
+    var isDroppingItem by remember { mutableStateOf(true) }
+    var isItemInBounds by remember { mutableStateOf(true) }
+    DropContainer(
+        modifier = Modifier,
+        onDrag = { isBounds, isDragging ->
+            isItemInBounds = isBounds
+            isDroppingItem = isDragging
+        }
+    ) {
+
+    }
+
+    DragTarget(modifier = Modifier, dragData = dragData) {
         Card(
             shape = RoundedCornerShape(18.dp),
             modifier = Modifier
@@ -198,6 +202,14 @@ fun PlayerCard(player: PlayerItem) { //checkDrag: Boolean
             }
         }
     }
+}
+
+@Composable
+fun ScrollTopCard(modifier: Modifier) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(Color.Transparent)
+    ) {}
 }
 
 private const val SCROLL_DX = 25f //scroll speed & direction

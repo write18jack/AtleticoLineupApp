@@ -68,7 +68,7 @@ import com.example.atleticolineupapp.ui.formation.ManageFormation
 //}
 
 @Composable
-fun FormationSheet(
+fun FormationTab(
     modifier: Modifier = Modifier,
     list: List<FormationItem>,
     onCLickTask: (manageFormation: ManageFormation)->Unit
@@ -106,8 +106,7 @@ fun FormationCard(
                 width = 2.dp,
                 color = Color.Black,
                 shape = RoundedCornerShape(5.dp)
-            )
-        ,
+            ),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -116,10 +115,4 @@ fun FormationCard(
             text = formationItem.formation,fontSize = 18.sp
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun TabPreview(){
-
 }

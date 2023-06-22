@@ -1,5 +1,6 @@
 package com.example.atleticolineupapp.util
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,11 +11,12 @@ import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.atleticolineupapp.ui.tab.SheetViewModel
+import com.example.atleticolineupapp.ui.theme.MidNightBlue
 import com.example.atleticolineupapp.util.drop.DropContainer
 import java.util.function.BinaryOperator
 
@@ -38,7 +40,9 @@ fun BottomBar(
     }
 
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .background(color = MidNightBlue),
         horizontalArrangement = Arrangement.SpaceAround
     ) {
         DropContainer(
@@ -51,13 +55,13 @@ fun BottomBar(
             IconButton(
                 onClick = openPlayerSheet
             ) {
-                Icon(Icons.Filled.Person, contentDescription = "", tint = Color.Red)
+                Icon(Icons.Outlined.Person, contentDescription = "", tint = Color.White)
             }
         }
         IconButton(
             onClick = openFormationSheet
         ) {
-            Icon(Icons.Filled.List, contentDescription = "", tint = Color.Red)
+            Icon(Icons.Filled.List, contentDescription = "", tint = Color.White)
         }
     }
 }

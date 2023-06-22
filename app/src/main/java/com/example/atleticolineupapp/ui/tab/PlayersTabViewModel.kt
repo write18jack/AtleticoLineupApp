@@ -5,7 +5,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import com.example.atleticolineupapp.util.PlayerItem
 import com.example.atleticolineupapp.util.PlayerList
-import org.burnoutcrew.reorderable.ItemPosition
 
 @Stable
 class PlayersTabViewModel : ViewModel() {

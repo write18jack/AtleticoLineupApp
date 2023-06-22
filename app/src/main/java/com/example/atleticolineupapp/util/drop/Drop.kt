@@ -1,9 +1,11 @@
 package com.example.atleticolineupapp.util.drop
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
@@ -14,8 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.atleticolineupapp.ui.theme.Purple200
 import com.example.atleticolineupapp.util.drag.DragData
 import com.example.atleticolineupapp.util.drag.LocalDragTargetInfo
 
@@ -51,18 +57,23 @@ fun DropPaneContent(
     if (dragImage != null) {
         Image(
             painter = dragImage,
-            contentDescription = "",
-            modifier = modifier.clip(shape = ShapeDefaults.Large)
+            contentDescription = null,
+            modifier = modifier.clip(shape = ShapeDefaults.Large),
+            contentScale = ContentScale.Crop
         )
     } else {
         Box(
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier
+                .fillMaxSize()
+                .background(color = Color.Transparent)
         ) {
             Icon(
                 Icons.Filled.Person,
-                contentDescription = "",
-                modifier = modifier.align(Alignment.Center),
-                tint = Color.Red)
+                contentDescription = null,
+                modifier = modifier
+                    .align(Alignment.Center)
+                    .size(60.dp),
+                tint = Color.LightGray)
         }
     }
 }

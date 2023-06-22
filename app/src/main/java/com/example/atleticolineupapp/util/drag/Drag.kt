@@ -34,9 +34,11 @@ fun DragContainer(
         Box(modifier = modifier.fillMaxSize())
         {
             content()
+
+            // DraggingItem
             if (state.isDragging) {
                 var targetSize by remember {
-                    mutableStateOf(IntSize.Zero)
+                     mutableStateOf(IntSize.Zero)
                 }
                 Box(modifier = Modifier
                     .graphicsLayer {

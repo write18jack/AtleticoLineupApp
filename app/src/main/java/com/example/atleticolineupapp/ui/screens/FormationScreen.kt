@@ -1,118 +1,105 @@
 package com.example.atleticolineupapp.ui.screens
 
+import android.content.res.Resources
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.Card
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.ConstraintSet
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.constraintlayout.compose.layoutId
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.atleticolineupapp.dragAndDrop.MimeType
+import com.example.atleticolineupapp.ui.formation.F4141
 import com.example.atleticolineupapp.ui.formation.F442
 import com.example.atleticolineupapp.ui.formation.ManageFormation
 import com.example.atleticolineupapp.ui.formation.positionList
+import com.example.atleticolineupapp.ui.tab.FormationTabViewModel
+import com.example.atleticolineupapp.ui.theme.Purple200
+import com.example.atleticolineupapp.ui.theme.Teal200
 import com.example.atleticolineupapp.util.drop.DropContainer
 import com.example.atleticolineupapp.util.drop.DropPaneContent
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
-// mutablelistを使ってみる
-//stateをviewmodelで管理する
-@Stable
-class DropStateViewModel : ViewModel() {
-    private val _dragImage = MutableStateFlow<Painter?>(null)
-    val dragImage: StateFlow<Painter?> = _dragImage
-    fun onChangeDragImage(newValue: Painter?) {
-        viewModelScope.launch {
-            _dragImage.value = newValue
-        }
-    }
-
-    private val _isDroppingItem = MutableStateFlow<Boolean>(false)
-    val isDroppingItem: StateFlow<Boolean> = _isDroppingItem
-    fun onChangeIsDroppingItem(newValue: Boolean) {
-        viewModelScope.launch {
-            _isDroppingItem.value = newValue
-        }
-    }
-
-    private val _isItemInBounds = MutableStateFlow<Boolean>(false)
-    val isItemInBounds: StateFlow<Boolean> = _isItemInBounds
-    fun onChangeIsItemInBounds(newValue: Boolean) {
-        viewModelScope.launch {
-            _isItemInBounds.value = newValue
-        }
-    }
-}
-
-@ExperimentalMaterialApi
 @Composable
 fun DisplayFormation(
     modifier: Modifier,
-    manageFormation: ManageFormation
+    manageFormation: ManageFormation,
+    vm: PositionStateViewModel = viewModel(),
+    stateHolder: StateHolder = rememberStateHolder()
 ) {
-    var dragImage by remember { mutableStateOf<Painter?>(null) }
-    var isDroppingItem by remember { mutableStateOf(false) }
-    var isItemInBounds by remember { mutableStateOf(false) }
+    val stateList = vm.positionStateList
 
     ConstraintLayout(
         constraintSet = manageFormation.formationConstraints(),
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
     ) {
-        for (i in positionList) {
+        for (i in 0..10) {
             DropContainer(
-                modifier = Modifier.layoutId(i),
+                modifier = Modifier.layoutId(positionList[i]),
                 onDrag = { isBounds, isDragging ->
-                    isDroppingItem = isDragging
-                    isItemInBounds = isBounds
+                    stateList[i].isDroppingItem = isDragging
+                    stateList[i].isItemInBounds = isBounds
                 }
-            ) {dragData ->
-                Box(
+            ) { dragData ->
+                Card(
+                    shape = RoundedCornerShape(18.dp),
                     modifier = Modifier
-                        .size(60.dp, 60.dp)
-                        .border(width = 1.dp, color = Color.Red)
+                        .padding(5.dp)
+                        .background(color = Color.Transparent)
+                        .size(80.dp, 90.dp)
+                        .border(
+                            width = 3.dp,
+                            color = Color.Black,
+                            shape = RoundedCornerShape(18.dp)
+                        )
+                    // .shadow(elevation.value)
                 ) {
-                    dragData?.let {
-                        if (!isDroppingItem) {
-                            if (dragData.type == MimeType.IMAGE_JPEG) {
-                                dragImage = dragData.data as Painter
+                    Box {
+                        //Dropしてない時にdragData内の中身を調べる
+                        dragData?.let {
+                            if (!stateList[i].isDroppingItem) {
+                                if (dragData.type == MimeType.IMAGE_JPEG) {
+                                    stateList[i].dragImage = dragData.data as Painter
+                                }
                             }
                         }
+                        DropPaneContent(
+                            modifier = Modifier.align(Alignment.Center),
+                            dragImage = stateList[i].dragImage
+                        )
                     }
-                    DropPaneContent(
-                        modifier.align(Alignment.Center),
-                        dragImage
-                    )
                 }
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@Preview
 @Composable
-fun TestScreen() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        DisplayFormation(
-            modifier = Modifier.fillMaxSize(),
-            manageFormation = F442()
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewSample() {
-    TestScreen()
+fun FormationPreview(vm2: FormationTabViewModel = viewModel()) {
+    val constraintSetItemX by vm2.constraintSetItem.collectAsState()
+    DisplayFormation(
+        modifier = Modifier.fillMaxSize(),
+        manageFormation = constraintSetItemX
+    )
 }
