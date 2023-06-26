@@ -34,9 +34,11 @@ fun DragContainer(
         Box(modifier = modifier.fillMaxSize())
         {
             content()
+
+            // DraggingItem
             if (state.isDragging) {
                 var targetSize by remember {
-                    mutableStateOf(IntSize.Zero)
+                     mutableStateOf(IntSize.Zero)
                 }
                 Box(modifier = Modifier
                     .graphicsLayer {
@@ -62,11 +64,11 @@ fun DragTarget(
     dragData: DragData,
     content: @Composable (() -> Unit)
 ) {
-
     var currentPosition by remember { mutableStateOf(Offset.Zero) }
     val currentState = LocalDragTargetInfo.current
 
     Box(modifier = modifier
+        //get layout size
         .onGloballyPositioned {
             currentPosition = it.localToWindow(Offset.Zero)
         }
@@ -76,8 +78,10 @@ fun DragTarget(
                     currentState.dragData = dragData
                     currentState.isDragging = true
                     currentState.dragPosition = currentPosition + it
+                    //動かすitemの実体
                     currentState.draggableComposable = content
                 }, onDrag = { change, dragAmount ->
+                    //どこかで消費されたら
                     change.consume()
                     currentState.dragOffset += Offset(dragAmount.x, dragAmount.y)
                 }, onDragEnd = {
