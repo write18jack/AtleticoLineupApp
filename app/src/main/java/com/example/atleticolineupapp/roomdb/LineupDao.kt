@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface LineupDao {
-
     @Query("SELECT * from Lineup ORDER BY position ASC")
     fun getItems(): Flow<List<Lineup>>
 

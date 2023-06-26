@@ -27,7 +27,7 @@ class FormationTabViewModel : ViewModel() {
     val constraintSetList: List<FormationItem>
         get() = _constraintSetList
 
-    private val _constraintSetItem = MutableStateFlow<ManageFormation>(F532())
+    private val _constraintSetItem = MutableStateFlow<ManageFormation>(F442())
     val constraintSetItem: StateFlow<ManageFormation> = _constraintSetItem
 
     fun onChangeConstraintItem(newValue: ManageFormation){

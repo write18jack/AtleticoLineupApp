@@ -9,7 +9,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintSet
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.atleticolineupapp.ui.screens.DisplayFormation
 import com.example.atleticolineupapp.ui.tab.FormationTabViewModel
@@ -22,7 +21,6 @@ open class ManageFormation {
         }
     }
 }
-
 class F442 : ManageFormation() {
     override fun formationConstraints(): ConstraintSet {
         return ConstraintSet {

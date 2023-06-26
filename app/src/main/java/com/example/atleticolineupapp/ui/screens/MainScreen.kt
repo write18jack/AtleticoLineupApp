@@ -38,10 +38,8 @@ import com.example.atleticolineupapp.util.drop.DropContainer
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 import kotlinx.coroutines.launch
 import androidx.compose.material.icons.filled.Close
-import com.example.atleticolineupapp.util.captureBitmap
-import com.example.atleticolineupapp.util.saveBitmap
+import com.example.atleticolineupapp.ui.formation.positionList
 import com.example.atleticolineupapp.util.saveImage
-import com.example.atleticolineupapp.util.shareImage
 import com.example.atleticolineupapp.util.shareImageUri
 import dev.shreyaspatil.capturable.Capturable
 
@@ -73,8 +71,6 @@ fun MainScreen(
     var formationBitmap: ImageBitmap? by remember { mutableStateOf(null) }
 
     val context = LocalContext.current
-
-//    var snapShot: () -> Bitmap? = { null }
 
     //when click backButton
     BackHandler(sheetState.isVisible) {
@@ -220,20 +216,7 @@ fun BitmapDialog(
     imageBitmap: Bitmap,
     context: Context
 ) {
-//    val uri = saveBitmap(context, imageBitmap)
-
     val coroutineScope = rememberCoroutineScope()
-
-
-//    val sendIntent = Intent().apply {
-//        action = Intent.ACTION_SEND
-//        putExtra(
-//            Intent.EXTRA_STREAM,  // name: 格納するデータの名称
-//            "text send" // value: 格納するデータ
-//        )
-//        type = "image/*" // image/x-ms-bmp
-//    }
-//    val shareIntent = Intent.createChooser(sendIntent, null)
 
     Dialog(onDismissRequest = { }) {
         Column(
@@ -260,24 +243,10 @@ fun BitmapDialog(
                 }
                 IconButton(
                     onClick = {
-//                        MainScope().launch {
-//                            val bitmap = captureBitmap.invoke()
-//                            val uri = saveImage(bitmap, context)
-//                            if (uri != null) {
-//                                shareImageUri(context, uri)
-//                            } else {
-//                                Toast.makeText(
-//                                    context,
-//                                    "uri is null",
-//                                    Toast.LENGTH_SHORT
-//                                ).show()
-//                            }
-//                        }
                     },
                     Modifier.paint(painterResource(id = R.drawable.download_icon))
                 ) {
                 }
-
                 IconButton(
                     onClick = {
                         coroutineScope.launch {
@@ -292,8 +261,6 @@ fun BitmapDialog(
                     )
                 }
             }
-
-
         }
     }
 }

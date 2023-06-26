@@ -11,20 +11,9 @@ data class PositionState(
     var isDroppingItem: Boolean = false
 )
 
-val PositionStates: List<PositionState>  = listOf(
-    PositionState(),
-    PositionState(),
-    PositionState(),
-    PositionState(),
-    PositionState(),
-    PositionState(),
-    PositionState(),
-    PositionState(),
-    PositionState(),
-    PositionState(),
+val PositionStates: List<PositionState>  = List(11){
     PositionState()
-)
-
+}
 @Stable
 class PositionStateViewModel: ViewModel(){
 
@@ -36,13 +25,11 @@ class PositionStateViewModel: ViewModel(){
         )
     })
 }
-
 class StateHolder(
     private val positionStateViewModel: PositionStateViewModel
 ){
     // viewModel変数はget @Composableかメソッド内で呼び出すことができる。
 }
-
 @Composable
 fun rememberStateHolder(
     positionStateViewModel: PositionStateViewModel = viewModel()
