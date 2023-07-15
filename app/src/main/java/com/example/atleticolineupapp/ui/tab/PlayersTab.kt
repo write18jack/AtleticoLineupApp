@@ -1,5 +1,6 @@
 package com.example.atleticolineupapp.ui.tab
 
+import android.util.Log
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.MutatePriority
@@ -17,9 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.atleticolineupapp.dragAndDrop.MimeType
@@ -28,6 +31,7 @@ import com.example.atleticolineupapp.util.drag.DragContainer
 import com.example.atleticolineupapp.util.drag.DragData
 import com.example.atleticolineupapp.util.drag.DragTarget
 import com.example.atleticolineupapp.util.drop.DropContainer
+import com.example.atleticolineupapp.util.drop.PlayerTabDropContainer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -35,43 +39,18 @@ import kotlinx.coroutines.launch
 fun PlayerSlotSheet(
     modifier: Modifier = Modifier,
     lazyGridState: LazyGridState,
-    coroutineScope: CoroutineScope,
     players: List<PlayerItem>,
+    onHeightInfo: (Int) -> Unit
 ) {
-//    val reorderState = rememberReorderableLazyGridState(
-//        onMove = vm::movePlayer
-//    )
-    var isStartDroppingItem by remember { mutableStateOf(false) }
-    var isStartScrollInBounds by remember { mutableStateOf(false) }
 
-    var isEndDroppingItem by remember { mutableStateOf(false) }
-    var isEndScrollInBounds by remember { mutableStateOf(false) }
-
-    if (isStartScrollInBounds) {
-        //!isItemInBoundsでscrollを中断する
-        LaunchedEffect(key1 = Unit) {
-            coroutineScope.launch {
-                while (isStartScrollInBounds) {
-                    lazyGridState.autoStartScroll()
-                    if (!isStartScrollInBounds) break
-                }
-            }
-        }
+    SideEffect {
+        Log.d("composeLog", "PlayerSlotSheet composition!")
     }
 
-    if (isEndScrollInBounds) {
-        //!isItemInBoundsでscrollを中断する
-        LaunchedEffect(key1 = Unit) {
-            coroutineScope.launch {
-                while (isEndScrollInBounds) {
-                    lazyGridState.autoEndScroll()
-                    if (!isEndScrollInBounds) break
-                }
-            }
-        }
-    }
-
-    Box(modifier = modifier) {
+    BoxWithConstraints {
+        val copyPlayersTabHeight = with(LocalDensity.current) { constraints.maxHeight}/3
+        val localScreenHeight = with(LocalDensity.current) { constraints.maxHeight.toDp() }/3
+        onHeightInfo(copyPlayersTabHeight)
         //lazyGridState.layoutInfo
         LazyHorizontalGrid(
             rows = GridCells.Fixed(2),
@@ -80,73 +59,16 @@ fun PlayerSlotSheet(
             verticalArrangement = Arrangement.spacedBy(2.dp),
             horizontalArrangement = Arrangement.spacedBy(2.dp),
             modifier = modifier
-                //.reorderable(reorderState)
-                .height(310.dp)
-            //.detectReorderAfterLongPress(reorderState)
+                .fillMaxWidth()
+                .height(localScreenHeight)
+
         ) {
             items(players, { it.key }) { item ->
-
-                    //SlotCard()
-                    PlayerCard(
-                        player = item,
-                        //checkDrag = isDragging
-                    )
-
+                //SlotCard()
+                PlayerCard(
+                    player = item,
+                )
             }
-        }
-        DropContainer(
-            modifier = modifier.align(alignment = Alignment.CenterStart),
-            onDrag = { isBounds, isDragging ->
-                isStartScrollInBounds = isBounds
-                isStartDroppingItem = isDragging
-            }
-        ) {
-            ScrollTopCard(
-                modifier = modifier
-                    .height(310.dp)
-                    .width(40.dp)
-
-            )
-        }
-        DropContainer(
-            modifier = modifier.align(alignment = Alignment.CenterEnd),
-            onDrag = { isBounds, isDragging ->
-                isEndScrollInBounds = isBounds
-                isEndDroppingItem = isDragging
-            }
-        ) {
-            ScrollTopCard(
-                modifier = modifier
-                    .height(310.dp)
-                    .width(40.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun SlotCard() {
-    Card(
-        shape = RoundedCornerShape(18.dp),
-        modifier = Modifier
-            .padding(5.dp)
-            .size(100.dp, 150.dp)
-            .border(
-                width = 2.dp,
-                color = Color.Black,
-                shape = RoundedCornerShape(18.dp)
-            )
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            androidx.compose.material.Icon(
-                Icons.Filled.Person,
-                contentDescription = "",
-                modifier = Modifier.align(Alignment.Center),
-                tint = Color.Red
-            )
         }
     }
 }
@@ -157,48 +79,50 @@ fun PlayerCard(player: PlayerItem) { //checkDrag: Boolean
     val dragData = DragData(type = MimeType.IMAGE_JPEG, data = dragImage)
     //val elevation = animateDpAsState(if (checkDrag) 50.dp else 0.dp)
 
+    SideEffect {
+        Log.d("composeLog", "PlayerCard composition!")
+    }
+
     var isDroppingItem by remember { mutableStateOf(true) }
     var isItemInBounds by remember { mutableStateOf(true) }
-    DropContainer(
+    PlayerTabDropContainer(
         modifier = Modifier,
         onDrag = { isBounds, isDragging ->
             isItemInBounds = isBounds
             isDroppingItem = isDragging
         }
     ) {
-
-    }
-
-    DragTarget(modifier = Modifier, dragData = dragData) {
-        Card(
-            shape = RoundedCornerShape(18.dp),
-            modifier = Modifier
-                .padding(5.dp)
-                .size(100.dp, 150.dp)
-                .border(
-                    width = 2.dp,
-                    color = Color.Black,
-                    shape = RoundedCornerShape(18.dp)
-                )
-            // .shadow(elevation.value)
-        ) {
-            Box {
-                Image(
-                    modifier = Modifier,
-                    painter = painterResource(id = player.image),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
-                Text(
-                    text = player.name,
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 12.dp)
-                        .background(color = Color.Black.copy(alpha = 0.5f)),
-                    color = Color.White,
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Bold
-                )
+        DragTarget(modifier = Modifier, dragData = dragData) {
+            Card(
+                shape = RoundedCornerShape(18.dp),
+                modifier = Modifier
+                    .padding(5.dp)
+                    .size(100.dp, 150.dp)
+                    .border(
+                        width = 2.dp,
+                        color = Color.Black,
+                        shape = RoundedCornerShape(18.dp)
+                    )
+                // .shadow(elevation.value)
+            ) {
+                Box {
+                    Image(
+                        modifier = Modifier,
+                        painter = painterResource(id = player.image),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop
+                    )
+                    Text(
+                        text = player.name,
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = 12.dp)
+                            .background(color = Color.Black.copy(alpha = 0.5f)),
+                        color = Color.White,
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
     }
@@ -251,8 +175,8 @@ fun ListPreview() {
     DragContainer(modifier = Modifier.fillMaxSize()) {
         PlayerSlotSheet(
             lazyGridState = rememberLazyGridState(),
-            coroutineScope = rememberCoroutineScope(),
-            players = PlayersTabViewModel().players
+            players = PlayersTabViewModel().players,
+            onHeightInfo = {}
         )
     }
 }
