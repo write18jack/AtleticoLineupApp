@@ -1,5 +1,6 @@
 package com.example.atleticolineupapp.ui.tab
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,6 +25,9 @@ fun FormationTab(
     list: List<FormationItem>,
     onCLickTask: (manageFormation: ManageFormation)->Unit
 ){
+    SideEffect {
+        Log.d("composeLog", "FormationTab composition!")
+    }
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(5.dp),
@@ -46,6 +50,9 @@ fun FormationCard(
     formationItem: FormationItem,
     onClick: ()->Unit
 ){
+    SideEffect {
+        Log.d("composeLog", "FormationCard composition!")
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -63,7 +70,7 @@ fun FormationCard(
     ) {
         Text(
             modifier = Modifier,
-            text = formationItem.formation,fontSize = 18.sp
+            text = formationItem.formation,fontSize = 28.sp
         )
     }
 }

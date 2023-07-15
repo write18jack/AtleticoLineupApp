@@ -2,8 +2,8 @@ package com.example.atleticolineupapp.ui.screens
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -34,11 +34,13 @@ import com.example.atleticolineupapp.R
 import com.example.atleticolineupapp.ui.tab.*
 import com.example.atleticolineupapp.util.BottomBar
 import com.example.atleticolineupapp.util.drag.DragContainer
-import com.example.atleticolineupapp.util.drop.DropContainer
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 import kotlinx.coroutines.launch
 import androidx.compose.material.icons.filled.Close
-import com.example.atleticolineupapp.ui.formation.positionList
+import androidx.compose.ui.platform.LocalDensity
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.atleticolineupapp.ui.theme.MidNightBlue
+import com.example.atleticolineupapp.util.drop.PlayerTabDropContainer
 import com.example.atleticolineupapp.util.saveImage
 import com.example.atleticolineupapp.util.shareImageUri
 import dev.shreyaspatil.capturable.Capturable
@@ -47,7 +49,9 @@ import dev.shreyaspatil.capturable.Capturable
 @Composable
 fun MainScreen(
     vm: PlayersTabViewModel = viewModel(),
-    vm2: FormationTabViewModel = viewModel()
+    vm2: FormationTabViewModel = viewModel(),
+//    viewModel: SampleViewModel = hiltViewModel(),
+    vm4: PositionStateViewModel = viewModel(),
 ) {
     //state&scope of bottomSheet
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -59,10 +63,14 @@ fun MainScreen(
 
     val lazyGridState = rememberLazyGridState()
 
+    //val tabState: Boolean by viewModel.tabState.collectAsState()
+
     var bottomSheetContent: (@Composable () -> Unit)? by remember {
         mutableStateOf(null)
     }
     val constraintSetItem by vm2.constraintSetItem.collectAsState()
+
+    val stateList = vm4.positionStateList
     //ScreenShot
     val captureController = rememberCaptureController()
 
@@ -70,18 +78,27 @@ fun MainScreen(
     // So that we can demo it
     var formationBitmap: ImageBitmap? by remember { mutableStateOf(null) }
 
+    var playersTabHeight by remember { mutableStateOf(0) }
+
+    var tabState by remember { mutableStateOf(false) }
+
     val context = LocalContext.current
 
-    //when click backButton
-    BackHandler(sheetState.isVisible) {
-        scope.launch {
+    SideEffect {
+        Log.d("composeLog", "MainScreen composition!")
+    }
+
+    if (!sheetState.isVisible) {
+        LaunchedEffect(Unit) {
             sheetState.hide()
+            tabState = false
         }
     }
     //itemのDragでPlayerTabを出るとclose
     if (!isItemInBounds) {
         LaunchedEffect(Unit) {
             sheetState.hide()
+            tabState = false
         }
     }
     //formationTabタップ時にclose
@@ -105,7 +122,7 @@ fun MainScreen(
             modifier = Modifier,
             sheetState = sheetState,
             sheetContent = {
-                DropContainer(
+                PlayerTabDropContainer(
                     modifier = Modifier,
                     onDrag = { isBounds, isDragging ->
                         isItemInBounds = isBounds
@@ -115,8 +132,7 @@ fun MainScreen(
                     bottomSheetContent?.let { it() }
                 }
             },
-            sheetBackgroundColor = Color.Transparent,
-            sheetContentColor = Color.Transparent
+            sheetBackgroundColor = MidNightBlue
         ) {
             Scaffold(
                 topBar = {
@@ -129,17 +145,13 @@ fun MainScreen(
                             Modifier
                                 .weight(0.5f)
                                 .background(color = Color.Green)
-                        ) {
-
-                        }
+                        )
                         Box(
                             Modifier
                                 .weight(1f)
                                 .size(50.dp)
                                 .paint(painter = painterResource(id = R.drawable.atletico_logo))
-                        ) {
-
-                        }
+                        )
                         IconButton(
                             modifier = Modifier.weight(0.5f),
                             onClick = { captureController.capture() }
@@ -158,9 +170,10 @@ fun MainScreen(
                             bottomSheetContent = {
                                 PlayerSlotSheet(
                                     lazyGridState = lazyGridState,
-                                    coroutineScope = scope,
-                                    players = vm.players
+                                    players = vm.players,
+                                    onHeightInfo = { playersTabHeight = it }
                                 )
+                                tabState = true
                             }
                             scope.launch {
                                 sheetState.show()
@@ -185,23 +198,27 @@ fun MainScreen(
                     )
                 }
             ) { paddingValues ->
-                Box(
-                    modifier = Modifier
-                        .padding(paddingValues)
+                BoxWithConstraints(
+                    modifier = Modifier.paint(
+                        painter = painterResource(id = R.drawable.pitch),
+                        contentScale = ContentScale.FillBounds
+                    )
                 ) {
+                    val contentHeight = with(LocalDensity.current) { constraints.maxHeight.toDp() }
+                    val height = if (tabState) (contentHeight / 3) * 2 else  contentHeight  //(contentHeight / 3) * 2
                     Capturable(
                         controller = captureController,
                         modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxWidth()
+                            .height(height)
+                            .padding(paddingValues)
                             .align(alignment = Alignment.Center),
                         onCaptured = { imageBitmap, _ -> formationBitmap = imageBitmap }
                     ) {
                         DisplayFormation(
-                            modifier = Modifier.paint(
-                                painter = painterResource(id = R.drawable.pitch),
-                                contentScale = ContentScale.FillBounds
-                            ),
-                            manageFormation = constraintSetItem
+                            modifier = Modifier,
+                            manageFormation = constraintSetItem,
+                            stateList = stateList,
                         )
                     }
                 }
@@ -243,12 +260,6 @@ fun BitmapDialog(
                 }
                 IconButton(
                     onClick = {
-                    },
-                    Modifier.paint(painterResource(id = R.drawable.download_icon))
-                ) {
-                }
-                IconButton(
-                    onClick = {
                         coroutineScope.launch {
                             shareNoteImage(imageBitmap, context)
                         }
@@ -264,6 +275,7 @@ fun BitmapDialog(
         }
     }
 }
+
 suspend fun shareNoteImage(bitmap: Bitmap, context: Context) {
     val uri = saveImage(bitmap, context)
     if (uri != null) {
