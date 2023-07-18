@@ -256,7 +256,7 @@ class F532 : ManageFormation() {
             val gk = createRefFor(positionList[10])
 
             createHorizontalChain(lst, rst, chainStyle = ChainStyle.Packed)
-            createHorizontalChain(lcm, cdm, rcm, chainStyle = ChainStyle.Spread)
+            createHorizontalChain(lcm, cdm, rcm, chainStyle = ChainStyle.Packed)
             createHorizontalChain(lb, rb, chainStyle = ChainStyle.SpreadInside)
             createHorizontalChain(lcb, cb, rcb, chainStyle = ChainStyle.Packed)
 
@@ -270,14 +270,14 @@ class F532 : ManageFormation() {
             }
             constrain(lcm) {
                 top.linkTo(lst.bottom, margin = 0.dp)
-                bottom.linkTo(cdm.top, margin = 0.dp)
+                bottom.linkTo(cb.top, margin = 20.dp)
             }
             constrain(rcm) {
                 top.linkTo(rst.bottom, margin = 0.dp)
-                bottom.linkTo(cdm.top, margin = 0.dp)
+                bottom.linkTo(cb.top, margin = 20.dp)
             }
             constrain(cdm) {
-                top.linkTo(lst.bottom, margin = 0.dp)
+                top.linkTo(lst.bottom, margin = 30.dp)
                 bottom.linkTo(cb.top, margin = 0.dp)
             }
             constrain(lb) {
@@ -326,38 +326,37 @@ class F3142 : ManageFormation() {
             val gk = createRefFor(positionList[10])
 
             createHorizontalChain(lst, rst, chainStyle = ChainStyle.Packed)
-            createHorizontalChain(lm, lcm, rcm, rm, chainStyle = ChainStyle.Spread)
+            createHorizontalChain(lm, rm, chainStyle = ChainStyle.SpreadInside)
+            createHorizontalChain(lcm, cdm, rcm, chainStyle = ChainStyle.Packed)
             createHorizontalChain(lcb, cb, rcb, chainStyle = ChainStyle.Spread)
 
             constrain(lst) {
                 top.linkTo(parent.top)
-                bottom.linkTo(lcm.top)
+                bottom.linkTo(lm.top)
             }
             constrain(rst) {
                 top.linkTo(parent.top, margin = 0.dp)
-                bottom.linkTo(lcm.top, margin = 0.dp)
+                bottom.linkTo(rm.top, margin = 0.dp)
             }
             constrain(lm) {
                 top.linkTo(lst.bottom, margin = 0.dp)
-                bottom.linkTo(cdm.top, margin = 0.dp)
+                bottom.linkTo(lcm.top, margin = 10.dp)
             }
             constrain(lcm) {
                 top.linkTo(lst.bottom, margin = 0.dp)
-                bottom.linkTo(cdm.top, margin = 0.dp)
+                bottom.linkTo(lcb.top, margin = 10.dp)
             }
             constrain(rcm) {
-                top.linkTo(lst.bottom, margin = 0.dp)
-                bottom.linkTo(cdm.top, margin = 0.dp)
+                top.linkTo(rst.bottom, margin = 0.dp)
+                bottom.linkTo(rcb.top, margin = 10.dp)
             }
             constrain(rm) {
-                top.linkTo(lst.bottom, margin = 0.dp)
-                bottom.linkTo(cdm.top, margin = 0.dp)
+                top.linkTo(rst.bottom, margin = 0.dp)
+                bottom.linkTo(rcm.top, margin = 10.dp)
             }
             constrain(cdm) {
-                top.linkTo(lcm.bottom, margin = 0.dp)
-                bottom.linkTo(cb.top, margin = 0.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
+                top.linkTo(lst.bottom, margin = 0.dp)
+                bottom.linkTo(cb.top, margin = 30.dp)
             }
             constrain(lcb) {
                 top.linkTo(cdm.bottom, margin = 0.dp)
@@ -372,7 +371,7 @@ class F3142 : ManageFormation() {
                 bottom.linkTo(gk.top, margin = 0.dp)
             }
             constrain(gk) {
-                top.linkTo(lcb.bottom, margin = 0.dp)
+                top.linkTo(cb.bottom, margin = 0.dp)
                 bottom.linkTo(parent.bottom, margin = 0.dp)
                 start.linkTo(parent.start, margin = 0.dp)
                 end.linkTo(parent.end, margin = 0.dp)

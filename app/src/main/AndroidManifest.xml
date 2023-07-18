@@ -14,8 +14,8 @@
         android:name=".ComposeApplication"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
         tools:targetApi="32">
+        <!--        android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"-->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.ch8n.fileprovider"
@@ -27,8 +27,8 @@
         </provider>
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+            android:exported="true">
+<!--            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
