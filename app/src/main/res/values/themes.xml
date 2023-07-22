@@ -12,5 +12,10 @@
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+             //Manifestで指定するための名前
+    <style name="SplashTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/indi</item>
+        <item name="windowSplashScreenBackground">@color/red</item>
+    </style>
 
 </resources>

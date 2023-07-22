@@ -30,8 +30,6 @@ import com.example.atleticolineupapp.util.drag.DragContainer
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalDensity
-import com.example.atleticolineupapp.ui.screens.DisplayFormation
-import com.example.atleticolineupapp.ui.screens.PositionStateViewModel
 import com.example.atleticolineupapp.ui.theme.MidNightBlue
 import com.example.atleticolineupapp.util.BitmapDialog
 import com.example.atleticolineupapp.util.drop.PlayerTabDropContainer
@@ -42,8 +40,7 @@ import dev.shreyaspatil.capturable.Capturable
 fun MainScreen(
     vm: PlayersTabViewModel = viewModel(),
     vm2: FormationTabViewModel = viewModel(),
-//    viewModel: SampleViewModel = hiltViewModel(),
-    vm4: PositionStateViewModel = viewModel(),
+    vm3: PositionStateViewModel = viewModel(),
 ) {
     //state&scope of bottomSheet
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -55,22 +52,18 @@ fun MainScreen(
 
     val lazyGridState = rememberLazyGridState()
 
-    //val tabState: Boolean by viewModel.tabState.collectAsState()
-
     var bottomSheetContent: (@Composable () -> Unit)? by remember {
         mutableStateOf(null)
     }
     val constraintSetItem by vm2.constraintSetItem.collectAsState()
 
-    val stateList = vm4.positionStateList
+    val stateList = vm3.positionStateList
     //ScreenShot
     val captureController = rememberCaptureController()
 
     // This will hold captured bitmap
     // So that we can demo it
     var formationBitmap: ImageBitmap? by remember { mutableStateOf(null) }
-
-    var playersTabHeight by remember { mutableStateOf(0) }
 
     var tabState by remember { mutableStateOf(false) }
 
@@ -87,7 +80,7 @@ fun MainScreen(
         }
     }
     //itemのDragでPlayerTabを出るとclose
-    if (!isItemInBounds) {
+    if (isDroppingItem) {
         LaunchedEffect(Unit) {
             sheetState.hide()
             tabState = false
@@ -166,8 +159,7 @@ fun MainScreen(
                             bottomSheetContent = {
                                 PlayerSlotSheet(
                                     lazyGridState = lazyGridState,
-                                    players = vm.players,
-                                    onHeightInfo = { playersTabHeight = it }
+                                    players = vm.players
                                 )
                                 tabState = true
                             }
@@ -195,7 +187,8 @@ fun MainScreen(
                 }
             ) { paddingValues ->
                 BoxWithConstraints(
-                    modifier = Modifier.paint(
+                    modifier = Modifier
+                        .paint(
                         painter = painterResource(id = R.drawable.pitch),
                         contentScale = ContentScale.FillBounds
                     )

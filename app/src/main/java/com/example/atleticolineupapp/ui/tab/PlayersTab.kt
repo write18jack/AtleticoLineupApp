@@ -39,8 +39,7 @@ import kotlinx.coroutines.launch
 fun PlayerSlotSheet(
     modifier: Modifier = Modifier,
     lazyGridState: LazyGridState,
-    players: List<PlayerItem>,
-    onHeightInfo: (Int) -> Unit
+    players: List<PlayerItem>
 ) {
 
     SideEffect {
@@ -48,9 +47,7 @@ fun PlayerSlotSheet(
     }
 
     BoxWithConstraints {
-        val copyPlayersTabHeight = with(LocalDensity.current) { constraints.maxHeight}/3
         val localScreenHeight = with(LocalDensity.current) { constraints.maxHeight.toDp() }/3
-        onHeightInfo(copyPlayersTabHeight)
         //lazyGridState.layoutInfo
         LazyHorizontalGrid(
             rows = GridCells.Fixed(2),
@@ -175,8 +172,7 @@ fun ListPreview() {
     DragContainer(modifier = Modifier.fillMaxSize()) {
         PlayerSlotSheet(
             lazyGridState = rememberLazyGridState(),
-            players = PlayersTabViewModel().players,
-            onHeightInfo = {}
+            players = PlayersTabViewModel().players
         )
     }
 }
