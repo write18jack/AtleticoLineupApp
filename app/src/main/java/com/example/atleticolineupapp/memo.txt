@@ -1,5 +1,0 @@
-12.Julio 一旦、DragItemはcopyのままにする。　PlayerTabが開いている時のDrop感知問題は
-         PlayerTabが開いたらDisplayFOrmationのheightを小さくする。
-
-         [Combine detectTapGestures and detectDragGesturesAfterLongPress]
-         https://stackoverflow.com/questions/72897579/combine-detecttapgestures-and-detectdraggesturesafterlongpress

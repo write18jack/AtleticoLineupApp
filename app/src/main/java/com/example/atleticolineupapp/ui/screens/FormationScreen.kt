@@ -30,8 +30,7 @@ fun DisplayFormation(
     modifier: Modifier,
     manageFormation: ManageFormation,
 //    vm: PositionStateViewModel = viewModel(),
-    stateList: List<PositionState>,
-    //tabStateX: Boolean
+    stateList: List<PositionState>
 //    stateHolder: StateHolder = rememberStateHolder()
 ) {
     val positionLists = remember { mutableStateListOf<String>() }
@@ -56,8 +55,7 @@ fun DisplayFormation(
                     }
                     isDroppingTarget = isDragging
                 },
-            ) { dragData ->
-//                Log.d("List", "stateList: ${stateList[i]}")
+            ) {dragData ->
                 //Dropしてない時にdragData内の中身を調べている。
                 //これが無いとそもそもdropしても表示されない
                 dragData?.let {

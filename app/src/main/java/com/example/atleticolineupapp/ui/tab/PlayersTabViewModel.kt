@@ -8,7 +8,7 @@ import com.example.atleticolineupapp.util.PlayerList
 
 @Stable
 class PlayersTabViewModel : ViewModel() {
-    var players by mutableStateOf(List(13) {
+    var players by mutableStateOf(List(PlayerList.size) {
         PlayerItem(
             name = PlayerList[it].name,
             image = PlayerList[it].image,

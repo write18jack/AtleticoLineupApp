@@ -75,6 +75,9 @@ dependencies {
     //google
     implementation("com.google.android.material:material:1.9.0")
 
+    //splash screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
     //Room
     implementation("androidx.room:room-ktx:2.5.1")
     implementation("androidx.room:room-runtime:2.5.1")

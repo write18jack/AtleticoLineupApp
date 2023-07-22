@@ -393,12 +393,10 @@ fun FormationPreview2(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-//                .height(600.dp)
                 .paint(
                     painter = painterResource(id = R.drawable.pitch),
                     contentScale = ContentScale.FillBounds
-                )
-            ,
+                ),
             manageFormation = constraintSetItemX,
             stateList = stateList
         )
