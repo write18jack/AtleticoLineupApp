@@ -10,15 +10,12 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.atleticolineupapp.ui.theme.MidNightBlue
 import com.example.atleticolineupapp.util.drop.DropContainer
-import java.util.function.BinaryOperator
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

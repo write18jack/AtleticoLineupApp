@@ -1,6 +1,5 @@
 package com.example.atleticolineupapp.util.drop
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,15 +14,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.atleticolineupapp.ui.theme.Purple200
 import com.example.atleticolineupapp.util.drag.DragData
 import com.example.atleticolineupapp.util.drag.LocalDragTargetInfo
 
@@ -31,7 +27,6 @@ import com.example.atleticolineupapp.util.drag.LocalDragTargetInfo
 fun DropContainer(
     modifier: Modifier,
     onDrag: (inBounds: Boolean, isDragging: Boolean) -> Unit,
-    tabState: Boolean = false,
     content: @Composable (BoxScope.(data: DragData?) -> Unit)
 ) {
     val dragState = LocalDragTargetInfo.current
@@ -52,27 +47,6 @@ fun DropContainer(
         content(dragData)
     }
 }
-
-@Composable
-fun DropContainerX(
-    modifier: Modifier,
-    onDrag: (inBounds: Boolean, isDragging: Boolean) -> Unit,
-    tabState: Boolean = false,
-    content: @Composable (BoxScope.(data: DragData?) -> Unit)
-) {
-    val dragState = LocalDragTargetInfo.current
-    val dragPosition = dragState.dragPosition
-    val dragOffset = dragState.dragOffset
-    var inBounds by remember { mutableStateOf(false) }
-    Box(
-        modifier = modifier
-    ) {
-//        val dragData = if (inBounds) dragState.dragData else null
-//        onDrag(inBounds, dragState.isDragging)
-//        content(dragData)
-    }
-}
-
 @Composable
 fun PlayerTabDropContainer(
     modifier: Modifier,

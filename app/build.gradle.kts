@@ -78,12 +78,6 @@ dependencies {
     //splash screen
     implementation("androidx.core:core-splashscreen:1.0.1")
 
-    //Room
-    implementation("androidx.room:room-ktx:2.5.1")
-    implementation("androidx.room:room-runtime:2.5.1")
-    implementation("com.google.android.gms:play-services-maps:18.0.2")
-    kapt("androidx.room:room-compiler:2.5.1")
-
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
@@ -94,7 +88,6 @@ dependencies {
     implementation ("com.google.dagger:hilt-android:2.45")
     kapt ("com.google.dagger:hilt-android-compiler:2.44.2")
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
-    //implementation("coreLibraryDesugaring \"com.android.tools:desugar_jdk_libs:1.1.1\"")
 
     testImplementation ("junit:junit:")
     androidTestImplementation ("androidx.test:core:1.5.0")
@@ -106,4 +99,7 @@ dependencies {
     androidTestImplementation ("com.google.dagger:hilt-android:2.45")
     androidTestImplementation ("com.google.dagger:hilt-android-testing:2.45")
     kaptAndroidTest ("com.google.dagger:hilt-compiler:2.45")
+
+    //AdMob
+    implementation ("com.google.android.gms:play-services-ads:22.2.0")
 }

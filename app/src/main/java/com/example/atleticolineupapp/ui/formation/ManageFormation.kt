@@ -1,26 +1,8 @@
 package com.example.atleticolineupapp.ui.formation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.paint
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintSet
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.atleticolineupapp.R
-import com.example.atleticolineupapp.ui.screens.DisplayFormation
-import com.example.atleticolineupapp.ui.screens.PositionStateViewModel
-import com.example.atleticolineupapp.ui.tab.FormationTabViewModel
 
 val positionList = mutableListOf("P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10", "P11")
 
@@ -377,28 +359,5 @@ class F3142 : ManageFormation() {
                 end.linkTo(parent.end, margin = 0.dp)
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun FormationPreview2(
-    vm2: FormationTabViewModel = viewModel(),
-    vm4: PositionStateViewModel = viewModel()
-) {
-    val constraintSetItemX by vm2.constraintSetItem.collectAsState()
-    val stateList = vm4.positionStateList
-    Box(modifier = Modifier.fillMaxSize()){
-        DisplayFormation(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .paint(
-                    painter = painterResource(id = R.drawable.pitch),
-                    contentScale = ContentScale.FillBounds
-                ),
-            manageFormation = constraintSetItemX,
-            stateList = stateList
-        )
     }
 }
