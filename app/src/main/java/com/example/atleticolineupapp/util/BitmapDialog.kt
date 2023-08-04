@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
@@ -38,18 +39,24 @@ fun BitmapDialog(
     Dialog(onDismissRequest = { }) {
         Column(
             modifier = Modifier
-                .background(Color.LightGray)
+                .background(Color.Black)
                 .padding(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Preview of image \uD83D\uDC47")
+            Text(
+                "Preview of image \uD83D\uDC47",
+                color = Color.White
+            )
             Spacer(Modifier.size(13.dp))
             Image(
                 bitmap = imageBitmap.asImageBitmap(),
                 contentDescription = "Preview of image",
             )
             Spacer(Modifier.size(4.dp))
-            Row(horizontalArrangement = Arrangement.Center) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
 
                 IconButton(onClick = closeDialog) {
                     Icon(

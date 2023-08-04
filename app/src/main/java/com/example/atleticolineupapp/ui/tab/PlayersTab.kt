@@ -41,11 +41,6 @@ fun PlayerSlotSheet(
     lazyGridState: LazyGridState,
     players: List<PlayerItem>
 ) {
-
-    SideEffect {
-        Log.d("composeLog", "PlayerSlotSheet composition!")
-    }
-
     BoxWithConstraints {
         val localScreenHeight = with(LocalDensity.current) { constraints.maxHeight.toDp() }/3
         //lazyGridState.layoutInfo
@@ -56,14 +51,12 @@ fun PlayerSlotSheet(
             verticalArrangement = Arrangement.spacedBy(2.dp),
             horizontalArrangement = Arrangement.spacedBy(2.dp),
             modifier = modifier
-                .fillMaxWidth()
+                .width(maxWidth)
                 .height(localScreenHeight)
-
         ) {
             items(players, { it.key }) { item ->
-                //SlotCard()
                 PlayerCard(
-                    player = item,
+                    player = item
                 )
             }
         }
@@ -75,10 +68,6 @@ fun PlayerCard(player: PlayerItem) { //checkDrag: Boolean
     val dragImage = painterResource(id = player.image)//Cast to Painter at here.
     val dragData = DragData(type = MimeType.IMAGE_JPEG, data = dragImage)
     //val elevation = animateDpAsState(if (checkDrag) 50.dp else 0.dp)
-
-    SideEffect {
-        Log.d("composeLog", "PlayerCard composition!")
-    }
 
     var isDroppingItem by remember { mutableStateOf(true) }
     var isItemInBounds by remember { mutableStateOf(true) }
@@ -94,7 +83,7 @@ fun PlayerCard(player: PlayerItem) { //checkDrag: Boolean
                 shape = RoundedCornerShape(18.dp),
                 modifier = Modifier
                     .padding(5.dp)
-                    .size(100.dp, 150.dp)
+                    .size(90.dp, 120.dp)
                     .border(
                         width = 2.dp,
                         color = Color.Black,
@@ -121,47 +110,6 @@ fun PlayerCard(player: PlayerItem) { //checkDrag: Boolean
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun ScrollTopCard(modifier: Modifier) {
-    Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(Color.Transparent)
-    ) {}
-}
-
-private const val SCROLL_DX = 25f //scroll speed & direction
-private const val SCROLL_DX2 = -25f
-
-suspend fun ScrollableState.autoStartScroll(
-    animationSpec: AnimationSpec<Float> = tween(durationMillis = 80, easing = LinearEasing)
-) {
-    var previousValue = 0f
-    scroll(MutatePriority.UserInput) {
-        animate(
-            initialValue = 0f,
-            targetValue = SCROLL_DX2,
-            animationSpec = animationSpec
-        ) { currentValue, _ ->
-            previousValue += scrollBy(currentValue - previousValue)
-        }
-    }
-}
-
-suspend fun ScrollableState.autoEndScroll(
-    animationSpec: AnimationSpec<Float> = tween(durationMillis = 80, easing = LinearEasing)
-) {
-    var previousValue = 0f
-    scroll(MutatePriority.UserInput) {
-        animate(
-            initialValue = 0f,
-            targetValue = SCROLL_DX,
-            animationSpec = animationSpec
-        ) { currentValue, _ ->
-            previousValue += scrollBy(currentValue - previousValue)//- previousValue
         }
     }
 }

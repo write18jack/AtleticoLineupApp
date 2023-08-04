@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
@@ -30,7 +29,9 @@ import com.example.atleticolineupapp.util.drag.DragContainer
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.tooling.preview.Devices
 import com.example.atleticolineupapp.ui.theme.MidNightBlue
+import com.example.atleticolineupapp.util.AdaptiveBanner
 import com.example.atleticolineupapp.util.BitmapDialog
 import com.example.atleticolineupapp.util.drop.PlayerTabDropContainer
 import dev.shreyaspatil.capturable.Capturable
@@ -80,7 +81,7 @@ fun MainScreen(
         }
     }
     //itemのDragでPlayerTabを出るとclose
-    if (isDroppingItem) {
+    if (!isItemInBounds) {
         LaunchedEffect(Unit) {
             sheetState.hide()
             tabState = false
@@ -122,7 +123,8 @@ fun MainScreen(
             Scaffold(
                 topBar = {
                     BoxWithConstraints {
-                        val contentHeight = with(LocalDensity.current) { constraints.maxHeight.toDp() }
+                        val contentHeight =
+                            with(LocalDensity.current) { constraints.maxHeight.toDp() }
                         TopAppBar(
                             modifier = Modifier.border(width = 3.dp, color = Color.Blue),
                             backgroundColor = Color.Red,
@@ -154,64 +156,71 @@ fun MainScreen(
                     }
                 },
                 bottomBar = {
-                    BottomBar(
-                        openPlayerSheet = {
-                            bottomSheetContent = {
-                                PlayerSlotSheet(
-                                    lazyGridState = lazyGridState,
-                                    players = vm.players
-                                )
-                                tabState = true
-                            }
-                            scope.launch {
-                                sheetState.show()
-                            }
-                        },
-                        openFormationSheet = {
-                            bottomSheetContent = {
-                                FormationTab(
-                                    list = vm2.constraintSetList,
-                                    onCLickTask = { ManageFormation ->
-                                        vm2.onChangeConstraintItem(ManageFormation)
-                                    }
-                                )
-                            }
-                            scope.launch {
-                                sheetState.show()
-                            }
-                        },
-                        modalBottomSheetState = sheetState,
-                        isDroppingItem = isDroppingItem,
-                        isItemInBounds = isItemInBounds
-                    )
+                    Column {
+                        //AdaptiveBanner(modifier = Modifier)
+                        BottomBar(
+                            openPlayerSheet = {
+                                bottomSheetContent = {
+                                    PlayerSlotSheet(
+                                        lazyGridState = lazyGridState,
+                                        players = vm.players
+                                    )
+                                    tabState = true
+                                }
+                                scope.launch {
+                                    sheetState.show()
+                                }
+                            },
+                            openFormationSheet = {
+                                bottomSheetContent = {
+                                    FormationTab(
+                                        list = vm2.constraintSetList,
+                                        onCLickTask = { ManageFormation ->
+                                            vm2.onChangeConstraintItem(ManageFormation)
+                                        }
+                                    )
+                                }
+                                scope.launch {
+                                    sheetState.show()
+                                }
+                            },
+                            modalBottomSheetState = sheetState,
+                            isDroppingItem = isDroppingItem,
+                            isItemInBounds = isItemInBounds
+                        )
+                    }
                 }
             ) { paddingValues ->
                 BoxWithConstraints(
                     modifier = Modifier
                         .paint(
-                        painter = painterResource(id = R.drawable.pitch),
-                        contentScale = ContentScale.FillBounds
-                    )
+                            painter = painterResource(id = R.drawable.pitch),
+                            contentScale = ContentScale.FillBounds
+                        )
                 ) {
-                    val contentHeight = with(LocalDensity.current) { constraints.maxHeight.toDp() }
-                    val height =
-                        if (tabState) (contentHeight / 3) * 2 else contentHeight
+                    val totalWidth = with(LocalDensity.current){ constraints.maxWidth.toDp() }
+                    val totalHeight = with(LocalDensity.current) { constraints.maxHeight.toDp() }
+
+                    SideEffect {
+                        Log.d("sizeLog", "heighg: $totalHeight  width: $totalWidth")
+                    }
+                    val height = if (tabState) (totalHeight / 3) * 2 else totalHeight
                     Capturable(
                         controller = captureController,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(height)
-                            .padding(paddingValues)
-                            .align(alignment = Alignment.Center),
+                            .padding(paddingValues),
                         onCaptured = { imageBitmap, _ -> formationBitmap = imageBitmap }
                     ) {
                         DisplayFormation(
-                            modifier = Modifier.paint(
+                            modifier = Modifier
+                                .paint(
                                 painter = painterResource(id = R.drawable.pitch),
                                 contentScale = ContentScale.FillBounds
                             ),
                             manageFormation = constraintSetItem,
-                            stateList = stateList,
+                            stateList = stateList
                         )
                     }
                 }
@@ -220,7 +229,7 @@ fun MainScreen(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, device = Devices.PIXEL_C)
 @Composable
 fun PreviewMe() {
     MainScreen()

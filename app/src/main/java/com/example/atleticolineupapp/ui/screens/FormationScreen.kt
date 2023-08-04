@@ -1,6 +1,5 @@
 package com.example.atleticolineupapp.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -13,24 +12,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.layoutId
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.atleticolineupapp.dragAndDrop.MimeType
 import com.example.atleticolineupapp.ui.formation.ManageFormation
 import com.example.atleticolineupapp.ui.formation.positionList
-import com.example.atleticolineupapp.util.drag.DragData
 import com.example.atleticolineupapp.util.drop.DropContainer
-import com.example.atleticolineupapp.util.drop.DropContainerX
 import com.example.atleticolineupapp.util.drop.DropPaneContent
 
 @Composable
 fun DisplayFormation(
     modifier: Modifier,
     manageFormation: ManageFormation,
-//    vm: PositionStateViewModel = viewModel(),
-    stateList: List<PositionState>
+    stateList: List<PositionState>,
 //    stateHolder: StateHolder = rememberStateHolder()
 ) {
     val positionLists = remember { mutableStateListOf<String>() }
@@ -38,9 +35,13 @@ fun DisplayFormation(
 
     var isDroppingTarget by remember { mutableStateOf(false) }
 
-    SideEffect {
-        Log.d("composeLog", "DisplayFormation composition!")
-    }
+    val configuration = LocalConfiguration.current
+
+    val screenHeight = configuration.screenHeightDp.dp
+    val screenWidth = configuration.screenWidthDp.dp
+
+    val itemHeight = screenHeight / 10
+    val itemWidth = screenWidth / 5
 
     ConstraintLayout(
         constraintSet = manageFormation.formationConstraints(),
@@ -68,6 +69,8 @@ fun DisplayFormation(
                 }
                 PositionCard(
                     dragImage = stateList[i].dragImage,
+                    itemWidth = itemWidth,
+                    itemHeight = itemHeight
                 )
             }
         }
@@ -77,18 +80,15 @@ fun DisplayFormation(
 @Composable
 fun PositionCard(
     dragImage: Painter?,
+    itemWidth: Dp,
+    itemHeight: Dp
 ) {
-
-    SideEffect {
-        Log.d("composeLog", "PositionCard composition!")
-    }
-
     Card(
         shape = RoundedCornerShape(18.dp),
         modifier = Modifier
             .padding(5.dp)
             .background(color = Color.Transparent)
-            .size(80.dp, 90.dp)
+            .size(width = itemWidth, height = itemHeight)
             .border(
                 width = 3.dp,
                 color = Color.Black,
