@@ -5,21 +5,32 @@ plugins {
     id ("dagger.hilt.android.plugin")
 }
 
+// Create a variable called keystorePropertiesFile, and initialize it to your
+// keystore.properties file, in the rootProject folder.
+//val keystorePropertiesFile = rootProject.file("keystore.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+//val keystoreProperties = java.util.Properties()
+
+// Load your keystore.properties file into the keystoreProperties object.
+//keystoreProperties.load(java.io.FileInputStream(keystorePropertiesFile))
+
 android {
-    namespace = "com.example.atleticolineupapp"
+    namespace = "com.whitebeach.atleticolineupapp"
     compileSdk = 33
     defaultConfig {
-        applicationId = "com.example.atleticolineupapp"
+        applicationId = "com.whitebeach.atleticolineupapp"
         minSdk = 22
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = ("androidx.test.runner.AndroidJUnitRunner")
         vectorDrawables {
             useSupportLibrary = true
         }
     }
+
     buildFeatures {
         compose = true
     }
@@ -27,20 +38,12 @@ android {
         kotlinCompilerExtensionVersion = "1.4.3"
     }
     buildTypes {
-
-        debug {
-            applicationIdSuffix = ".debug"
-            manifestPlaceholders["appName"] = "Debug"
-        }
-
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            signingConfig = signingConfigs.getByName("debug")
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            isMinifyEnabled = false
+            //isShrinkResources = true
+            //signingConfig = signingConfigs.getByName("release")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            isDebuggable = false
         }
     }
     compileOptions {
@@ -92,13 +95,13 @@ dependencies {
     testImplementation ("junit:junit:")
     androidTestImplementation ("androidx.test:core:1.5.0")
     androidTestImplementation ("androidx.test:runner:1.5.2")
-    androidTestImplementation ("androidx.test:rules:1.5.0")
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation ("androidx.test.ext:junit-ktx:1.1.5")
-    androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
-    androidTestImplementation ("com.google.dagger:hilt-android:2.45")
-    androidTestImplementation ("com.google.dagger:hilt-android-testing:2.45")
-    kaptAndroidTest ("com.google.dagger:hilt-compiler:2.45")
+//    androidTestImplementation ("androidx.test:rules:1.5.0")
+//    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
+//    androidTestImplementation ("androidx.test.ext:junit-ktx:1.1.5")
+//    androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+//    androidTestImplementation ("com.google.dagger:hilt-android:2.45")
+//    androidTestImplementation ("com.google.dagger:hilt-android-testing:2.45")
+//    kaptAndroidTest ("com.google.dagger:hilt-compiler:2.45")
 
     //AdMob
     implementation ("com.google.android.gms:play-services-ads:22.2.0")
