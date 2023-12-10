@@ -5,8 +5,12 @@
 <!--        <item name="android:statusBarColor">@color/purple_700</item>-->
 <!--    </style>-->
 
+    <style name="Theme.Material3" parent="Theme.Material3.DayNight.NoActionBar">
+
+    </style>
+
     <style name="Theme.AppCompat.Light.NoActionBar"
-        parent="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+        parent="@style/Theme.MaterialComponents.DayNight.NoActionBar"> //@style/Theme.AppCompat.Light.NoActionBar
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">false</item>
