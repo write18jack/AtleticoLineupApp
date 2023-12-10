@@ -1,19 +1,21 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.android.application")
-    kotlin("android")
+    alias(libs.plugins.com.android.application)
+    alias(libs.plugins.org.jetbrains.kotlin.android)
     kotlin("kapt")
-    id ("dagger.hilt.android.plugin")
+    id("com.google.gms.google-services")
+    //id("com.google.devtools.ksp")
 }
 
 android {
-    namespace = "com.example.atleticolineupapp"
-    compileSdk = 33
+    namespace = "com.whitebeach.atleticolineupapp"
+    compileSdk = 34
     defaultConfig {
-        applicationId = "com.example.atleticolineupapp"
-        minSdk = 22
-        targetSdk = 33
-        versionCode = 1
-        versionName = "1.0.0"
+        applicationId = "com.whitebeach.atleticolineupapp"
+        minSdk = 30
+        targetSdk = 34
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = ("androidx.test.runner.AndroidJUnitRunner")
         vectorDrawables {
@@ -27,20 +29,15 @@ android {
         kotlinCompilerExtensionVersion = "1.4.3"
     }
     buildTypes {
-
-        debug {
-            applicationIdSuffix = ".debug"
-            manifestPlaceholders["appName"] = "Debug"
-        }
-
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            signingConfig = signingConfigs.getByName("debug")
+            isMinifyEnabled = false
+            //isShrinkResources = true
+            //signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            isDebuggable = false
         }
     }
     compileOptions {
@@ -56,50 +53,53 @@ kapt {
         arg("room.schemaLocation", "$projectDir/schemas")
     }
 }
+configurations.implementation {
+//    exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
+//    exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
+}
+
 
 dependencies {
-    implementation("androidx.activity:activity-compose:1.7.2")
-    implementation("androidx.appcompat:appcompat-resources:1.6.1")
-    implementation("androidx.compose.runtime:runtime:1.4.3")
-    implementation("androidx.compose.material:material:1.4.3")
-    implementation("androidx.compose.material3:material3:1.1.1")
-    implementation ("androidx.compose.foundation:foundation:1.4.3")
-    implementation ("androidx.compose.foundation:foundation-layout:1.4.3")
-    implementation ("androidx.compose.animation:animation:1.4.3")
-    implementation("androidx.compose.ui:ui-tooling:1.4.3")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
+    implementation(libs.core.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.activity.compose)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.androidx.material)
+    implementation(libs.material3)
+    implementation(libs.material)
+    implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.transport.runtime)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
 
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.22")
-
-    //google
-    implementation("com.google.android.material:material:1.9.0")
-
-    //splash screen
-    implementation("androidx.core:core-splashscreen:1.0.1")
-
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-
-    implementation ("dev.shreyaspatil:capturable:1.0.3")
-    implementation("androidx.navigation:navigation-compose:2.6.0")
-    implementation("io.coil-kt:coil-compose:2.3.0")
-
-    implementation ("com.google.dagger:hilt-android:2.45")
-    kapt ("com.google.dagger:hilt-android-compiler:2.44.2")
-    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
-
-    testImplementation ("junit:junit:")
-    androidTestImplementation ("androidx.test:core:1.5.0")
-    androidTestImplementation ("androidx.test:runner:1.5.2")
-    androidTestImplementation ("androidx.test:rules:1.5.0")
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation ("androidx.test.ext:junit-ktx:1.1.5")
-    androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
-    androidTestImplementation ("com.google.dagger:hilt-android:2.45")
-    androidTestImplementation ("com.google.dagger:hilt-android-testing:2.45")
-    kaptAndroidTest ("com.google.dagger:hilt-compiler:2.45")
-
-    //AdMob
-    implementation ("com.google.android.gms:play-services-ads:22.2.0")
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.okhttp)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.paging.common.ktx)
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.retrofit2.kotlin.coroutines.adapter)
+    implementation(libs.converter.moshi)
+    implementation(libs.moshi.kotlin)
+    implementation(libs.play.services.ads)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.capturable)
+    implementation(libs.coil.compose)
+    implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
+    implementation(libs.firebase.firestore.ktx)
 }

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "538879786537",
+    "project_id": "atletico-madrid-lineup",
+    "storage_bucket": "atletico-madrid-lineup.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:538879786537:android:42edc271f175c9579ae638",
+        "android_client_info": {
+          "package_name": "com.whitebeach.atleticolineupapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "538879786537-hfg37o616h24k24uindj580mul2rn507.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzOIt8-ARnl1oXq5ZHqvSRdtioqALkCx0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "538879786537-hfg37o616h24k24uindj580mul2rn507.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
