@@ -1,6 +1,6 @@
 [versions]
 agp = "8.1.0"
-capturable = "1.0.3"
+capturable = "2.1.0"
 coil-compose = "2.4.0"
 constraintlayout-compose = "1.0.1"
 core-splashscreen = "1.0.1"

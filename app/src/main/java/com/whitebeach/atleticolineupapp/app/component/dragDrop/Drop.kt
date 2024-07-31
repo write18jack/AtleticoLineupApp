@@ -61,8 +61,9 @@ fun DropPaneContent(
         Image(
             painter = dragImage,
             contentDescription = null,
-            modifier = modifier.clip(shape = ShapeDefaults.Large),
-            contentScale = ContentScale.Crop
+            modifier =  Modifier,//modifier.clip(shape = ShapeDefaults.Large),
+            alignment = Alignment.Center,
+            contentScale = ContentScale.FillHeight
         )
     } else {
         Box(

@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
@@ -71,7 +72,7 @@ fun PlayerCard(
             // onClick = onClick,
             modifier = Modifier
                 .padding(5.dp)
-                .height(130.dp)
+                .height(120.dp)
                 .width(90.dp)
                 .border(
                     width = 2.dp,
@@ -89,7 +90,7 @@ fun PlayerCard(
                     contentDescription = "",
                     modifier = Modifier,
                     alignment = Alignment.Center,
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.FillHeight
                 )
                 Text(
                     text = player.name,
@@ -104,4 +105,15 @@ fun PlayerCard(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun PlayerSheetPreview(){
+    val list = listOf(
+        PlayerInfo()
+    )
+    PlayerSheet(
+        list = list
+    )
 }

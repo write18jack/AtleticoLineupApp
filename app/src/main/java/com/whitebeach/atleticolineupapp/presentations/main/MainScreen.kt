@@ -1,21 +1,32 @@
 package com.whitebeach.atleticolineupapp.presentations.main
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Send
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ExperimentalComposeApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
@@ -25,6 +36,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.whitebeach.atleticolineupapp.R
 import com.whitebeach.atleticolineupapp.presentations.main.view.BottomBar
@@ -35,13 +47,18 @@ import com.whitebeach.atleticolineupapp.presentations.playerSheet.PlayerSheet
 import com.whitebeach.atleticolineupapp.presentations.formationSheet.formationItemList
 import com.whitebeach.atleticolineupapp.presentations.formationSheet.rememberFormation
 import com.whitebeach.atleticolineupapp.app.theme.AppTheme
-import com.whitebeach.atleticolineupapp.presentations.main.view.BitmapDialog
 import com.whitebeach.atleticolineupapp.app.component.dragDrop.DropTarget
+import com.whitebeach.atleticolineupapp.presentations.main.view.ShareDialog
+import com.whitebeach.atleticolineupapp.presentations.main.view.shareNoteImage
 import dev.shreyaspatil.capturable.Capturable
+import dev.shreyaspatil.capturable.capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@OptIn(
+    ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalComposeApi::class, ExperimentalComposeUiApi::class
+)
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
@@ -49,6 +66,7 @@ fun MainScreen(
     positionStateViewModel: PositionStateViewModel = viewModel()
 ) {
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     var bottomSheetContent: (@Composable () -> Unit)? by remember { mutableStateOf(null) }
     val formationState = rememberFormation()
@@ -56,6 +74,7 @@ fun MainScreen(
     var isDroppingItem by remember { mutableStateOf(true) }
     var isItemInBounds by remember { mutableStateOf(true) }
     val captureController = rememberCaptureController()
+
     var formationBitmap: ImageBitmap? by remember { mutableStateOf(null) }
 
     if (!isItemInBounds) {
@@ -65,17 +84,18 @@ fun MainScreen(
     }
 
     LaunchedEffect(formationState) {
+        formationBitmap = null
         sheetState.hide()
     }
 
-    formationBitmap?.let { imageBitmap ->
-        BitmapDialog(
-            closeDialog = { formationBitmap = null },
-            imageBitmap = imageBitmap.asAndroidBitmap(),
-            context = LocalContext.current,
-            coroutineScope = scope
-        )
-    }
+        formationBitmap?.let { imageBitmap ->
+            scope.launch {
+                shareNoteImage(
+                    bitmap = imageBitmap.asAndroidBitmap(),
+                    context = context
+                )
+            }
+        }
 
     ModalBottomSheetLayout(
         sheetContent = {
@@ -95,12 +115,37 @@ fun MainScreen(
     ) {
         Scaffold(
             topBar = {
-                TopAppBarItems(
+                CenterAlignedTopAppBar(
+                    title = {
+                        Image(
+                            painter = painterResource(id = R.drawable.atletico_logo),
+                            contentDescription = "",
+                            modifier = Modifier.size(50.dp),
+                        )
+                    },
                     modifier = Modifier,
-                    clickShare = {
-                        captureController.capture()
-                        //context.startActivity(shareIntent)
-                    }
+                    navigationIcon = {
+
+                    },
+                    actions = {
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    formationBitmap = captureController.captureAsync().await()
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.Send,
+                                contentDescription = ""
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = Color.Red,
+                        navigationIconContentColor = Color.Red,
+                        actionIconContentColor = Color.White
+                    )
                 )
             },
             bottomBar = {
@@ -133,25 +178,18 @@ fun MainScreen(
                 }
             }
         ) {
-            Capturable(
-                controller = captureController,
+            DisplayFormation(
                 modifier = Modifier
+                    .capturable(captureController)
+                    .padding(it)
                     .paint(
                         painter = painterResource(id = R.drawable.pitch),
                         contentScale = ContentScale.FillBounds
                     )
-                    .fillMaxSize()
-                    .padding(it),
-                onCaptured = { imageBitmap, _ ->
-                    formationBitmap = imageBitmap
-                }
-            ) {
-                DisplayFormation(
-                    modifier = Modifier.fillMaxSize(),
-                    manageFormation = formationState.manageFormation,
-                    stateList = positionStateViewModel.positionStateList
-                )
-            }
+                    .fillMaxSize(),
+                manageFormation = formationState.manageFormation,
+                stateList = positionStateViewModel.positionStateList
+            )
         }
     }
 }

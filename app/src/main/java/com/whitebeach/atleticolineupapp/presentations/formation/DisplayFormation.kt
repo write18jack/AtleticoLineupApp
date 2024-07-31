@@ -40,6 +40,7 @@ fun DisplayFormation(
 
     val itemHeight = screenHeight / 8
     val itemWidth = screenWidth / 5
+
     ConstraintLayout(
         constraintSet = manageFormation.formationConstraints(),
         modifier = modifier
@@ -80,89 +81,6 @@ fun DisplayFormation(
         }
     }
 }
-
-//@Composable
-//fun DisplayFormation(
-//    modifier: Modifier,
-//    manageFormation: ManageFormation,
-//    stateList: List<PositionState>,
-//    sheetObserve: Boolean
-////    stateHolder: StateHolder = rememberStateHolder()
-//) {
-//    val positionLists = rememberUpdatedState(newValue = positionList)
-//
-//    val configuration = LocalConfiguration.current
-//
-//    val screenHeight = configuration.screenHeightDp.dp
-//    val screenWidth = configuration.screenWidthDp.dp
-//
-//    val itemHeight = screenHeight / 8
-//    val itemWidth = screenWidth / 5
-//
-//    Log.d("StateCheck", "change?:  $sheetObserve")
-//    ConstraintLayout(
-//        constraintSet = manageFormation.formationConstraints(),
-//        modifier = modifier
-//    ) {
-//
-////                onDrag = { isBounds, isDragging ->
-////                    stateList[i].isDroppingItem = isDragging
-////                    stateList[i].isItemInBounds = isBounds
-////                },
-//        DropTarget(modifier = Modifier) {isInBound: Boolean, data: DragData? ->
-//            if (!LocalDragTargetInfo.current.itemDropped) {
-//                if(isInBound){
-//                    data?.let {
-//                        LocalDragTargetInfo.current.itemDropped = true
-//                        LocalDragTargetInfo.current.dragData = null
-//
-//
-//                    }
-//            }
-//        }
-//
-//                            if (!stateList[i].isDroppingItem) {
-//                                if (dragData.type == MimeType.IMAGE_JPEG) {
-//                                    stateList[i].dragImage = dragData.data as Painter
-//                                }
-//                            }
-//                        }
-//
-//                }
-//                PositionCard(
-//                    dragImage = stateList[i].dragImage,
-//                    itemWidth = itemWidth,
-//                    itemHeight = itemHeight
-//                )
-//            }
-//
-//    }
-//}
-//
-//@Composable
-//fun PositionCardList(
-//    modifier: Modifier,
-//    manageFormation: ManageFormation,
-//    data: PositionState,
-//    positionList:  State<MutableList<String>>,
-//){
-//    ConstraintLayout(
-//        constraintSet = manageFormation.formationConstraints(),
-//        modifier = modifier
-//    ) {
-//        for (i in 0..10) {
-//            Box(
-//                modifier = Modifier.layoutId(positionList.value[i]),
-//            ){
-//                PositionCard(
-//                    dragImage = data.dragImage,
-//                    itemWidth = itemWidth,
-//                    itemHeight = itemHeight
-//                )
-//            }
-//        }
-//    }
-//}
 
 @Composable
 fun PositionCard(
