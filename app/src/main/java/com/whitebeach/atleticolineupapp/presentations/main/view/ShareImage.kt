@@ -16,7 +16,7 @@ import java.io.IOException
 suspend fun shareNoteImage(bitmap: Bitmap, context: Context) {
     val uri = createUri(bitmap, context)
     if (uri != null) {
-        shareImageUri(context, uri)
+        //shareImageUri(context, uri)
     } else {
         Toast.makeText(
             context,
@@ -48,10 +48,10 @@ suspend fun createUri(image: Bitmap, context: Context): Uri? =
         uri
     }
 
-fun shareImageUri(context: Context, uri: Uri) {
+fun shareImageUri(uri: Uri): Intent {
     val intent = Intent(Intent.ACTION_SEND)
     intent.putExtra(Intent.EXTRA_STREAM, uri)
     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     intent.type = "image/png"
-    context.startActivity(intent)
+    return intent
 }
