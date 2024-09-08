@@ -17,6 +17,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,31 +27,47 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.whitebeach.atleticolineupapp.data.model.remote.PlayerInfo
 import com.whitebeach.atleticolineupapp.dragAndDrop.MimeType
 import com.whitebeach.atleticolineupapp.app.component.dragDrop.DragData
 import com.whitebeach.atleticolineupapp.app.component.dragDrop.DragTarget
+import com.whitebeach.atleticolineupapp.data.model.remote.player.Player
+import com.whitebeach.atleticolineupapp.data.model.remote.player.ResponseX
 
 @Composable
 fun PlayerSheet(
     modifier: Modifier = Modifier,
-    list: List<PlayerInfo>
+    //playersUiState: PlayersUiState,
+    //getPlayersInfo: () -> Unit = {},
+    //list: List<PlayerInfo>
     //onClick: (playerItem: PlayerItem) -> Unit
+    //rapidApiViewModel: RapidApiViewModel = viewModel(),
 ) {
+   // val playersUiState = rapidApiViewModel.playersUiState.collectAsState()
+    //val playerList = rapidApiViewModel.playersUiState.collectAsState()
+
+    PlayerSheetComponent(playerList = playerList.value)
+}
+
+@Composable
+fun PlayerSheetComponent(
+    playerList: List<ResponseX>
+){
     LazyHorizontalGrid(
         rows = GridCells.Fixed(2),
-        modifier = modifier.height(280.dp),
+        modifier = Modifier.height(280.dp),
         contentPadding = PaddingValues(horizontal = 5.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         items(
-            items = list,
-            key = { it.number }
+            items = playerList,
+            key = { it.player.id }
         ) { item ->
             PlayerCard(
-                player = item,
+                player = item.player,
                 //onClick = { onClick(item) }
             )
         }
@@ -58,10 +76,10 @@ fun PlayerSheet(
 
 @Composable
 fun PlayerCard(
-    player: PlayerInfo,
+    player: Player,
 //    onClick: () -> Unit
 ) {
-    val imageUrl = player.image
+    val imageUrl = player.photo
     val painter = rememberAsyncImagePainter(model = imageUrl)
     val dragData = DragData(type = MimeType.IMAGE_JPEG, data = painter)
 
@@ -112,8 +130,5 @@ fun PlayerCard(
 fun PlayerSheetPreview(){
     val list = listOf(
         PlayerInfo()
-    )
-    PlayerSheet(
-        list = list
     )
 }

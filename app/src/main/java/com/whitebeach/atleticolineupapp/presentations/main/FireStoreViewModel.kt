@@ -14,8 +14,8 @@ import java.util.Collections.emptyList
 class FireStoreViewModel : ViewModel() {
 
     var state = mutableStateListOf<PlayerInfo>()
-    private val _playerDataList = MutableStateFlow<List<PlayerInfo>>(emptyList())
-    val playerDataList: StateFlow<List<PlayerInfo>> = _playerDataList.asStateFlow()
+//    val _playerDataList = MutableStateFlow<List<PlayerInfo>>(emptyList())
+//    val playerDataList: StateFlow<List<PlayerInfo>> = _playerDataList.asStateFlow()
 
     init {
         getData()
@@ -23,7 +23,7 @@ class FireStoreViewModel : ViewModel() {
 
     private fun getData() {
         viewModelScope.launch {
-            _playerDataList.value = getPlayerInFireStore()
+            state = getPlayerInFireStore()
         }
     }
 }

@@ -5,9 +5,6 @@ import com.whitebeach.atleticolineupapp.data.remote.service.PlayersInfoService
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-class RemoteModule {
-}
-
 private const val BASE_URL = "https://api-football-v1.p.rapidapi.com"
 
 private val retrofit = Retrofit.Builder()

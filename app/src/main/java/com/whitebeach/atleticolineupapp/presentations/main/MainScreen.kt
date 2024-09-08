@@ -55,9 +55,10 @@ import com.whitebeach.atleticolineupapp.presentations.formationSheet.formationIt
 import com.whitebeach.atleticolineupapp.presentations.formationSheet.rememberFormation
 import com.whitebeach.atleticolineupapp.presentations.main.view.BottomBar
 import com.whitebeach.atleticolineupapp.presentations.playerSheet.PlayerSheet
+import com.whitebeach.atleticolineupapp.presentations.playerSheet.PlayersUiState
+import com.whitebeach.atleticolineupapp.presentations.playerSheet.RapidApiViewModel
 import dev.shreyaspatil.capturable.capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -71,7 +72,8 @@ import java.io.IOException
 fun MainScreen(
     modifier: Modifier = Modifier,
     fireStoreViewModel: FireStoreViewModel = viewModel(),
-    positionStateViewModel: PositionStateViewModel = viewModel()
+    rapidApiViewModel: RapidApiViewModel = viewModel(),
+    positionStateViewModel: PositionStateViewModel = viewModel(),
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -84,7 +86,8 @@ fun MainScreen(
     var formationBitmap: ImageBitmap? by remember { mutableStateOf(null) }
     var loadingDialogState by remember { mutableStateOf(false) }
 
-    val playerDataList by fireStoreViewModel.playerDataList.collectAsState()
+    val fireStoreList = fireStoreViewModel.state
+//    val playerList = rapidApiViewModel.playersUiState.collectAsState()
 
     if (!isItemInBounds) {
         LaunchedEffect(Unit) {
@@ -96,13 +99,13 @@ fun MainScreen(
         sheetState.hide()
     }
 
-    if(loadingDialogState){
+    if (loadingDialogState) {
         LoadingDialog(
             onDismissRequest = { loadingDialogState = false }
         )
     }
 
-    LaunchedEffect(formationBitmap){
+    LaunchedEffect(formationBitmap) {
         formationBitmap?.let { imageBitmap ->
             val imagesFolder = File(context.cacheDir, "images")
             var uri: Uri? = null
@@ -194,7 +197,11 @@ fun MainScreen(
                                 sheetState.show()
                             }
                             bottomSheetContent = {
-                                PlayerSheet(list = playerDataList)
+                                PlayerSheet(
+                                    modifier = Modifier,
+//                                    playersUiState = rapidApiViewModel.playersUiState.value,
+//                                    getPlayersInfo = { rapidApiViewModel.getPlayersInfo() }
+                                )
                             }
                         },
                         openFormationSheet = {

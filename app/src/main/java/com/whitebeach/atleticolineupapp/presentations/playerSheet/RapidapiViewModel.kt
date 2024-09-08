@@ -1,9 +1,6 @@
 package com.whitebeach.atleticolineupapp.presentations.playerSheet
 
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.whitebeach.atleticolineupapp.data.model.remote.player.ResponseX
@@ -12,49 +9,50 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.io.IOException
 
 sealed interface PlayersUiState {
-    data class Success(val players: List<ResponseX>) : PlayersUiState
+    data class Success(val players: MutableList<ResponseX>) : PlayersUiState
     object Error : PlayersUiState
     object Loading : PlayersUiState
 }
 
-@Stable
-class RapidapiViewModel: ViewModel() {
-    var playersUiState: PlayersUiState by mutableStateOf(PlayersUiState.Loading)
-        private set
+sealed class ResultUiState<out T> {
+    //object Idle : ResultUiState<Nothing>()
+    object Loading : ResultUiState<Nothing>()
+    data class Success<T>(val data: T) : ResultUiState<T>()
+    data class Error(val error: String) : ResultUiState<Nothing>()
+}
 
-    private val _storePlayersList = MutableStateFlow<List<ResponseX>>(emptyList())
-    val storePlayersList: StateFlow<List<ResponseX>> = _storePlayersList.asStateFlow()
+@Stable
+class RapidApiViewModel : ViewModel() {
+//    var playersUiState: PlayersUiState by mutableStateOf(PlayersUiState.Loading)
+//        private set
+
+    private val _playersUiState =
+        MutableStateFlow<List<ResponseX>>(emptyList())
+    val playersUiState: StateFlow<List<ResponseX>> = _playersUiState.asStateFlow()
 
     init {
-        getPlayersInfoX()
+        getPlayersInfo()
     }
 
-    fun getPlayersInfoX() {
+    private fun getPlayersInfo() {
+        //_playersUiState.value = ResultUiState.Loading
         viewModelScope.launch {
             try {
-                _storePlayersList.value += PlayerApi.retrofitService.getPlayers().body()!!.response
-                _storePlayersList.value += PlayerApi.retrofitService.getPlayers2().body()!!.response
-                _storePlayersList.value += PlayerApi.retrofitService.getPlayers3().body()!!.response
-
-            }catch (e: IOException){
-                PlayersUiState.Error
+                val response = PlayerApi.retrofitService.getPlayers().body()!!.response.toMutableList()
+                response += PlayerApi.retrofitService.getPlayers2().body()!!.response
+                response += PlayerApi.retrofitService.getPlayers3().body()!!.response
+                if (response.isNotEmpty()) {
+                    _playersUiState.value = response
+                }
+            } catch (e: IOException) {
+                _playersUiState.value = emptyList()
+            } catch (e: HttpException) {
+                _playersUiState.value = emptyList()
             }
         }
     }
-
-//    fun getPlayersInfo() {
-//        viewModelScope.launch {
-//            playersUiState = try {
-//                _storePlayersList.value += PlayerApi.retrofitService.getPlayers().body()!!.response
-//                _storePlayersList.value += PlayerApi.retrofitService.getPlayers2().body()!!.response
-//                _storePlayersList.value += PlayerApi.retrofitService.getPlayers3().body()!!.response
-//                PlayersUiState.Success(_storePlayersList.value)
-//            }catch (e: IOException){
-//                PlayersUiState.Error
-//            }
-//        }
-//    }
 }
