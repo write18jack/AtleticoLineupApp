@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -48,7 +49,7 @@ fun TopAppBarItems(
             onClick = clickShare
         ) {
             Icon(
-                imageVector = Icons.Filled.CheckCircle,
+                imageVector = Icons.Filled.Share,
                 contentDescription = "",
                 tint = Color.White
             )
@@ -56,7 +57,6 @@ fun TopAppBarItems(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun TopBatPreview() {

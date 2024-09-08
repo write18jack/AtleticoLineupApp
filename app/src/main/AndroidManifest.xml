@@ -30,8 +30,8 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
-<!--        ca-app-pub-3512477696171901~4084946280-->
+            android:value="ca-app-pub-3512477696171901~4084946280"/>
+<!--        ca-app-pub-3940256099942544~3347511713-->
         <activity
             android:name="com.whitebeach.atleticolineupapp.presentations.main.MainActivity"
             android:exported="true"

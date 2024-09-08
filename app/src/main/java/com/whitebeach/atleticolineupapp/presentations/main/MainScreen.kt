@@ -1,21 +1,36 @@
 package com.whitebeach.atleticolineupapp.presentations.main
 
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
+import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ExperimentalComposeApi
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
@@ -25,38 +40,54 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.whitebeach.atleticolineupapp.R
-import com.whitebeach.atleticolineupapp.presentations.main.view.BottomBar
+import com.whitebeach.atleticolineupapp.app.component.dragDrop.DropTarget
+import com.whitebeach.atleticolineupapp.app.theme.AppTheme
+import com.whitebeach.atleticolineupapp.app.theme.Red
+import com.whitebeach.atleticolineupapp.presentations.LoadingDialog
 import com.whitebeach.atleticolineupapp.presentations.formation.DisplayFormation
-import com.whitebeach.atleticolineupapp.presentations.main.view.TopAppBarItems
 import com.whitebeach.atleticolineupapp.presentations.formationSheet.FormationSheet
-import com.whitebeach.atleticolineupapp.presentations.playerSheet.PlayerSheet
 import com.whitebeach.atleticolineupapp.presentations.formationSheet.formationItemList
 import com.whitebeach.atleticolineupapp.presentations.formationSheet.rememberFormation
-import com.whitebeach.atleticolineupapp.app.theme.AppTheme
-import com.whitebeach.atleticolineupapp.presentations.main.view.BitmapDialog
-import com.whitebeach.atleticolineupapp.app.component.dragDrop.DropTarget
-import dev.shreyaspatil.capturable.Capturable
+import com.whitebeach.atleticolineupapp.presentations.main.view.BottomBar
+import com.whitebeach.atleticolineupapp.presentations.playerSheet.PlayerSheet
+import com.whitebeach.atleticolineupapp.presentations.playerSheet.PlayersUiState
+import com.whitebeach.atleticolineupapp.presentations.playerSheet.RapidApiViewModel
+import dev.shreyaspatil.capturable.capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@OptIn(
+    ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalComposeUiApi::class, ExperimentalComposeApi::class
+)
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
     fireStoreViewModel: FireStoreViewModel = viewModel(),
-    positionStateViewModel: PositionStateViewModel = viewModel()
+    rapidApiViewModel: RapidApiViewModel = viewModel(),
+    positionStateViewModel: PositionStateViewModel = viewModel(),
 ) {
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     var bottomSheetContent: (@Composable () -> Unit)? by remember { mutableStateOf(null) }
     val formationState = rememberFormation()
-    //bottomSheet expanded state
     var isDroppingItem by remember { mutableStateOf(true) }
     var isItemInBounds by remember { mutableStateOf(true) }
     val captureController = rememberCaptureController()
     var formationBitmap: ImageBitmap? by remember { mutableStateOf(null) }
+    var loadingDialogState by remember { mutableStateOf(false) }
+
+    val fireStoreList = fireStoreViewModel.state
+//    val playerList = rapidApiViewModel.playersUiState.collectAsState()
 
     if (!isItemInBounds) {
         LaunchedEffect(Unit) {
@@ -68,13 +99,40 @@ fun MainScreen(
         sheetState.hide()
     }
 
-    formationBitmap?.let { imageBitmap ->
-        BitmapDialog(
-            closeDialog = { formationBitmap = null },
-            imageBitmap = imageBitmap.asAndroidBitmap(),
-            context = LocalContext.current,
-            coroutineScope = scope
+    if (loadingDialogState) {
+        LoadingDialog(
+            onDismissRequest = { loadingDialogState = false }
         )
+    }
+
+    LaunchedEffect(formationBitmap) {
+        formationBitmap?.let { imageBitmap ->
+            val imagesFolder = File(context.cacheDir, "images")
+            var uri: Uri? = null
+            try {
+                imagesFolder.mkdirs()
+                val file = File(imagesFolder, "shared_image.png")
+                val stream = FileOutputStream(file)
+                imageBitmap.asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 90, stream)
+                stream.flush()
+                stream.close()
+                uri = FileProvider.getUriForFile(
+                    context,
+                    "com.atletico.file-provider",
+                    file
+                )
+            } catch (e: IOException) {
+                Log.d("Error", "IOException while trying to write file for sharing: " + e.message)
+            }
+            val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                putExtra(Intent.EXTRA_STREAM, uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                type = "image/png"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            loadingDialogState = false
+            startActivity(context, shareIntent, null)
+        }
     }
 
     ModalBottomSheetLayout(
@@ -95,17 +153,43 @@ fun MainScreen(
     ) {
         Scaffold(
             topBar = {
-                TopAppBarItems(
+                CenterAlignedTopAppBar(
+                    title = {
+                        Image(
+                            painter = painterResource(id = R.drawable.atletico_logo),
+                            contentDescription = "",
+                            modifier = Modifier.size(50.dp),
+                        )
+                    },
                     modifier = Modifier,
-                    clickShare = {
-                        captureController.capture()
-                        //context.startActivity(shareIntent)
-                    }
+                    navigationIcon = {
+
+                    },
+                    actions = {
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    formationBitmap = captureController.captureAsync().await()
+                                    loadingDialogState = true
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Share,
+                                contentDescription = ""
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = Color.Red,
+                        navigationIconContentColor = Color.Red,
+                        actionIconContentColor = Color.White
+                    )
                 )
             },
             bottomBar = {
                 BottomAppBar(
-                    containerColor = Color.Transparent
+                    containerColor = Red
                 ) {
                     BottomBar(
                         openPlayerSheet = {
@@ -113,7 +197,11 @@ fun MainScreen(
                                 sheetState.show()
                             }
                             bottomSheetContent = {
-                                PlayerSheet(list = fireStoreViewModel.state)
+                                PlayerSheet(
+                                    modifier = Modifier,
+//                                    playersUiState = rapidApiViewModel.playersUiState.value,
+//                                    getPlayersInfo = { rapidApiViewModel.getPlayersInfo() }
+                                )
                             }
                         },
                         openFormationSheet = {
@@ -133,25 +221,18 @@ fun MainScreen(
                 }
             }
         ) {
-            Capturable(
-                controller = captureController,
+            DisplayFormation(
                 modifier = Modifier
+                    .capturable(captureController)
+                    .padding(it)
                     .paint(
                         painter = painterResource(id = R.drawable.pitch),
                         contentScale = ContentScale.FillBounds
                     )
-                    .fillMaxSize()
-                    .padding(it),
-                onCaptured = { imageBitmap, _ ->
-                    formationBitmap = imageBitmap
-                }
-            ) {
-                DisplayFormation(
-                    modifier = Modifier.fillMaxSize(),
-                    manageFormation = formationState.manageFormation,
-                    stateList = positionStateViewModel.positionStateList
-                )
-            }
+                    .fillMaxSize(),
+                manageFormation = formationState.manageFormation,
+                stateList = positionStateViewModel.positionStateList
+            )
         }
     }
 }
@@ -163,232 +244,3 @@ fun PreviewMain() {
         MainScreen()
     }
 }
-//@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
-//@Composable
-//fun MainScreenX(
-//    //vm: PlayersTabViewModel = viewModel(),
-//    //vm2: RapidapiViewModel = viewModel(),
-//    vm: FireStoreViewModel = hiltViewModel(),
-//    vm3: PositionStateViewModel = viewModel(),
-//    //vm: FireStoreViewModel = viewModel()
-//) {
-//    //val configuration = LocalConfiguration.current
-//   // val heightInDp = configuration.screenHeightDp.dp
-//
-//    val tasks = vm.tasks.collectAsState(initial = emptyList())
-//
-//    //val playersList: List<ResponseX> by vm2.storePlayersList.collectAsState()
-//
-//    //state&scope of bottomSheet
-//    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-//
-//    // CallBack関数でCoroutineを使用する場合
-//    val scope = rememberCoroutineScope()
-//
-//    //bottomSheet expanded state
-//    var isDroppingItem by remember { mutableStateOf(true) }
-//    var isItemInBounds by remember { mutableStateOf(true) }
-//
-//    //val lazyGridState = rememberLazyGridState()
-//
-//    var bottomSheetContent: (@Composable () -> Unit)? by remember {
-//        mutableStateOf(null)
-//    }
-//    //val playerItemFlow by vm.playerItemFlow.collectAsState()
-//
-//    val formationSample = rememberFormation()
-//
-//    val stateList = vm3.positionStateList
-//    //ScreenShot
-//    val captureController = rememberCaptureController()
-//
-//    // This will hold captured bitmap
-//    // So that we can demo it
-//    var formationBitmap: ImageBitmap? by remember { mutableStateOf(null) }
-//
-//    //PlayerInfoDialog
-//    var showDialog by remember { mutableStateOf(false) }
-//
-//    if (!sheetState.isVisible) {
-//        LaunchedEffect(Unit) {
-//            sheetState.hide()
-//        }
-//    }
-//    //itemのDragでPlayerTabを出るとclose
-//    if (!isItemInBounds) {
-//        LaunchedEffect(Unit) {
-//            sheetState.hide()
-//        }
-//    }
-//    //formationTabタップ時にclose
-//    LaunchedEffect(key1 = formationSample, block = {
-//        sheetState.hide()
-//    })
-//
-//    // When Ticket's Bitmap image is captured, show preview in dialog
-//    formationBitmap?.let { imageBitmap ->
-//        BitmapDialog(
-//            closeDialog = { formationBitmap = null },
-//            imageBitmap = imageBitmap.asAndroidBitmap(),
-//            context = LocalContext.current,
-//            coroutineScope = scope
-//        )
-//    }
-//
-////    if (showDialog) {
-////        PlayerDialog(
-////            modifier = Modifier
-////                .fillMaxWidth()
-////                .height(heightInDp / 3 * 2),
-////            playerInfo = playerItemFlow
-////        ) {
-////            showDialog = false
-////        }
-////    }
-//
-//    DragContainer(
-//        modifier = Modifier.fillMaxSize()
-//    ) {
-//        ModalBottomSheetLayout(
-//            modifier = Modifier,
-//            sheetState = sheetState,
-//            sheetContent = {
-//                DropTarget(
-//                    modifier = Modifier,
-//                    onDrag = { isBounds, isDragging ->
-//                        isItemInBounds = isBounds
-//                        isDroppingItem = isDragging
-//                    }
-//                ) {
-//                    bottomSheetContent?.let { it() }
-//                }
-//            },
-//            sheetBackgroundColor = Color.Transparent
-//        ) {
-//            Scaffold(
-//                topBar = {
-//                    BoxWithConstraints {
-//                        val contentHeight = maxHeight
-//                        androidx.compose.material.TopAppBar(
-//                            modifier = Modifier.border(width = 3.dp, color = Color.Blue),
-//                            backgroundColor = Color.Red,
-//                            elevation = 8.dp
-//                        ) {
-//                            TopAppBarItems(
-//                                modifier = Modifier,
-//                                clickShare = {
-//                                    captureController.capture()
-//                                }
-//                            )
-//                        }
-//                    }
-//                },
-//                bottomBar = {
-//                    Column {
-////                        AdaptiveBanner(modifier = Modifier)
-//                        BottomBar(
-//                            modifier = Modifier.background(Color.Blue),
-//                            openPlayerSheet = {
-//                                bottomSheetContent = {
-//                                    PlayerSheet(
-//                                        modifier = Modifier.fillMaxWidth(),
-//                                        list = tasks.value
-////                                        onClick = { playerItem ->
-////                                            showDialog = true
-////                                            vm.onChangePlayerItem(playerItem)
-////                                        }
-//                                    )
-//                                }
-//                                scope.launch {
-//                                    sheetState.show()
-//                                }
-//                            },
-//                            openFormationSheet = {
-//                                bottomSheetContent = {
-//                                    FormationSheet(
-//                                        list = formationItemList,
-//                                        onCLickTask = { manageFormation ->
-//                                            formationSample.changeFormation(manageFormation)
-//                                        }
-//                                    )
-//                                }
-//                                scope.launch {
-//                                    sheetState.show()
-//                                }
-//                            }
-//                        )
-//                    }
-//                }
-//            ) { paddingValues ->
-//                Capturable(
-//                    controller = captureController,
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .padding(paddingValues),
-//                    onCaptured = { imageBitmap, _ ->
-//                        formationBitmap = imageBitmap
-//                    }
-//                ) {
-//                    DisplayFormation(
-//                        modifier = Modifier
-//                            .paint(
-//                                painter = painterResource(id = R.drawable.pitch),
-//                                contentScale = ContentScale.FillBounds
-//                            )
-//                            .fillMaxSize(),
-//                        manageFormation = formationSample.manageFormation,
-//                        stateList = stateList
-//                    )
-//                }
-//            }
-//        }
-//    }
-//}
-
-//@Composable
-//fun ManagePlayersUiState(
-//    playersUiState: PlayersUiState,
-//) {
-//    val emptyList = emptyList<ResponseX>().toMutableList()
-//    when (playersUiState) {
-//        is PlayersUiState.Loading -> LoadingScreen(modifier = Modifier.fillMaxSize())
-//        is PlayersUiState.Success -> {
-//            playersUiState.players.forEach {
-//                if (it.player.name in displayPlayer) {
-//                    emptyList.add(it)
-//                }
-//            }
-////            PlayerSheet(
-////                response =  emptyList
-////            )
-//        }
-//
-//        is PlayersUiState.Error -> ErrorScreen(retryAction = { /*TODO*/ })
-//    }
-//}
-//
-//@Composable
-//fun LoadingScreen(modifier: Modifier = Modifier) {
-//    Image(
-//        modifier = modifier,
-//        painter = painterResource(R.drawable.loading_img),
-//        contentDescription = stringResource(R.string.loading)
-//    )
-//}
-//
-//@Composable
-//fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
-//    Column(
-//        modifier = modifier,
-//        verticalArrangement = Arrangement.Center,
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Image(
-//            painter = painterResource(id = R.drawable.ic_connection_error), contentDescription = ""
-//        )
-//        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
-//        Button(onClick = retryAction) {
-//            Text(stringResource(R.string.retry))
-//        }
-//    }
-//}
