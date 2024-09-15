@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 rootProject.name = "AtleticoLineupApp"
 include(":app")
 include(":domain")
+
