@@ -1,7 +1,7 @@
-package com.whitebeach.atleticolineupapp.data.remote.di
+package com.whitebeach.data.remote
 
 import com.squareup.moshi.Moshi
-import com.whitebeach.atleticolineupapp.data.remote.service.PlayersInfoService
+import com.whitebeach.data.remote.network.PlayersInfoService
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 

@@ -1,4 +1,4 @@
-package com.whitebeach.atleticolineupapp.data.model.remote
+package com.whitebeach.data.remote.model
 
 data class PlayerInfo(
     val image: String="",

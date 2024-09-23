@@ -1,4 +1,4 @@
-package com.whitebeach.atleticolineupapp.domain.usecase
+package com.whitebeach.data.firestore
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
@@ -6,6 +6,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.whitebeach.atleticolineupapp.data.model.remote.PlayerInfo
+import com.whitebeach.data.remote.model.PlayerInfo
 
 fun getPlayerInFireStore(): SnapshotStateList<PlayerInfo> {
     val db = FirebaseFirestore.getInstance()

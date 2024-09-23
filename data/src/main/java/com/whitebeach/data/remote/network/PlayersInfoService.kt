@@ -1,4 +1,4 @@
-package com.whitebeach.atleticolineupapp.data.remote.service
+package com.whitebeach.data.remote.network
 
 import com.whitebeach.atleticolineupapp.data.model.remote.player.PlayersResponse
 import retrofit2.Response
@@ -13,7 +13,7 @@ interface PlayersInfoService {
         ]
     )
     @GET("v3/players?team=530&league=140&season=2024&page=1")
-    suspend fun getPlayers(): Response<PlayersResponse>
+    suspend fun getPlayers(): retrofit2.Response<PlayersResponse>
 
     @Headers(
         value = [
@@ -22,7 +22,7 @@ interface PlayersInfoService {
         ]
     )
     @GET("v3/players?team=530&league=140&season=2024&page=2")
-    suspend fun getPlayers2(): Response<PlayersResponse>
+    suspend fun getPlayers2(): retrofit2.Response<PlayersResponse>
 
     @Headers(
         value = [

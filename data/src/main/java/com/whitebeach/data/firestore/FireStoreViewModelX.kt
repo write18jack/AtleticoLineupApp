@@ -1,4 +1,4 @@
-package com.whitebeach.atleticolineupapp.data.remote.di
+package com.whitebeach.data.firestore
 
 import android.content.ContentValues.TAG
 import android.util.Log
@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.dataObjects
 import com.google.firebase.firestore.firestore
 import com.whitebeach.atleticolineupapp.data.model.remote.PlayerInfo
+import com.whitebeach.data.remote.model.PlayerInfo
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
