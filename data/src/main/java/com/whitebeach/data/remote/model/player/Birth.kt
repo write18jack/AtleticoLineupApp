@@ -1,4 +1,4 @@
-package com.whitebeach.atleticolineupapp.data.model.remote.player
+package com.whitebeach.data.remote.model.player
 
 data class Birth(
     var date: String?,

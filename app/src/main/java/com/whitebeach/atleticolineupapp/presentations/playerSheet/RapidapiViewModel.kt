@@ -3,8 +3,8 @@ package com.whitebeach.atleticolineupapp.presentations.playerSheet
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.whitebeach.atleticolineupapp.data.model.remote.player.ResponseX
-import com.whitebeach.atleticolineupapp.data.remote.di.PlayerApi
+import com.whitebeach.data.remote.PlayerApi
+import com.whitebeach.data.remote.model.player.ResponseX
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

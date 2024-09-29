@@ -1,4 +1,4 @@
-package com.adiupd123.cookmaster.models2
+package com.whitebeach.data.remote.model.player
 
 data class Dribbles(
     var attempts: Any?,

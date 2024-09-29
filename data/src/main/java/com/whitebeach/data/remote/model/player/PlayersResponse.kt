@@ -1,7 +1,8 @@
 package com.whitebeach.atleticolineupapp.data.model.remote.player
 
-import com.adiupd123.cookmaster.models2.Paging
-import com.adiupd123.cookmaster.models2.Parameters
+import com.whitebeach.data.remote.model.player.Paging
+import com.whitebeach.data.remote.model.player.Parameters
+import com.whitebeach.data.remote.model.player.ResponseX
 
 data class PlayersResponse(
     var `get`: String,

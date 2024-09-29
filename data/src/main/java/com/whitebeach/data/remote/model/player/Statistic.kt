@@ -1,18 +1,18 @@
 package com.whitebeach.atleticolineupapp.data.model.remote.player
 
-import com.adiupd123.cookmaster.models2.Cards
-import com.adiupd123.cookmaster.models2.Dribbles
-import com.adiupd123.cookmaster.models2.Duels
-import com.adiupd123.cookmaster.models2.Fouls
-import com.adiupd123.cookmaster.models2.Games
-import com.adiupd123.cookmaster.models2.Goals
-import com.adiupd123.cookmaster.models2.League
-import com.adiupd123.cookmaster.models2.Passes
-import com.adiupd123.cookmaster.models2.Penalty
-import com.adiupd123.cookmaster.models2.Shots
-import com.adiupd123.cookmaster.models2.Substitutes
-import com.adiupd123.cookmaster.models2.Tackles
-import com.adiupd123.cookmaster.models2.Team
+import com.whitebeach.data.remote.model.player.Cards
+import com.whitebeach.data.remote.model.player.Dribbles
+import com.whitebeach.data.remote.model.player.Duels
+import com.whitebeach.data.remote.model.player.Fouls
+import com.whitebeach.data.remote.model.player.Games
+import com.whitebeach.data.remote.model.player.Goals
+import com.whitebeach.data.remote.model.player.League
+import com.whitebeach.data.remote.model.player.Passes
+import com.whitebeach.data.remote.model.player.Penalty
+import com.whitebeach.data.remote.model.player.Shots
+import com.whitebeach.data.remote.model.player.Substitutes
+import com.whitebeach.data.remote.model.player.Tackles
+import com.whitebeach.data.remote.model.player.Team
 
 data class Statistic(
     var team: Team,

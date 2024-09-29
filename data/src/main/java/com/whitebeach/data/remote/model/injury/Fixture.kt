@@ -1,4 +1,4 @@
-package com.whitebeach.atleticolineupapp.data.model.remote.injury
+package com.whitebeach.data.remote.model.injury
 
 data class Fixture(
     var id: Int,

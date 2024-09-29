@@ -3,8 +3,7 @@ package com.whitebeach.atleticolineupapp.presentations.main
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.whitebeach.atleticolineupapp.data.model.remote.PlayerInfo
-import com.whitebeach.atleticolineupapp.domain.usecase.getPlayerInFireStore
+import com.whitebeach.data.remote.model.PlayerInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,7 +22,7 @@ class FireStoreViewModel : ViewModel() {
 
     private fun getData() {
         viewModelScope.launch {
-            state = getPlayerInFireStore()
+           // state = getPlayerInFireStore()
         }
     }
 }

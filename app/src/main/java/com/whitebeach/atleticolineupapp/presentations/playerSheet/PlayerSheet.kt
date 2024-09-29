@@ -17,8 +17,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,14 +25,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
-import com.whitebeach.atleticolineupapp.data.model.remote.PlayerInfo
 import com.whitebeach.atleticolineupapp.dragAndDrop.MimeType
 import com.whitebeach.atleticolineupapp.app.component.dragDrop.DragData
 import com.whitebeach.atleticolineupapp.app.component.dragDrop.DragTarget
 import com.whitebeach.atleticolineupapp.data.model.remote.player.Player
-import com.whitebeach.atleticolineupapp.data.model.remote.player.ResponseX
+import com.whitebeach.data.remote.model.PlayerInfo
+import com.whitebeach.data.remote.model.player.Birth
+import com.whitebeach.data.remote.model.player.ResponseX
 
 @Composable
 fun PlayerSheet(
@@ -48,12 +46,12 @@ fun PlayerSheet(
    // val playersUiState = rapidApiViewModel.playersUiState.collectAsState()
     //val playerList = rapidApiViewModel.playersUiState.collectAsState()
 
-    PlayerSheetComponent(playerList = playerList.value)
+    PlayerSheetComponent(playerList = listOf("a", "v"))
 }
 
 @Composable
 fun PlayerSheetComponent(
-    playerList: List<ResponseX>
+    playerList: List<String>
 ){
     LazyHorizontalGrid(
         rows = GridCells.Fixed(2),
@@ -64,10 +62,15 @@ fun PlayerSheetComponent(
     ) {
         items(
             items = playerList,
-            key = { it.player.id }
+           // key = { it.player.id }
         ) { item ->
             PlayerCard(
-                player = item.player,
+                player = Player(
+                    id = 2, name = "ww", firstname = "ss", lastname = "rr", age = 3,
+                    birth = Birth(
+                        date = "333", place = "eeee", country = "MAD"
+                    ) ,nationality = "dd", height = "11", weight = "fff", injured = false, photo = ""
+                    )
                 //onClick = { onClick(item) }
             )
         }

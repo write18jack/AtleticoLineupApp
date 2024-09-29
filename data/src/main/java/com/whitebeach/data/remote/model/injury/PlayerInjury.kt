@@ -1,4 +1,8 @@
-package com.whitebeach.atleticolineupapp.data.model.remote.injury
+package com.whitebeach.data.remote.model.injury
+
+import com.whitebeach.data.remote.model.injury.Paging
+import com.whitebeach.data.remote.model.injury.Parameters
+import com.whitebeach.data.remote.model.injury.Response
 
 data class PlayerInjury(
     var `get`: String,
