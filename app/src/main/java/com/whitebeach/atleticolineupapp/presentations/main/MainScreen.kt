@@ -71,8 +71,8 @@ import java.io.IOException
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    fireStoreViewModel: FireStoreViewModel = viewModel(),
-    rapidApiViewModel: RapidApiViewModel = viewModel(),
+    //fireStoreViewModel: FireStoreViewModel = viewModel(),
+    //rapidApiViewModel: RapidApiViewModel = viewModel(),
     positionStateViewModel: PositionStateViewModel = viewModel(),
 ) {
     val scope = rememberCoroutineScope()
@@ -86,7 +86,6 @@ fun MainScreen(
     var formationBitmap: ImageBitmap? by remember { mutableStateOf(null) }
     var loadingDialogState by remember { mutableStateOf(false) }
 
-    val fireStoreList = fireStoreViewModel.state
 //    val playerList = rapidApiViewModel.playersUiState.collectAsState()
 
     if (!isItemInBounds) {
@@ -237,10 +236,72 @@ fun MainScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MainLite(
+    modifier: Modifier = Modifier,
+    positionStateViewModel: PositionStateViewModel = viewModel()
+){
+    val formationState = rememberFormation()
+
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Image(
+                        painter = painterResource(id = R.drawable.atletico_logo),
+                        contentDescription = "",
+                        modifier = Modifier.size(50.dp),
+                    )
+                },
+                modifier = Modifier,
+                navigationIcon = {},
+                actions = {
+                    IconButton(
+                        onClick = {}
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Share,
+                            contentDescription = ""
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.Red,
+                    navigationIconContentColor = Color.Red,
+                    actionIconContentColor = Color.White
+                )
+            )
+        },
+        bottomBar = {
+            BottomAppBar(
+                containerColor = Red
+            ) {
+                BottomBar(
+                    openPlayerSheet = {},
+                    openFormationSheet = {}
+                )
+            }
+        }
+    ) {
+        DisplayFormation(
+            modifier = Modifier
+                .padding(it)
+                .paint(
+                    painter = painterResource(id = R.drawable.pitch),
+                    contentScale = ContentScale.FillBounds
+                )
+                .fillMaxSize(),
+            manageFormation = formationState.manageFormation,
+            stateList = positionStateViewModel.positionStateList
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewMain() {
     AppTheme {
-        MainScreen()
+
     }
 }
