@@ -72,7 +72,6 @@ import java.io.IOException
 fun MainScreen(
     modifier: Modifier = Modifier,
     fireStoreViewModel: FireStoreViewModel = viewModel(),
-    rapidApiViewModel: RapidApiViewModel = viewModel(),
     positionStateViewModel: PositionStateViewModel = viewModel(),
 ) {
     val scope = rememberCoroutineScope()
@@ -80,14 +79,12 @@ fun MainScreen(
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     var bottomSheetContent: (@Composable () -> Unit)? by remember { mutableStateOf(null) }
     val formationState = rememberFormation()
+    val fireStoreList = fireStoreViewModel.playerDataList
     var isDroppingItem by remember { mutableStateOf(true) }
     var isItemInBounds by remember { mutableStateOf(true) }
     val captureController = rememberCaptureController()
     var formationBitmap: ImageBitmap? by remember { mutableStateOf(null) }
     var loadingDialogState by remember { mutableStateOf(false) }
-
-    val fireStoreList = fireStoreViewModel.state
-//    val playerList = rapidApiViewModel.playersUiState.collectAsState()
 
     if (!isItemInBounds) {
         LaunchedEffect(Unit) {
@@ -199,8 +196,7 @@ fun MainScreen(
                             bottomSheetContent = {
                                 PlayerSheet(
                                     modifier = Modifier,
-//                                    playersUiState = rapidApiViewModel.playersUiState.value,
-//                                    getPlayersInfo = { rapidApiViewModel.getPlayersInfo() }
+                                    playerList = fireStoreList
                                 )
                             }
                         },

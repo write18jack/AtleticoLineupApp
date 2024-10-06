@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.transport.runtime)
+    implementation(project(mapOf("path" to ":data")))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
