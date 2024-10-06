@@ -36,8 +36,11 @@ android {
 dependencies {
 
     implementation(libs.core.ktx)
-    implementation(libs.appcompat)
-    implementation(libs.material)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.material3)
     implementation(libs.converter.moshi)
     implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
     implementation(libs.firebase.firestore.ktx)

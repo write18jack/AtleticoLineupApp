@@ -30,59 +30,39 @@ import com.whitebeach.atleticolineupapp.dragAndDrop.MimeType
 import com.whitebeach.atleticolineupapp.app.component.dragDrop.DragData
 import com.whitebeach.atleticolineupapp.app.component.dragDrop.DragTarget
 import com.whitebeach.atleticolineupapp.data.model.remote.player.Player
-import com.whitebeach.data.remote.model.PlayerInfo
-import com.whitebeach.data.remote.model.player.Birth
-import com.whitebeach.data.remote.model.player.ResponseX
+import com.whitebeach.data.model.PlayerInfo
+import com.whitebeach.data.model.player.Birth
 
 @Composable
 fun PlayerSheet(
     modifier: Modifier = Modifier,
-    //playersUiState: PlayersUiState,
-    //getPlayersInfo: () -> Unit = {},
-    //list: List<PlayerInfo>
-    //onClick: (playerItem: PlayerItem) -> Unit
-    //rapidApiViewModel: RapidApiViewModel = viewModel(),
+    playerList: List<PlayerInfo>
 ) {
-   // val playersUiState = rapidApiViewModel.playersUiState.collectAsState()
-    //val playerList = rapidApiViewModel.playersUiState.collectAsState()
-
-    PlayerSheetComponent(playerList = listOf("a", "v"))
-}
-
-@Composable
-fun PlayerSheetComponent(
-    playerList: List<String>
-){
     LazyHorizontalGrid(
         rows = GridCells.Fixed(2),
-        modifier = Modifier.height(280.dp),
+        modifier = modifier.height(280.dp),
         contentPadding = PaddingValues(horizontal = 5.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         items(
             items = playerList,
-           // key = { it.player.id }
+            key = { it.number }
         ) { item ->
             PlayerCard(
-                player = Player(
-                    id = 2, name = "ww", firstname = "ss", lastname = "rr", age = 3,
-                    birth = Birth(
-                        date = "333", place = "eeee", country = "MAD"
-                    ) ,nationality = "dd", height = "11", weight = "fff", injured = false, photo = ""
-                    )
-                //onClick = { onClick(item) }
+                player = item,
             )
+            //onClick = { onClick(item) }
         }
     }
 }
 
 @Composable
 fun PlayerCard(
-    player: Player,
+    player: PlayerInfo,
 //    onClick: () -> Unit
 ) {
-    val imageUrl = player.photo
+    val imageUrl = player.image
     val painter = rememberAsyncImagePainter(model = imageUrl)
     val dragData = DragData(type = MimeType.IMAGE_JPEG, data = painter)
 
@@ -130,7 +110,7 @@ fun PlayerCard(
 
 @Preview
 @Composable
-fun PlayerSheetPreview(){
+fun PlayerSheetPreview() {
     val list = listOf(
         PlayerInfo()
     )

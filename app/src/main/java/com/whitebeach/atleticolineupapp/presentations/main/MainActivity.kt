@@ -25,8 +25,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             AtleticoLineupAppTheme {
                 DragContainer {
-                    MainLite()
-                    //MainScreen()
+                    MainScreen()
                 }
             }
         }

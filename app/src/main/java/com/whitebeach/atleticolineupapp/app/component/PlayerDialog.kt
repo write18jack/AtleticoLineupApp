@@ -19,8 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.whitebeach.data.remote.model.PlayerInfo
-
+import com.whitebeach.data.model.PlayerInfo
 
 @Composable
 fun PlayerDialog(
