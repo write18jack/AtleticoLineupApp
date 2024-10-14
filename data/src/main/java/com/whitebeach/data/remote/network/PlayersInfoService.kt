@@ -1,6 +1,6 @@
 package com.whitebeach.data.remote.network
 
-import com.whitebeach.atleticolineupapp.data.model.remote.player.PlayersResponse
+import com.whitebeach.data.model.player.PlayersResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers

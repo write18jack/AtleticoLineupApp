@@ -1,18 +1,4 @@
-package com.whitebeach.atleticolineupapp.data.model.remote.player
-
-import com.whitebeach.data.model.player.Cards
-import com.whitebeach.data.model.player.Dribbles
-import com.whitebeach.data.model.player.Duels
-import com.whitebeach.data.model.player.Fouls
-import com.whitebeach.data.model.player.Games
-import com.whitebeach.data.model.player.Goals
-import com.whitebeach.data.model.player.League
-import com.whitebeach.data.model.player.Passes
-import com.whitebeach.data.model.player.Penalty
-import com.whitebeach.data.model.player.Shots
-import com.whitebeach.data.model.player.Substitutes
-import com.whitebeach.data.model.player.Tackles
-import com.whitebeach.data.model.player.Team
+package com.whitebeach.data.model.player
 
 data class Statistic(
     var team: Team,

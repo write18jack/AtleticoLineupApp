@@ -1,8 +1,4 @@
-package com.whitebeach.atleticolineupapp.data.model.remote.player
-
-import com.whitebeach.data.model.player.Paging
-import com.whitebeach.data.model.player.Parameters
-import com.whitebeach.data.model.player.ResponseX
+package com.whitebeach.data.model.player
 
 data class PlayersResponse(
     var `get`: String,

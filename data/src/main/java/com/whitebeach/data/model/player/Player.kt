@@ -1,6 +1,4 @@
-package com.whitebeach.atleticolineupapp.data.model.remote.player
-
-import com.whitebeach.data.model.player.Birth
+package com.whitebeach.data.model.player
 
 data class Player(
     var id: Int,
