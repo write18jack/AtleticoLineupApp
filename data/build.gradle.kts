@@ -37,6 +37,7 @@ dependencies {
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.ui)
     implementation(platform(libs.compose.bom))
     implementation(libs.converter.moshi)
     implementation(platform("com.google.firebase:firebase-bom:32.2.3"))

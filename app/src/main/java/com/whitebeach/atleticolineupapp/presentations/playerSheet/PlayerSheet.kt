@@ -29,9 +29,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.whitebeach.atleticolineupapp.dragAndDrop.MimeType
 import com.whitebeach.atleticolineupapp.app.component.dragDrop.DragData
 import com.whitebeach.atleticolineupapp.app.component.dragDrop.DragTarget
-import com.whitebeach.atleticolineupapp.data.model.remote.player.Player
 import com.whitebeach.data.model.PlayerInfo
-import com.whitebeach.data.model.player.Birth
 
 @Composable
 fun PlayerSheet(
