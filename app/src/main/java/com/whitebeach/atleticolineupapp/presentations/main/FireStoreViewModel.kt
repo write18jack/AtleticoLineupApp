@@ -22,8 +22,3 @@ class FireStoreViewModel() : ViewModel() {
         }
     }
 }
-
-sealed class FirestoreUiState {
-    data class Success(val players: List<PlayerInfo>) : FirestoreUiState()
-    data class Error(val message: Throwable) : FirestoreUiState()
-}
