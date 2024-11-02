@@ -29,6 +29,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.whitebeach.atleticolineupapp.dragAndDrop.MimeType
 import com.whitebeach.atleticolineupapp.app.component.dragDrop.DragData
 import com.whitebeach.atleticolineupapp.app.component.dragDrop.DragTarget
+import com.whitebeach.atleticolineupapp.presentations.main.FirestoreUiState
 import com.whitebeach.data.model.PlayerInfo
 
 @Composable

@@ -55,8 +55,6 @@ import com.whitebeach.atleticolineupapp.presentations.formationSheet.formationIt
 import com.whitebeach.atleticolineupapp.presentations.formationSheet.rememberFormation
 import com.whitebeach.atleticolineupapp.presentations.main.view.BottomBar
 import com.whitebeach.atleticolineupapp.presentations.playerSheet.PlayerSheet
-import com.whitebeach.atleticolineupapp.presentations.playerSheet.PlayersUiState
-import com.whitebeach.atleticolineupapp.presentations.playerSheet.RapidApiViewModel
 import dev.shreyaspatil.capturable.capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 import kotlinx.coroutines.launch
@@ -79,7 +77,7 @@ fun MainScreen(
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     var bottomSheetContent: (@Composable () -> Unit)? by remember { mutableStateOf(null) }
     val formationState = rememberFormation()
-    val fireStoreList = fireStoreViewModel.playerDataList
+    val firestoreList = fireStoreViewModel.playerDataList.collectAsState()
     var isDroppingItem by remember { mutableStateOf(true) }
     var isItemInBounds by remember { mutableStateOf(true) }
     val captureController = rememberCaptureController()
@@ -192,12 +190,13 @@ fun MainScreen(
                         openPlayerSheet = {
                             scope.launch {
                                 sheetState.show()
-                            }
-                            bottomSheetContent = {
-                                PlayerSheet(
-                                    modifier = Modifier,
-                                    playerList = fireStoreList
-                                )
+
+                                bottomSheetContent = {
+                                    PlayerSheet(
+                                        modifier = Modifier,
+                                        playerList = firestoreList.value
+                                    )
+                                }
                             }
                         },
                         openFormationSheet = {

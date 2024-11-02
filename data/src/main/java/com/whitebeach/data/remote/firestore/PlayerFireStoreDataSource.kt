@@ -1,36 +1,26 @@
 package com.whitebeach.data.remote.firestore
 
-import android.util.Log
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.firebase.firestore.FirebaseFirestore
 import com.whitebeach.data.model.PlayerInfo
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
-fun playerFireStoreDataSource(): SnapshotStateList<PlayerInfo> {
+fun playerFireStoreDataSource(): StateFlow<List<PlayerInfo>> {
     val db = FirebaseFirestore.getInstance()
-    var userList = mutableStateListOf<PlayerInfo>()
+
+    val userList: MutableStateFlow<List<PlayerInfo>> = MutableStateFlow(emptyList())
 
     db.collection("Players")
-        .addSnapshotListener { value, error ->
-            error?.let {
-                Log.d("error", "getDataFromFirstStore: $it")
-            }
-            if (value != null) {
-                for (document in value.documents) {
-                    val result = document.toObject(PlayerInfo::class.java)
-                    if (result != null) {
-                        Log.d("result", "PlayerDataSource: $result")
-                        userList.add(result)
-                    }
+        .get()
+        .addOnSuccessListener { result ->
+            for (document in result) {
+                val result = document.toObject(PlayerInfo::class.java)
+                if (true) {
+                    userList.value = userList.value + result
                 }
             }
-
-//            value?.documents
-//                ?.mapNotNull { document -> document.toObject(PlayerInfo::class.java) }
-//                .also { result ->
-//                    Log.d("result", "PlayerDataSource: $result")
-//                    userList.addAll(result)
-//                }
+        }.addOnFailureListener {
+            userList.value = emptyList()
         }
     return userList
 }
