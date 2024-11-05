@@ -15,9 +15,7 @@ fun playerFireStoreDataSource(): StateFlow<List<PlayerInfo>> {
         .addOnSuccessListener { result ->
             for (document in result) {
                 val result = document.toObject(PlayerInfo::class.java)
-                if (true) {
-                    userList.value = userList.value + result
-                }
+                userList.value = userList.value + result
             }
         }.addOnFailureListener {
             userList.value = emptyList()
