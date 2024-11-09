@@ -55,8 +55,6 @@ import com.whitebeach.atleticolineupapp.presentations.formationSheet.formationIt
 import com.whitebeach.atleticolineupapp.presentations.formationSheet.rememberFormation
 import com.whitebeach.atleticolineupapp.presentations.main.view.BottomBar
 import com.whitebeach.atleticolineupapp.presentations.playerSheet.PlayerSheet
-import com.whitebeach.atleticolineupapp.presentations.playerSheet.PlayersUiState
-import com.whitebeach.atleticolineupapp.presentations.playerSheet.RapidApiViewModel
 import dev.shreyaspatil.capturable.capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 import kotlinx.coroutines.launch
@@ -72,7 +70,6 @@ import java.io.IOException
 fun MainScreen(
     modifier: Modifier = Modifier,
     fireStoreViewModel: FireStoreViewModel = viewModel(),
-    rapidApiViewModel: RapidApiViewModel = viewModel(),
     positionStateViewModel: PositionStateViewModel = viewModel(),
 ) {
     val scope = rememberCoroutineScope()
@@ -80,14 +77,12 @@ fun MainScreen(
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     var bottomSheetContent: (@Composable () -> Unit)? by remember { mutableStateOf(null) }
     val formationState = rememberFormation()
+    val firestoreList = fireStoreViewModel.playerDataList.collectAsState()
     var isDroppingItem by remember { mutableStateOf(true) }
     var isItemInBounds by remember { mutableStateOf(true) }
     val captureController = rememberCaptureController()
     var formationBitmap: ImageBitmap? by remember { mutableStateOf(null) }
     var loadingDialogState by remember { mutableStateOf(false) }
-
-    val fireStoreList = fireStoreViewModel.state
-//    val playerList = rapidApiViewModel.playersUiState.collectAsState()
 
     if (!isItemInBounds) {
         LaunchedEffect(Unit) {
@@ -195,13 +190,13 @@ fun MainScreen(
                         openPlayerSheet = {
                             scope.launch {
                                 sheetState.show()
-                            }
-                            bottomSheetContent = {
-                                PlayerSheet(
-                                    modifier = Modifier,
-//                                    playersUiState = rapidApiViewModel.playersUiState.value,
-//                                    getPlayersInfo = { rapidApiViewModel.getPlayersInfo() }
-                                )
+
+                                bottomSheetContent = {
+                                    PlayerSheet(
+                                        modifier = Modifier,
+                                        playerList = firestoreList.value
+                                    )
+                                }
                             }
                         },
                         openFormationSheet = {
