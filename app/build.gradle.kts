@@ -1,10 +1,9 @@
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    kotlin("kapt")
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.ksp)
     id("com.google.gms.google-services")
-    //id("com.google.devtools.ksp")
 }
 
 android {
@@ -21,12 +20,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
     }
     buildTypes {
         release {
@@ -47,17 +40,17 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
-}
-kapt {
-    arguments {
-        arg("room.schemaLocation", "$projectDir/schemas")
+    buildFeatures {
+        compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
+
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.kotlin.stdlib)
+    //implementation(libs.kotlin.stdlib)
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
@@ -65,10 +58,10 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.androidx.material)
     implementation(libs.material3)
-    implementation(libs.material)
+    implementation(libs.androidx.material)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.transport.runtime)
-    implementation(project(mapOf("path" to ":data")))
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -77,25 +70,18 @@ dependencies {
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
-    implementation(libs.okhttp)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.paging.common.ktx)
-    implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.retrofit2.kotlin.coroutines.adapter)
-    implementation(libs.converter.moshi)
-    implementation(libs.moshi.kotlin)
+
     implementation(libs.play.services.ads)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.capturable)
-    implementation(libs.coil.compose)
-    implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
-    implementation(libs.firebase.firestore.ktx)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.firestore)
+
+    implementation(project(":data"))
+    implementation(project(":domain"))
+    implementation(project(":presentation"))
+
 }
