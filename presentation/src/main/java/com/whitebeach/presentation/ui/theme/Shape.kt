@@ -1,4 +1,4 @@
-package com.whitebeach.atleticolineupapp.app.theme
+package com.whitebeach.presentation.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

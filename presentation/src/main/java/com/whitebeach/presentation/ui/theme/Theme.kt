@@ -1,4 +1,4 @@
-package com.whitebeach.atleticolineupapp.app.theme
+package com.whitebeach.presentation.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

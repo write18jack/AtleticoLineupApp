@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.whitebeach.presentation.ui.dragDrop.DragContainer
-import com.whitebeach.atleticolineupapp.app.theme.AtleticoLineupAppTheme
+import com.whitebeach.presentation.ui.theme.AtleticoLineupAppTheme
 import com.whitebeach.presentation.ui.main.MainScreen
 
 class MainActivity : ComponentActivity() {
