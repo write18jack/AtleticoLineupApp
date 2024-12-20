@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import com.google.android.gms.ads.MobileAds
 import com.whitebeach.presentation.ui.dragDrop.DragContainer
 import com.whitebeach.presentation.ui.theme.AtleticoLineupAppTheme
 import com.whitebeach.presentation.ui.main.MainScreen
@@ -26,6 +27,6 @@ class MainActivity : ComponentActivity() {
             }
         }
         // initialize the Mobile Ads SDK
-        //MobileAds.initialize(this){}
+        MobileAds.initialize(this){}
     }
 }

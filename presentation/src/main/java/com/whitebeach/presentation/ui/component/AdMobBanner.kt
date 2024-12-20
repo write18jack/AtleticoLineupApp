@@ -8,6 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize
+import com.google.android.gms.ads.AdView
+import com.whitebeach.presentation.R
 
 @Composable
 fun AdaptiveBanner(
@@ -24,15 +28,15 @@ fun AdaptiveBanner(
             modifier = Modifier.fillMaxWidth(),
             factory = {context ->
                 // Using application context to avoid memory leak
-                com.google.android.gms.ads.AdView(context).apply {
-                    com.google.android.gms.ads.BaseAdView.setAdSize(
-                        com.google.android.gms.ads.AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+                AdView(context).apply {
+                    setAdSize(
+                        getCurrentOrientationAnchoredAdaptiveBannerAdSize(
                             context,
                             deviceCurrentWidth,
                         ),
                     )
-                    com.google.android.gms.ads.BaseAdView.setAdUnitId = context.getString(com.whitebeach.atleticolineupapp.R.string.ad_id_banner)
-                    com.google.android.gms.ads.BaseAdView.loadAd(com.google.android.gms.ads.AdRequest.Builder.build())
+                    adUnitId = context.getString(R.string.ad_id_banner)
+                    loadAd(AdRequest.Builder().build())
                 }
             },
         )
