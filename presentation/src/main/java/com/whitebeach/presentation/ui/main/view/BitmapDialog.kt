@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Share
@@ -41,7 +42,7 @@ fun BitmapDialog(
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
                     IconButton(onClick = onDismiss) {
-                        androidx.compose.material.Icon(
+                        Icon(
                             imageVector = Icons.Filled.Close,
                             contentDescription = "",
                             tint = Color.White
@@ -54,7 +55,7 @@ fun BitmapDialog(
                             }
                         }
                     ) {
-                        androidx.compose.material.Icon(
+                        Icon(
                             imageVector = Icons.Filled.Share,
                             contentDescription = "",
                             tint = Color.White

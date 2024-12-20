@@ -5,11 +5,16 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,6 +44,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.whitebeach.presentation.R
+import com.whitebeach.presentation.ui.component.AdaptiveBanner
 import com.whitebeach.presentation.ui.main.view.LoadingDialog
 import com.whitebeach.presentation.ui.dragDrop.DropTarget
 import com.whitebeach.presentation.ui.formation.DisplayFormation
@@ -55,7 +62,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 @OptIn(
-    androidx.compose.material.ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class,
     ExperimentalComposeUiApi::class, ExperimentalComposeApi::class
 )
 @Composable
@@ -66,8 +73,7 @@ fun MainScreen(
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val sheetState =
-        androidx.compose.material.rememberModalBottomSheetState(initialValue = androidx.compose.material.ModalBottomSheetValue.Hidden)
+    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     var bottomSheetContent: (@Composable () -> Unit)? by remember { mutableStateOf(null) }
     val formationState = rememberFormation()
     val firestoreList = fireStoreViewModel.playerDataList.collectAsState()
@@ -123,7 +129,7 @@ fun MainScreen(
         }
     }
 
-    androidx.compose.material.ModalBottomSheetLayout(
+    ModalBottomSheetLayout(
         sheetContent = {
             DropTarget(
                 modifier = Modifier,
@@ -144,7 +150,7 @@ fun MainScreen(
                 CenterAlignedTopAppBar(
                     title = {
                         Image(
-                            painter = painterResource(id = com.whitebeach.presentation.R.drawable.atletico_logo),
+                            painter = painterResource(id = R.drawable.atletico_logo),
                             contentDescription = "",
                             modifier = Modifier.size(50.dp),
                         )
@@ -176,36 +182,39 @@ fun MainScreen(
                 )
             },
             bottomBar = {
-                BottomAppBar(
-                    containerColor = Color.Red
-                ) {
-                    BottomBar(
-                        openPlayerSheet = {
-                            scope.launch {
-                                sheetState.show()
+                Column {
+                    AdaptiveBanner(modifier = Modifier)
+                    BottomAppBar(
+                        containerColor = Color.Red
+                    ) {
+                        BottomBar(
+                            openPlayerSheet = {
+                                scope.launch {
+                                    sheetState.show()
 
+                                    bottomSheetContent = {
+                                        PlayerSheet(
+                                            modifier = Modifier,
+                                            playerList = firestoreList.value
+                                        )
+                                    }
+                                }
+                            },
+                            openFormationSheet = {
+                                scope.launch {
+                                    sheetState.show()
+                                }
                                 bottomSheetContent = {
-                                    PlayerSheet(
-                                        modifier = Modifier,
-                                        playerList = firestoreList.value
+                                    FormationSheet(
+                                        list = formationItemList,
+                                        onCLickTask = {
+                                            formationState.changeFormation(it)
+                                        }
                                     )
                                 }
                             }
-                        },
-                        openFormationSheet = {
-                            scope.launch {
-                                sheetState.show()
-                            }
-                            bottomSheetContent = {
-                                FormationSheet(
-                                    list = formationItemList,
-                                    onCLickTask = {
-                                        formationState.changeFormation(it)
-                                    }
-                                )
-                            }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         ) {
@@ -214,7 +223,7 @@ fun MainScreen(
                     .capturable(captureController)
                     .padding(it)
                     .paint(
-                        painter = painterResource(id = com.whitebeach.presentation.R.drawable.pitch),
+                        painter = painterResource(id = R.drawable.pitch),
                         contentScale = ContentScale.FillBounds
                     )
                     .fillMaxSize(),

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.layoutId
+import com.whitebeach.atleticolineupapp.dragAndDrop.MimeType
 import com.whitebeach.presentation.ui.dragDrop.DropPaneContent
 import com.whitebeach.presentation.ui.dragDrop.DropTarget
 import com.whitebeach.presentation.ui.dragDrop.LocalDragTargetInfo
@@ -61,7 +62,7 @@ fun DisplayFormation(
                         //LocalDragTargetInfo.current.dragData = null
 
                         if (!stateList[i].isDroppingItem) {
-                            if (it.type == com.whitebeach.atleticolineupapp.dragAndDrop.MimeType.IMAGE_JPEG) {
+                            if (it.type == MimeType.IMAGE_JPEG) {
                                 stateList[i].dragImage = it.data as Painter
                             }
                         }
