@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.com.android.application)
@@ -70,6 +68,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.transport.runtime)
+    implementation(project(mapOf("path" to ":data")))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
