@@ -13,6 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+<<<<<<< HEAD
 .idea/appInsightsSettings.xml
 .idea/deploymentTargetSelector.xml
 .idea/migrations.xml
@@ -22,3 +23,10 @@ local.properties
 .idea/gradle.xml
 .idea/kotlinc.xml
 .idea/inspectionProfiles/Project_Default.xml
+=======
+.idea/gradle.xml
+.idea/runConfigurations.xml
+.idea/encodings.xml
+.kotlin/
+>>>>>>> feature-create-multi-module-local
+.idea/gradle.xml~feature-create-multi-module-local
