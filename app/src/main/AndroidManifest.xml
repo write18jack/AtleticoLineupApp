@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/SplashTheme"
-        android:name=".app.MainApplication"
+        android:name=".MainApplication"
         android:hardwareAccelerated="true"
         tools:targetApi="32">
         <!--        android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"-->
@@ -33,7 +33,7 @@
             android:value="ca-app-pub-3512477696171901~4084946280"/>
 <!--        ca-app-pub-3940256099942544~3347511713-->
         <activity
-            android:name="com.whitebeach.atleticolineupapp.presentations.main.MainActivity"
+            android:name="com.whitebeach.atleticolineupapp.MainActivity"
             android:exported="true"
             android:screenOrientation="fullSensor">
 <!--            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"-->
