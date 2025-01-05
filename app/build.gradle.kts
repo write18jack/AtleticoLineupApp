@@ -1,4 +1,3 @@
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
@@ -98,4 +97,6 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
     implementation(libs.firebase.firestore.ktx)
+
+    implementation(project(":presentation"))
 }

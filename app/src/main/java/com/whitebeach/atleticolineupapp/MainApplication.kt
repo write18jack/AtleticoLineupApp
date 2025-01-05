@@ -1,4 +1,4 @@
-package com.whitebeach.atleticolineupapp.app
+package com.whitebeach.atleticolineupapp
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

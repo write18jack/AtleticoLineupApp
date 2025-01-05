@@ -1,4 +1,3 @@
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
@@ -9,7 +8,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 34
+        minSdk = 30
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -31,14 +30,38 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-}
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.3"
+    }
 
-dependencies {
+    dependencies {
 
-    implementation(libs.core.ktx)
-    implementation(libs.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+        implementation(libs.core.ktx)
+        implementation(libs.appcompat)
+        implementation(libs.material)
+        implementation(libs.lifecycle.runtime.ktx)
+        implementation(libs.kotlin.stdlib)
+        implementation(libs.activity.compose)
+        implementation(libs.androidx.lifecycle.viewmodel.compose)
+        implementation(platform(libs.compose.bom))
+        implementation(libs.ui)
+        implementation(libs.ui.graphics)
+        implementation(libs.ui.tooling.preview)
+        implementation(libs.androidx.material)
+        implementation(libs.material3)
+        implementation(libs.androidx.constraintlayout.compose)
+        implementation(libs.capturable)
+        implementation(libs.coil.compose)
+        implementation(libs.play.services.ads)
+        implementation(libs.retrofit)
+
+        testImplementation(libs.junit)
+        androidTestImplementation(libs.androidx.test.ext.junit)
+        androidTestImplementation(libs.espresso.core)
+
+        implementation(project(":data"))
+    }
 }
