@@ -26,7 +26,9 @@ sealed class ResultUiState<out T> {
 }
 
 @Stable
-class RapidApiViewModel : ViewModel() {
+class RapidApiViewModel(
+    private val playerApi: PlayerApi
+) : ViewModel() {
 //    var playersUiState: PlayersUiState by mutableStateOf(PlayersUiState.Loading)
 //        private set
 
@@ -42,9 +44,9 @@ class RapidApiViewModel : ViewModel() {
         //_playersUiState.value = ResultUiState.Loading
         viewModelScope.launch {
             try {
-                val response = PlayerApi.retrofitService.getPlayers().body()!!.response.toMutableList()
-                response += PlayerApi.retrofitService.getPlayers2().body()!!.response
-                response += PlayerApi.retrofitService.getPlayers3().body()!!.response
+                val response = playerApi.retrofitService.getPlayers().body()!!.response.toMutableList()
+                response += playerApi.retrofitService.getPlayers2().body()!!.response
+                response += playerApi.retrofitService.getPlayers3().body()!!.response
                 if (response.isNotEmpty()) {
                     _playersUiState.value = response
                 }
