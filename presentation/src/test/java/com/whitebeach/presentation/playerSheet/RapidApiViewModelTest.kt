@@ -1,100 +1,69 @@
 package com.whitebeach.presentation.playerSheet
 
-import com.whitebeach.data.model.player.Birth
-import com.whitebeach.data.model.player.Paging
-import com.whitebeach.data.model.player.Parameters
-import com.whitebeach.data.model.player.Player
-import com.whitebeach.data.model.player.PlayersResponse
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.whitebeach.data.model.player.ResponseX
-import com.whitebeach.data.remote.FakePlayerApi
-import com.whitebeach.data.remote.FakePlayersInfoService
-import com.whitebeach.data.remote.PlayerApi
+import com.whitebeach.data.repository.PlayersRepository
+import com.whitebeach.presentation.fake.FakePlayersInfoService
+import io.mockk.coEvery
+import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import retrofit2.Response
+import org.junit.rules.TestRule
 
-
+@ExperimentalCoroutinesApi
 class RapidApiViewModelTest {
 
-    lateinit var viewModel: RapidApiViewModel
-    private lateinit var playerApi: PlayerApi
-    private lateinit var fakePlayersInfoService: FakePlayersInfoService
+    private lateinit var viewModel: RapidApiViewModel
+    private lateinit var playersRepository: PlayersRepository
+    private lateinit var repository: PlayersRepository
+
+    @get:Rule
+    val testInstantTaskExecutorRules: TestRule = InstantTaskExecutorRule()
+    private val testDispatcher = StandardTestDispatcher()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
-        fakePlayersInfoService = FakePlayersInfoService().apply {
-            getPlayersImpl = {
-                Response.success(
-                    PlayersResponse(
-                        get ="123456789",
-                        parameters = Parameters(
-                            team = "",
-                            season = "",
-                        ),
-                        errors = emptyList(),
-                        results = 2,
-                        paging = Paging(
-                            current = 1,
-                            total = 1
-                        ),
-                        response = listOf(
-                            ResponseX(
-                                player = Player(
-                                    id = 1,
-                                    name = "name",
-                                    firstname = "firstname",
-                                    lastname = "lastname",
-                                    age = 1,
-                                    birth = Birth(
-                                        date = "data",
-                                        place = "place",
-                                        country = "country"
-                                    ),
-                                    nationality = "nationality",
-                                    height = "height",
-                                    weight = "weight",
-                                    injured = true,
-                                    photo = "photo"
-                                ),
-                                statistics = emptyList()
-                            )
-                        ),
-                    )
-                )
-            }
-        }
-
-        playerApi = FakePlayerApi(fakePlayersInfoService)
-        viewModel = RapidApiViewModel(playerApi)
+        playersRepository = PlayersRepository(FakePlayersInfoService())
+        repository = mockk<PlayersRepository>()
+        Dispatchers.setMain(testDispatcher)
     }
 
+    @Test
+    fun viewmodel_getPlayers_verifyPlayers() = runTest(UnconfinedTestDispatcher()) {
+
+        // ViewModelのインスタンス化（initブロックが実行される）
+        viewModel = RapidApiViewModel(playersRepository)
+        val data: List<ResponseX> = playersRepository.getPlayers().body()!!.response
+        testDispatcher.scheduler.advanceUntilIdle()
+        val result = viewModel.playersUiState
+
+        // データ取得状態を検証
+        assertEquals(PlayersUiState.Success(data), result)
+    }
 
     @Test
-    fun aaa() {
-        val data: List<ResponseX> = listOf(
-            ResponseX(
-                player = Player(
-                    id = 1,
-                    name = "name",
-                    firstname = "firstname",
-                    lastname = "lastname",
-                    age = 1,
-                    birth = Birth(
-                        date = "data",
-                        place = "place",
-                        country = "country"
-                    ),
-                    nationality = "nationality",
-                    height = "height",
-                    weight = "weight",
-                    injured = true,
-                    photo = "photo"
-                ),
-                statistics = emptyList()
-            )
-        )
-        val result = viewModel.playersUiState.value
-        assertEquals(data, result)
+    fun viewmodel_getPlayers_error() = runTest(UnconfinedTestDispatcher()) {
+        // モックのエラーレスポンスを設定
+        val errorMessage = "error message"
+
+        // suspend関数の場合 coEvery
+        coEvery { repository.getPlayers() } throws RuntimeException(errorMessage)
+
+        // ViewModelのインスタンス化（initブロックが実行される）
+        val viewModel = RapidApiViewModel(repository)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        // エラー状態を検証
+        assertEquals(PlayersUiState.Error(errorMessage), viewModel.playersUiState)
     }
 
 }
