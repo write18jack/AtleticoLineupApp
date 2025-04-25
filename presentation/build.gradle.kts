@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -24,17 +27,19 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
     }
 
     dependencies {
@@ -55,12 +60,25 @@ android {
         implementation(libs.androidx.constraintlayout.compose)
         implementation(libs.capturable)
         implementation(libs.coil.compose)
-        implementation(libs.play.services.ads)
+//        implementation(libs.play.services.ads)
         implementation(libs.retrofit)
+        implementation(libs.converter.gson)
+        implementation(libs.hilt.android)
+        ksp(libs.hilt.compiler)
 
         testImplementation(libs.junit)
-        androidTestImplementation(libs.androidx.test.ext.junit)
+        testImplementation(libs.ui.test.junit4)
+        testImplementation(libs.kotlinx.coroutines.test)
+        testImplementation(libs.mockk)
+        testImplementation(libs.androidx.core.testing)
+        testImplementation(libs.robolectric)
+        androidTestImplementation(libs.junit)
+        androidTestImplementation(libs.ui.test.junit4)
         androidTestImplementation(libs.espresso.core)
+        androidTestImplementation(libs.junit.ext)
+        androidTestImplementation(platform(libs.compose.bom))
+        debugImplementation(libs.ui.test.manifest)
+        debugImplementation(libs.ui.tooling)
 
         implementation(project(":data"))
     }

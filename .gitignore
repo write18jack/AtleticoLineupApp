@@ -17,3 +17,7 @@ local.properties
 .idea/runConfigurations.xml
 .idea/encodings.xml
 .kotlin/
+.idea/AndroidProjectSystem.xml
+.idea/androidTestResultsUserPreferences.xml
+.idea/kotlinc.xml
+.idea/deploymentTargetSelector.xml

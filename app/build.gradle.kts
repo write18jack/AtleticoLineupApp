@@ -1,9 +1,10 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    kotlin("kapt")
-    id("com.google.gms.google-services")
-    //id("com.google.devtools.ksp")
+    alias(libs.plugins.compose)
+//    id("com.google.gms.google-services")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -23,9 +24,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
     }
     buildTypes {
         release {
@@ -47,11 +45,6 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
-kapt {
-    arguments {
-        arg("room.schemaLocation", "$projectDir/schemas")
-    }
-}
 
 dependencies {
     implementation(libs.core.ktx)
@@ -67,15 +60,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.transport.runtime)
-    implementation(project(mapOf("path" to ":data")))
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.ui.test.junit4)
-    debugImplementation(libs.ui.tooling)
-    debugImplementation(libs.ui.test.manifest)
-
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.kotlinx.serialization.json)
@@ -87,16 +71,18 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.retrofit2.kotlin.coroutines.adapter)
     implementation(libs.converter.moshi)
     implementation(libs.moshi.kotlin)
-    implementation(libs.play.services.ads)
+//    implementation(libs.play.services.ads)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.capturable)
     implementation(libs.coil.compose)
-    implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore.ktx)
 
+    implementation(project(":data"))
     implementation(project(":presentation"))
 }
