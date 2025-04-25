@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,7 +25,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ExperimentalComposeApi
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,21 +38,22 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.whitebeach.presentation.LoadingDialog
+import com.whitebeach.presentation.R
 import com.whitebeach.presentation.component.dragDrop.DropTarget
 import com.whitebeach.presentation.formation.DisplayFormation
 import com.whitebeach.presentation.formationSheet.FormationSheet
 import com.whitebeach.presentation.formationSheet.formationItemList
 import com.whitebeach.presentation.formationSheet.rememberFormation
 import com.whitebeach.presentation.main.view.BottomBar
-import com.whitebeach.presentation.playerSheet.PlayerSheet
-import com.whitebeach.presentation.R
+import com.whitebeach.presentation.playerSheet.PlayerSheetCheck
+import com.whitebeach.presentation.playerSheet.RapidApiViewModel
 import dev.shreyaspatil.capturable.capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 import kotlinx.coroutines.launch
@@ -67,20 +68,23 @@ import java.io.IOException
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    fireStoreViewModel: FireStoreViewModel = viewModel(),
+    //fireStoreViewModel: FireStoreViewModel = viewModel(),
     positionStateViewModel: PositionStateViewModel = viewModel(),
+    rapidApiViewModel: RapidApiViewModel = viewModel(),
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     var bottomSheetContent: (@Composable () -> Unit)? by remember { mutableStateOf(null) }
     val formationState = rememberFormation()
-    val firestoreList = fireStoreViewModel.playerDataList.collectAsState()
+    //val firestoreList = fireStoreViewModel.playerDataList.collectAsState()
     var isDroppingItem by remember { mutableStateOf(true) }
     var isItemInBounds by remember { mutableStateOf(true) }
     val captureController = rememberCaptureController()
     var formationBitmap: ImageBitmap? by remember { mutableStateOf(null) }
     var loadingDialogState by remember { mutableStateOf(false) }
+
+    val playersUiState = rapidApiViewModel.playersUiState
 
     if (!isItemInBounds) {
         LaunchedEffect(Unit) {
@@ -154,7 +158,7 @@ fun MainScreen(
                             modifier = Modifier.size(50.dp),
                         )
                     },
-                    modifier = Modifier,
+                    modifier = Modifier.testTag("yourTestTag"),
                     navigationIcon = {
 
                     },
@@ -184,33 +188,36 @@ fun MainScreen(
                 BottomAppBar(
                     containerColor = Color.Red
                 ) {
-                    BottomBar(
-                        openPlayerSheet = {
-                            scope.launch {
-                                sheetState.show()
-
+                    Column {
+                        // AdaptiveBanner(modifier = Modifier)
+                        BottomBar(
+                            openPlayerSheet = {
+                                scope.launch {
+                                    sheetState.show()
+                                    bottomSheetContent = {
+//                                    rapidApiViewModel.getPlayersInfo()
+                                        PlayerSheetCheck(
+                                            modifier = Modifier,
+                                            playersUiState = playersUiState
+                                        )
+                                    }
+                                }
+                            },
+                            openFormationSheet = {
+                                scope.launch {
+                                    sheetState.show()
+                                }
                                 bottomSheetContent = {
-                                    PlayerSheet(
-                                        modifier = Modifier,
-                                        playerList = firestoreList.value
+                                    FormationSheet(
+                                        list = formationItemList,
+                                        onCLickTask = {
+                                            formationState.changeFormation(it)
+                                        }
                                     )
                                 }
                             }
-                        },
-                        openFormationSheet = {
-                            scope.launch {
-                                sheetState.show()
-                            }
-                            bottomSheetContent = {
-                                FormationSheet(
-                                    list = formationItemList,
-                                    onCLickTask = {
-                                        formationState.changeFormation(it)
-                                    }
-                                )
-                            }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         ) {
@@ -228,10 +235,4 @@ fun MainScreen(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewMain() {
-
 }

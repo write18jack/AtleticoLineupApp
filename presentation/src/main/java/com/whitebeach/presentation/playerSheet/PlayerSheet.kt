@@ -22,19 +22,39 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.whitebeach.atleticolineupapp.dragAndDrop.MimeType
-import com.whitebeach.data.model.PlayerInfo
+import com.whitebeach.data.model.player.ResponseX
 import com.whitebeach.presentation.component.dragDrop.DragData
 import com.whitebeach.presentation.component.dragDrop.DragTarget
 
 @Composable
+fun PlayerSheetCheck(
+    modifier: Modifier = Modifier,
+    playersUiState: PlayersUiState
+) {
+    when (playersUiState) {
+        is PlayersUiState.Loading -> {
+            Text(text = "Loading")
+        }
+        is PlayersUiState.Success -> {
+            PlayerSheet(
+                modifier = modifier,
+                playersList = playersUiState.players
+            )
+        }
+        is PlayersUiState.Error -> {
+            Text(text = "Error")
+        }
+    }
+}
+
+@Composable
 fun PlayerSheet(
     modifier: Modifier = Modifier,
-    playerList: List<PlayerInfo>
+    playersList: List<ResponseX>
 ) {
     LazyHorizontalGrid(
         rows = GridCells.Fixed(2),
@@ -44,8 +64,8 @@ fun PlayerSheet(
         horizontalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         items(
-            items = playerList,
-            key = { it.number }
+            items = playersList,
+            key = { it.player.id }
         ) { item ->
             PlayerCard(
                 player = item,
@@ -57,10 +77,10 @@ fun PlayerSheet(
 
 @Composable
 fun PlayerCard(
-    player: PlayerInfo,
+    player: ResponseX,
 //    onClick: () -> Unit
 ) {
-    val imageUrl = player.image
+    val imageUrl = player.player.photo
     val painter = rememberAsyncImagePainter(model = imageUrl)
     val dragData = DragData(type = MimeType.IMAGE_JPEG, data = painter)
 
@@ -92,7 +112,7 @@ fun PlayerCard(
                     contentScale = ContentScale.FillHeight
                 )
                 Text(
-                    text = player.name,
+                    text = player.player.name,
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 8.dp)
@@ -104,12 +124,4 @@ fun PlayerCard(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun PlayerSheetPreview() {
-    val list = listOf(
-        PlayerInfo()
-    )
 }

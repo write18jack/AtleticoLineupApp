@@ -1,60 +1,42 @@
 package com.whitebeach.presentation.playerSheet
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.whitebeach.data.remote.PlayerApi
 import com.whitebeach.data.model.player.ResponseX
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.whitebeach.data.repository.PlayersRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
+import javax.inject.Inject
 
-sealed interface PlayersUiState {
-    data class Success(val players: MutableList<ResponseX>) : PlayersUiState
-    object Error : PlayersUiState
-    object Loading : PlayersUiState
-}
-
-sealed class ResultUiState<out T> {
-    //object Idle : ResultUiState<Nothing>()
-    object Loading : ResultUiState<Nothing>()
-    data class Success<T>(val data: T) : ResultUiState<T>()
-    data class Error(val error: String) : ResultUiState<Nothing>()
-}
-
-@Stable
-class RapidApiViewModel(
-    private val playerApi: PlayerApi
+@HiltViewModel
+class RapidApiViewModel @Inject constructor(
+    private val playersRepository: PlayersRepository
 ) : ViewModel() {
-//    var playersUiState: PlayersUiState by mutableStateOf(PlayersUiState.Loading)
-//        private set
 
-    private val _playersUiState =
-        MutableStateFlow<List<ResponseX>>(emptyList())
-    val playersUiState: StateFlow<List<ResponseX>> = _playersUiState.asStateFlow()
+    var playersUiState: PlayersUiState by mutableStateOf(PlayersUiState.Loading)
+        private set
 
     init {
         getPlayersInfo()
     }
 
-    private fun getPlayersInfo() {
-        //_playersUiState.value = ResultUiState.Loading
+    fun getPlayersInfo() {
         viewModelScope.launch {
-            try {
-                val response = playerApi.retrofitService.getPlayers().body()!!.response.toMutableList()
-                response += playerApi.retrofitService.getPlayers2().body()!!.response
-                response += playerApi.retrofitService.getPlayers3().body()!!.response
-                if (response.isNotEmpty()) {
-                    _playersUiState.value = response
-                }
-            } catch (e: IOException) {
-                _playersUiState.value = emptyList()
-            } catch (e: HttpException) {
-                _playersUiState.value = emptyList()
+            playersUiState = PlayersUiState.Loading
+            playersUiState = try {
+                PlayersUiState.Success(playersRepository.getPlayers().body()!!.response)
+            } catch (e: Exception) {
+                PlayersUiState.Error(e.message ?: "unknown error")
             }
         }
     }
+}
+
+sealed interface PlayersUiState {
+    object Loading : PlayersUiState
+    data class Success(val players: List<ResponseX>) : PlayersUiState
+    data class Error(val message: String) : PlayersUiState
 }
