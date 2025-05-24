@@ -12,8 +12,8 @@ interface PlayersInfoService {
             "X-RapidAPI-Host: api-football-v1.p.rapidapi.com"
         ]
     )
-    @GET("v3/players?team=530&league=140&season=2024&page=1")
-    suspend fun getPlayers(): retrofit2.Response<PlayersResponse>
+    @GET("v3/players?team=530&season=2024&page=1")
+    suspend fun getPlayers(): Response<PlayersResponse>
 
     @Headers(
         value = [
@@ -21,8 +21,8 @@ interface PlayersInfoService {
             "X-RapidAPI-Host: api-football-v1.p.rapidapi.com"
         ]
     )
-    @GET("v3/players?team=530&league=140&season=2024&page=2")
-    suspend fun getPlayers2(): retrofit2.Response<PlayersResponse>
+    @GET("v3/players?team=530&season=2024&page=2")
+    suspend fun getPlayers2(): Response<PlayersResponse>
 
     @Headers(
         value = [
@@ -30,6 +30,6 @@ interface PlayersInfoService {
             "X-RapidAPI-Host: api-football-v1.p.rapidapi.com"
         ]
     )
-    @GET("v3/players?team=530&league=140&season=2024&page=3")
+    @GET("v3/players?team=530&season=2024&page=3")
     suspend fun getPlayers3(): Response<PlayersResponse>
 }
