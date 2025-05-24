@@ -3,7 +3,6 @@ package com.whitebeach.presentation.playerSheet
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.whitebeach.data.remote.PlayerApi
 import com.whitebeach.data.model.player.ResponseX
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,18 +40,19 @@ class RapidApiViewModel : ViewModel() {
     private fun getPlayersInfo() {
         //_playersUiState.value = ResultUiState.Loading
         viewModelScope.launch {
-            try {
-                val response = PlayerApi.retrofitService.getPlayers().body()!!.response.toMutableList()
-                response += PlayerApi.retrofitService.getPlayers2().body()!!.response
-                response += PlayerApi.retrofitService.getPlayers3().body()!!.response
-                if (response.isNotEmpty()) {
-                    _playersUiState.value = response
-                }
-            } catch (e: IOException) {
-                _playersUiState.value = emptyList()
-            } catch (e: HttpException) {
-                _playersUiState.value = emptyList()
-            }
+//            try {
+//                val response = PlayerApi.retrofitService.getPlayers().body()!!.response.toMutableList()
+//                response += PlayerApi.retrofitService.getPlayers2().body()!!.response
+//                response += PlayerApi.retrofitService.getPlayers3().body()!!.response
+//                if (response.isNotEmpty()) {
+//                    _playersUiState.value = response
+//                }
+//            } catch (e: IOException) {
+//                _playersUiState.value = emptyList()
+//            } catch (e: HttpException) {
+//                _playersUiState.value = emptyList()
+//            }
+//        }
         }
     }
 }
