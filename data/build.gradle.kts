@@ -38,14 +38,16 @@ dependencies {
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.ui)
-    implementation(platform(libs.compose.bom))
+    implementation(libs.converter.gson)
     implementation(libs.converter.moshi)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.android)
     implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
     implementation(libs.firebase.firestore.ktx)
+
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.hilt.android.testing)
+    kspTest(libs.hilt.compiler)
+
 }
