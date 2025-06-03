@@ -1,6 +1,5 @@
 package com.whitebeach.presentation.formationSheet
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,10 +12,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.whitebeach.presentation.formation.ManageFormation
@@ -25,20 +24,17 @@ import com.whitebeach.presentation.formation.ManageFormation
 fun FormationSheet(
     modifier: Modifier = Modifier,
     list: List<FormationItem>,
-    onCLickTask: (manageFormation: ManageFormation)->Unit
-){
-    SideEffect {
-        Log.d("composeLog", "FormationTab composition!")
-    }
+    onCLickTask: (manageFormation: ManageFormation) -> Unit
+) {
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(5.dp),
         contentPadding = PaddingValues(5.dp)
-    ){
+    ) {
         items(
             items = list,
             key = { item -> item.id }
-        ){formationItem ->
+        ) { formationItem ->
             FormationCard(
                 formationItem = formationItem,
                 onClick = { onCLickTask(formationItem.manageFormation) }
@@ -50,10 +46,11 @@ fun FormationSheet(
 @Composable
 fun FormationCard(
     formationItem: FormationItem,
-    onClick: ()->Unit
-){
+    onClick: () -> Unit
+) {
     Row(
         modifier = Modifier
+            .testTag(formationItem.formation)
             .fillMaxWidth()
             .background(Color.White, RoundedCornerShape(5.dp))
             .clickable(
@@ -69,7 +66,7 @@ fun FormationCard(
     ) {
         Text(
             modifier = Modifier,
-            text = formationItem.formation,fontSize = 28.sp
+            text = formationItem.formation, fontSize = 28.sp
         )
     }
 }
