@@ -1,9 +1,10 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    kotlin("kapt")
+    alias(libs.plugins.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
     id("com.google.gms.google-services")
-    //id("com.google.devtools.ksp")
 }
 
 android {
@@ -23,9 +24,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
     }
     buildTypes {
         release {
@@ -47,11 +45,6 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
-kapt {
-    arguments {
-        arg("room.schemaLocation", "$projectDir/schemas")
-    }
-}
 
 dependencies {
     implementation(libs.core.ktx)
@@ -67,7 +60,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.transport.runtime)
-    implementation(project(mapOf("path" to ":data")))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -86,6 +78,7 @@ dependencies {
     implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
+    ksp(libs.hilt.compiler)
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.retrofit2.kotlin.coroutines.adapter)
@@ -98,5 +91,6 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
     implementation(libs.firebase.firestore.ktx)
 
+    implementation(project(":data"))
     implementation(project(":presentation"))
 }

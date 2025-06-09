@@ -8,7 +8,9 @@ import androidx.core.view.WindowCompat
 import com.whitebeach.presentation.component.dragDrop.DragContainer
 import com.whitebeach.presentation.theme.AtleticoLineupAppTheme
 import com.whitebeach.presentation.main.MainScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         //Calling SplashScreen
