@@ -53,6 +53,8 @@ import com.whitebeach.presentation.formationSheet.rememberFormation
 import com.whitebeach.presentation.main.view.BottomBar
 import com.whitebeach.presentation.playerSheet.PlayerSheet
 import com.whitebeach.presentation.R
+import com.whitebeach.presentation.playerSheet.PlayerSheetCheck
+import com.whitebeach.presentation.playerSheet.RapidApiViewModel
 import dev.shreyaspatil.capturable.capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 import kotlinx.coroutines.launch
@@ -69,6 +71,7 @@ fun MainScreen(
     modifier: Modifier = Modifier,
     fireStoreViewModel: FireStoreViewModel = viewModel(),
     positionStateViewModel: PositionStateViewModel = viewModel(),
+    rapidApiViewModel: RapidApiViewModel = viewModel(),
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -81,6 +84,8 @@ fun MainScreen(
     val captureController = rememberCaptureController()
     var formationBitmap: ImageBitmap? by remember { mutableStateOf(null) }
     var loadingDialogState by remember { mutableStateOf(false) }
+
+    val playersUiState = rapidApiViewModel.playersUiState
 
     if (!isItemInBounds) {
         LaunchedEffect(Unit) {
@@ -188,11 +193,10 @@ fun MainScreen(
                         openPlayerSheet = {
                             scope.launch {
                                 sheetState.show()
-
                                 bottomSheetContent = {
-                                    PlayerSheet(
+                                    PlayerSheetCheck(
                                         modifier = Modifier,
-                                        playerList = firestoreList.value
+                                        playersUiState = playersUiState
                                     )
                                 }
                             }
