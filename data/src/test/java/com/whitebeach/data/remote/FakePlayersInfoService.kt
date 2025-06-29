@@ -20,7 +20,7 @@ class FakePlayersInfoService : PlayersInfoService {
         return Response.success(getPlayersResponse())
     }
 
-    fun getPlayersResponse(): PlayersResponse? {
+    private fun getPlayersResponse(): PlayersResponse? {
         return AssetsManager.openStream("players_response.json")?.use { stream ->
             val gson = Gson()
             val reader = InputStreamReader(stream)
