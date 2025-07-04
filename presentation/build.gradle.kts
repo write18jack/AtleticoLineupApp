@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.whitebeach.presentation"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 30
@@ -57,7 +57,7 @@ android {
         implementation(libs.coil.compose)
         ksp(libs.hilt.compiler)
         implementation(libs.hilt.android)
-//        implementation(libs.play.services.ads)
+        implementation(libs.play.services.ads)
         implementation(libs.retrofit)
         implementation(libs.converter.gson)
 

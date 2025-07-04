@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.whitebeach.data"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 30
@@ -42,8 +42,6 @@ dependencies {
     implementation(libs.converter.moshi)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.android)
-    implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
-    implementation(libs.firebase.firestore.ktx)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
