@@ -18,6 +18,11 @@
         android:hardwareAccelerated="true"
         tools:targetApi="32">
         <!--        android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"-->
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_app_id"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.atletico.file-provider"
@@ -28,10 +33,6 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-<!--        <meta-data-->
-<!--            android:name="com.google.android.gms.ads.APPLICATION_ID"-->
-<!--            android:value="ca-app-pub-3512477696171901~4084946280"/>-->
-<!--        ca-app-pub-3940256099942544~3347511713-->
         <activity
             android:name="com.whitebeach.atleticolineupapp.MainActivity"
             android:exported="true"
