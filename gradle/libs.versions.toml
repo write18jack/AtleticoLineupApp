@@ -4,6 +4,7 @@ capturable = "2.1.0"
 coil-compose = "2.4.0"
 constraintlayout-compose = "1.0.1"
 core-splashscreen = "1.0.1"
+coreTesting = "2.2.0"
 firebase-firestore-ktx = "24.9.1"
 google-material = "1.10.0"
 androidxPaging = "3.1.0"
@@ -31,10 +32,12 @@ retrofit = "2.9.0"
 retrofit2-kotlin-coroutines-adapter = "0.9.2"
 retrofit2-kotlinx-serialization-converter = "1.0.0"
 appcompat = "1.7.0"
+robolectric = "4.13"
 
 [libraries]
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayout-compose" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-splashscreen" }
+androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle-runtime-ktx" }
 androidx-material = { module = "androidx.compose.material:material", version.ref = "material" }
@@ -69,6 +72,7 @@ play-services-ads = { module = "com.google.android.gms:play-services-ads", versi
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit2-kotlin-coroutines-adapter = { module = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter", version.ref = "retrofit2-kotlin-coroutines-adapter" }
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2-kotlinx-serialization-converter" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 ui = { group = "androidx.compose.ui", name = "ui" }
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }

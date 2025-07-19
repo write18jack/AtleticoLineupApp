@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "com.whitebeach.atleticolineupapp"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "com.whitebeach.atleticolineupapp"
         minSdk = 30
@@ -28,8 +28,6 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            //isShrinkResources = true
-            //signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -43,6 +41,13 @@ android {
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+    packagingOptions {
+        resources {
+            // 重複するファイルを除外する
+            excludes.add("META-INF/AL2.0")
+            excludes.add("META-INF/LGPL2.1") // 他のライセンスファイルで同様のエラーが出た場合も追記
+        }
     }
 }
 
@@ -88,8 +93,7 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.capturable)
     implementation(libs.coil.compose)
-    implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
-    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.google.services)
 
     implementation(project(":data"))
     implementation(project(":presentation"))

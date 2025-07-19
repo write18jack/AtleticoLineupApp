@@ -1,9 +1,9 @@
-package com.whitebeach.data.remote
+package com.whitebeach.presentation.fake
 
 import com.google.gson.Gson
 import com.whitebeach.data.model.player.PlayersResponse
 import com.whitebeach.data.remote.network.PlayersInfoService
-import com.whitebeach.data.util.AssetsManager
+import com.whitebeach.presentation.util.AssetsManager
 import retrofit2.Response
 import java.io.InputStreamReader
 
@@ -20,11 +20,12 @@ class FakePlayersInfoService : PlayersInfoService {
         return Response.success(getPlayersResponse())
     }
 
-    private fun getPlayersResponse(): PlayersResponse? {
-        return AssetsManager.openStream("players_response.json")?.use { stream ->
-            val gson = Gson()
-            val reader = InputStreamReader(stream)
-            gson.fromJson(reader, PlayersResponse::class.java)
-        }
+    fun getPlayersResponse(): PlayersResponse? {
+        return AssetsManager.openStream("players_response.json")
+            ?.use { stream ->
+                val gson = Gson()
+                val reader = InputStreamReader(stream)
+                gson.fromJson(reader, PlayersResponse::class.java)
+            }
     }
 }

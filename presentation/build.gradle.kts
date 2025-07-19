@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.whitebeach.presentation"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 30
@@ -59,10 +59,21 @@ android {
         implementation(libs.hilt.android)
         implementation(libs.play.services.ads)
         implementation(libs.retrofit)
+        implementation(libs.converter.gson)
 
         testImplementation(libs.junit)
+        testImplementation(libs.ui.test.junit4)
+        testImplementation(libs.kotlinx.coroutines.test)
+        testImplementation(libs.mockk)
+        testImplementation(libs.androidx.core.testing)
+        testImplementation(libs.robolectric)
+
+        androidTestImplementation(libs.junit)
         androidTestImplementation(libs.androidx.test.ext.junit)
+        androidTestImplementation(libs.ui.test.junit4)
         androidTestImplementation(libs.espresso.core)
+        debugImplementation(libs.ui.test.manifest)
+        debugImplementation(libs.ui.tooling)
 
         implementation(project(":data"))
     }

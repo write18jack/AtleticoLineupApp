@@ -41,13 +41,13 @@ fun BottomBar(
             IconButton(
                 onClick = openPlayerSheet
             ) {
-                Icon(Icons.Default.Person, contentDescription = "", tint = Color.White)
+                Icon(Icons.Default.Person, contentDescription = "player_list", tint = Color.White)
             }
 
             IconButton(
                 onClick = openFormationSheet
             ) {
-                Icon(Icons.Default.List, contentDescription = "", tint = Color.White)
+                Icon(Icons.Default.List, contentDescription = "formation_list", tint = Color.White)
             }
         }
     }
