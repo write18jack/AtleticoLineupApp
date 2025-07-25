@@ -15,7 +15,7 @@ import com.whitebeach.presentation.R
 
 @Composable
 fun AdaptiveBanner(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val deviceCurrentWidth = LocalConfiguration.current.screenWidthDp
 
@@ -26,7 +26,7 @@ fun AdaptiveBanner(
     ) {
         AndroidView(
             modifier = Modifier.fillMaxWidth(),
-            factory = {context ->
+            factory = { context ->
                 // Using application context to avoid memory leak
                 AdView(context).apply {
                     setAdSize(
