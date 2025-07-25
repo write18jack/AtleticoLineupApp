@@ -1,14 +1,15 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    kotlin("kapt")
+    alias(libs.plugins.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
     id("com.google.gms.google-services")
-    //id("com.google.devtools.ksp")
 }
 
 android {
     namespace = "com.whitebeach.atleticolineupapp"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "com.whitebeach.atleticolineupapp"
         minSdk = 30
@@ -24,14 +25,9 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
-    }
     buildTypes {
         release {
             isMinifyEnabled = false
-            //isShrinkResources = true
-            //signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -46,10 +42,12 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
-}
-kapt {
-    arguments {
-        arg("room.schemaLocation", "$projectDir/schemas")
+    packagingOptions {
+        resources {
+            // 重複するファイルを除外する
+            excludes.add("META-INF/AL2.0")
+            excludes.add("META-INF/LGPL2.1") // 他のライセンスファイルで同様のエラーが出た場合も追記
+        }
     }
 }
 
@@ -67,7 +65,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.transport.runtime)
-    implementation(project(mapOf("path" to ":data")))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -86,6 +83,7 @@ dependencies {
     implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
+    ksp(libs.hilt.compiler)
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.retrofit2.kotlin.coroutines.adapter)
@@ -95,8 +93,8 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.capturable)
     implementation(libs.coil.compose)
-    implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
-    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.google.services)
 
+    implementation(project(":data"))
     implementation(project(":presentation"))
 }
