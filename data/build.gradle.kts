@@ -1,8 +1,6 @@
 plugins {
-    alias(libs.plugins.com.android.library)
-    alias(libs.plugins.org.jetbrains.kotlin.android)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+    alias(libs.plugins.atletico.android.library)
+    alias(libs.plugins.atletico.hilt)
 }
 
 android {
@@ -10,12 +8,11 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 30
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -29,9 +26,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
 }
 
 dependencies {
@@ -40,12 +34,10 @@ dependencies {
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.converter.gson)
     implementation(libs.converter.moshi)
-    ksp(libs.hilt.compiler)
-    implementation(libs.hilt.android)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.hilt.android.testing)
-    kspTest(libs.hilt.compiler)
+//    testImplementation(libs.hilt.android.testing)
+//    kspTest(libs.hilt.compiler)
 
 }
