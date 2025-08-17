@@ -1,9 +1,6 @@
 plugins {
-    alias(libs.plugins.com.android.library)
-    alias(libs.plugins.org.jetbrains.kotlin.android)
-    alias(libs.plugins.compose)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+    alias(libs.plugins.atletico.android.feature)
+    alias(libs.plugins.atletico.android.library.compose)
 }
 
 android {
@@ -11,7 +8,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 30
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -30,9 +27,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
     buildFeatures {
         compose = true
     }
@@ -41,21 +35,14 @@ android {
 
         implementation(libs.core.ktx)
         implementation(libs.appcompat)
-        implementation(libs.material)
-        implementation(libs.lifecycle.runtime.ktx)
+        implementation(libs.google.material)
         implementation(libs.kotlin.stdlib)
-        implementation(libs.activity.compose)
-        implementation(libs.androidx.lifecycle.viewmodel.compose)
-        implementation(platform(libs.compose.bom))
-        implementation(libs.ui)
-        implementation(libs.ui.graphics)
-        implementation(libs.ui.tooling.preview)
+        implementation(libs.kotlin.reflect)
         implementation(libs.androidx.material)
         implementation(libs.material3)
         implementation(libs.androidx.constraintlayout.compose)
         implementation(libs.capturable)
         implementation(libs.coil.compose)
-        ksp(libs.hilt.compiler)
         implementation(libs.hilt.android)
         implementation(libs.play.services.ads)
         implementation(libs.retrofit)
@@ -73,7 +60,6 @@ android {
         androidTestImplementation(libs.ui.test.junit4)
         androidTestImplementation(libs.espresso.core)
         debugImplementation(libs.ui.test.manifest)
-        debugImplementation(libs.ui.tooling)
 
         implementation(project(":data"))
     }
