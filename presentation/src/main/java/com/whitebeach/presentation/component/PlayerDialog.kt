@@ -19,42 +19,41 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.whitebeach.data.model.PlayerInfo
 
-@Composable
-fun PlayerDialog(
-    modifier: Modifier,
-    playerInfo: PlayerInfo,
-    onDismissRequest: () -> Unit
-) {
-    Dialog(
-        onDismissRequest = { onDismissRequest() },
-        properties = DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = true
-        )
-    ) {
-        Card(
-            modifier = modifier,
-            shape = RoundedCornerShape(18.dp)
-        ) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                Image(
-                    modifier = Modifier,
-                    painter = painterResource(id = playerInfo.image.toInt()),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillBounds
-                )
-                Icon(
-                    imageVector = Icons.Rounded.ArrowBack,
-                    contentDescription = "",
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopStart)
-                        .padding(top = 10.dp, start = 5.dp)
-                        .clickable { onDismissRequest() },
-                    tint = colorResource(android.R.color.white),
-                )
-            }
-        }
-    }
-}
+//@Composable
+//fun PlayerDialog(
+//    modifier: Modifier,
+//    playerInfo: PlayerInfo,
+//    onDismissRequest: () -> Unit
+//) {
+//    Dialog(
+//        onDismissRequest = { onDismissRequest() },
+//        properties = DialogProperties(
+//            dismissOnBackPress = true,
+//            dismissOnClickOutside = true
+//        )
+//    ) {
+//        Card(
+//            modifier = modifier,
+//            shape = RoundedCornerShape(18.dp)
+//        ) {
+//            Box(modifier = Modifier.fillMaxSize()) {
+//                Image(
+//                    modifier = Modifier,
+//                    painter = painterResource(id = playerInfo.image.toInt()),
+//                    contentDescription = null,
+//                    contentScale = ContentScale.FillBounds
+//                )
+//                Icon(
+//                    imageVector = Icons.Rounded.ArrowBack,
+//                    contentDescription = "",
+//                    modifier = Modifier
+//                        .align(alignment = Alignment.TopStart)
+//                        .padding(top = 10.dp, start = 5.dp)
+//                        .clickable { onDismissRequest() },
+//                    tint = colorResource(android.R.color.white),
+//                )
+//            }
+//        }
+//    }
+//}

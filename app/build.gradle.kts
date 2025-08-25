@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.Packaging
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.atletico.android.application)
@@ -15,6 +16,11 @@ android {
         versionName = "1.0.2"
 
         testInstrumentationRunner = ("androidx.test.runner.AndroidJUnitRunner")
+
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+        buildConfigField("String", "API_KEY", properties.getProperty("API_KEY"))
+
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -56,6 +62,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.okhttp)
+    implementation("com.squareup.okhttp3:logging-interceptor:5.1.0")
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.retrofit2.kotlin.coroutines.adapter)

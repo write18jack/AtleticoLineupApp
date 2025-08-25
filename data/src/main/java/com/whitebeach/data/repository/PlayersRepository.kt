@@ -1,24 +1,16 @@
 package com.whitebeach.data.repository
 
-import com.whitebeach.data.model.player.PlayersResponse
+import com.whitebeach.data.model.AtleticoPlayer
 import com.whitebeach.data.remote.network.PlayersInfoService
 import retrofit2.Response
 import javax.inject.Inject
 
-class PlayersRepository @Inject constructor(
-    private val playersInfoService: PlayersInfoService
+class PlayersRepository2 @Inject constructor(
+    private val playersInfoService2: PlayersInfoService
 ) {
 
-    suspend fun getPlayers(): Response<PlayersResponse> {
-        return playersInfoService.getPlayers()
-    }
-
-    suspend fun getPlayers2(): Response<PlayersResponse> {
-        return playersInfoService.getPlayers2()
-    }
-
-    suspend fun getPlayers3(): Response<PlayersResponse> {
-        return playersInfoService.getPlayers3()
+    suspend fun getPlayers2(): Response<AtleticoPlayer> {
+        return playersInfoService2.getPlayers()
     }
 
 }
