@@ -5,7 +5,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -15,13 +17,33 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ApiModule {
 
-    private val BASE_URL = "https://api-football-v1.p.rapidapi.com"
+    private const val BASE_URL = "https://api.football-data.org/"
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideAuthInterceptor(): Interceptor {
+        // BuildConfigからAPIキーを取得するのがベストプラクティス
+        val apiKey = BuildConfig.API_KEY
+
+        return Interceptor { chain ->
+            val originalRequest = chain.request()
+            val newRequest = originalRequest.newBuilder()
+                .header("X-Auth-Token", apiKey)
+                .build()
+            chain.proceed(newRequest)
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(authInterceptor: Interceptor): OkHttpClient {
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
         return OkHttpClient
             .Builder()
+            .addInterceptor(authInterceptor)
+            .addInterceptor(loggingInterceptor)
             // 必要に応じて interceptor や timeout などを設定
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
