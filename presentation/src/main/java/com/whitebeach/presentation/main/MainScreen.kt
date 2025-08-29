@@ -1,9 +1,6 @@
 package com.whitebeach.presentation.main
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,14 +32,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
-import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.whitebeach.presentation.LoadingDialog
 import com.whitebeach.presentation.R
@@ -55,12 +49,12 @@ import com.whitebeach.presentation.formationSheet.rememberFormation
 import com.whitebeach.presentation.main.view.BottomBar
 import com.whitebeach.presentation.playerSheet.PlayerSheetCheck
 import com.whitebeach.presentation.playerSheet.RapidApiViewModel
+import com.whitebeach.presentation.saveBitmapToCache
+import com.whitebeach.presentation.shareImageBitmap
 import dev.shreyaspatil.capturable.capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
 import kotlinx.coroutines.launch
 import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 
 @OptIn(
     ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class,
@@ -103,31 +97,18 @@ fun MainScreen(
 
     LaunchedEffect(formationBitmap) {
         formationBitmap?.let { imageBitmap ->
-            val imagesFolder = File(context.cacheDir, "images")
-            var uri: Uri? = null
-            try {
-                imagesFolder.mkdirs()
-                val file = File(imagesFolder, "shared_image.png")
-                val stream = FileOutputStream(file)
-                imageBitmap.asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 90, stream)
-                stream.flush()
-                stream.close()
-                uri = FileProvider.getUriForFile(
-                    context,
-                    "com.atletico.file-provider",
-                    file
-                )
-            } catch (e: IOException) {
-                Log.d("Error", "IOException while trying to write file for sharing: " + e.message)
-            }
-            val sendIntent = Intent(Intent.ACTION_SEND).apply {
-                putExtra(Intent.EXTRA_STREAM, uri)
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                type = "image/png"
-            }
-            val shareIntent = Intent.createChooser(sendIntent, null)
+            val uri = saveBitmapToCache(
+                context = context,
+                imagesFolder = File(context.cacheDir, "images"),
+                imageBitmap = imageBitmap
+            )
             loadingDialogState = false
-            startActivity(context, shareIntent, null)
+            context.startActivity(
+                Intent.createChooser(
+                    shareImageBitmap(uri = uri),
+                    "share image"
+                )
+            )
         }
     }
 
