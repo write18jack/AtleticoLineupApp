@@ -12,8 +12,8 @@ android {
     namespace = "com.whitebeach.atleticolineupapp"
     defaultConfig {
         applicationId = "com.whitebeach.atleticolineupapp"
-        versionCode = 4
-        versionName = "1.0.2"
+        versionCode = 7
+        versionName = "1.0.4"
 
         testInstrumentationRunner = ("androidx.test.runner.AndroidJUnitRunner")
 
