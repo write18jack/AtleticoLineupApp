@@ -1,0 +1,48 @@
+package com.whitebeach.presentation.matches
+
+internal val dummyMatches = listOf(
+    MatchUiModel(
+        id = 1,
+        competitionName = "LaLiga",
+        dateText = "Aug 17, 2026",
+        timeText = "21:00",
+        homeTeamName = "Atlético Madrid",
+        awayTeamName = "Villarreal",
+        homeScore = null,
+        awayScore = null,
+        status = MatchStatusUi.UPCOMING,
+    ),
+    MatchUiModel(
+        id = 2,
+        competitionName = "LaLiga",
+        dateText = "Aug 24, 2026",
+        timeText = "19:30",
+        homeTeamName = "Real Betis",
+        awayTeamName = "Atlético Madrid",
+        homeScore = null,
+        awayScore = null,
+        status = MatchStatusUi.UPCOMING,
+    ),
+    MatchUiModel(
+        id = 3,
+        competitionName = "Club Friendly",
+        dateText = "Jul 26, 2026",
+        timeText = "Finished",
+        homeTeamName = "Atlético Madrid",
+        awayTeamName = "Inter",
+        homeScore = 2,
+        awayScore = 1,
+        status = MatchStatusUi.FINISHED,
+    ),
+    MatchUiModel(
+        id = 4,
+        competitionName = "Club Friendly",
+        dateText = "Jul 20, 2026",
+        timeText = "Finished",
+        homeTeamName = "Arsenal",
+        awayTeamName = "Atlético Madrid",
+        homeScore = 1,
+        awayScore = 1,
+        status = MatchStatusUi.FINISHED,
+    ),
+)

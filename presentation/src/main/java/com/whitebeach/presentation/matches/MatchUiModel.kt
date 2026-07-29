@@ -1,0 +1,24 @@
+package com.whitebeach.presentation.matches
+
+data class MatchUiModel(
+    val id: Int,
+    val competitionName: String,
+    val dateText: String,
+    val timeText: String,
+    val homeTeamName: String,
+    val awayTeamName: String,
+    val homeScore: Int?,
+    val awayScore: Int?,
+    val status: MatchStatusUi,
+)
+
+enum class MatchStatusUi(
+    val sectionTitle: String,
+) {
+    UPCOMING(
+        sectionTitle = "Upcoming Matches",
+    ),
+    FINISHED(
+        sectionTitle = "Finished Matches",
+    ),
+}
