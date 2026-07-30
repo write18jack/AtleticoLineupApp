@@ -6,14 +6,17 @@ import androidx.compose.material.icons.filled.Groups
 import androidx.compose.ui.graphics.vector.ImageVector
 
 enum class MainDestination(
+    val title: String,
     val label: String,
     val icon: ImageVector,
 ) {
     PLAYERS(
+        title = "Atlético Squad",
         label = "Players",
         icon = Icons.Default.Groups,
     ),
     MATCHES(
+        title = "Atlético Matches",
         label = "Matches",
         icon = Icons.Default.Event,
     ),

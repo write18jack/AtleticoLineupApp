@@ -17,16 +17,52 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.whitebeach.presentation.component.EmptyState
+import com.whitebeach.presentation.component.ErrorState
+import com.whitebeach.presentation.component.LoadingState
 import com.whitebeach.presentation.theme.AtleticoLineupAppTheme
 
 @Composable
 fun PlayersScreen(
     modifier: Modifier = Modifier,
 ) {
-    PlayersContent(
-        players = dummyPlayers,
+    PlayersScreen(
+        uiState = PlayersUiState.Success(
+            players = dummyPlayers,
+        ),
+        onRetry = {},
         modifier = modifier,
     )
+}
+
+@Composable
+private fun PlayersScreen(
+    uiState: PlayersUiState,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    when (uiState) {
+        PlayersUiState.Loading -> {
+            LoadingState(
+                modifier = modifier,
+            )
+        }
+
+        is PlayersUiState.Success -> {
+            PlayersContent(
+                players = uiState.players,
+                modifier = modifier,
+            )
+        }
+
+        is PlayersUiState.Error -> {
+            ErrorState(
+                message = uiState.message,
+                onRetry = onRetry,
+                modifier = modifier,
+            )
+        }
+    }
 }
 
 @Composable
@@ -34,6 +70,16 @@ private fun PlayersContent(
     players: List<PlayerUiModel>,
     modifier: Modifier = Modifier,
 ) {
+    if (players.isEmpty()) {
+        EmptyState(
+            title = "No players found",
+            description = "Player information is not available.",
+            modifier = modifier,
+        )
+
+        return
+    }
+
     val playersByPosition = remember(players) {
         players.groupBy { player ->
             player.position
@@ -101,25 +147,17 @@ private fun PlayersHeader(
     playerCount: Int,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    Text(
+        text = "$playerCount players",
         modifier = modifier
             .fillMaxWidth()
             .padding(
                 horizontal = 16.dp,
                 vertical = 12.dp,
             ),
-    ) {
-        Text(
-            text = "Squad",
-            style = MaterialTheme.typography.headlineMedium,
-        )
-
-        Text(
-            text = "$playerCount players",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
 }
 
 @Composable
@@ -147,12 +185,64 @@ private fun PositionSectionHeader(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    name = "Loading players",
+    showBackground = true,
+)
 @Composable
-private fun PlayersScreenPreview() {
+private fun LoadingPlayersPreview() {
     AtleticoLineupAppTheme {
-        PlayersContent(
-            players = dummyPlayers,
+        PlayersScreen(
+            uiState = PlayersUiState.Loading,
+            onRetry = {},
+        )
+    }
+}
+
+@Preview(
+    name = "Success players",
+    showBackground = true,
+)
+@Composable
+private fun SuccessPlayersPreview() {
+    AtleticoLineupAppTheme {
+        PlayersScreen(
+            uiState = PlayersUiState.Success(
+                players = dummyPlayers,
+            ),
+            onRetry = {},
+        )
+    }
+}
+
+@Preview(
+    name = "Empty players",
+    showBackground = true,
+)
+@Composable
+private fun EmptyPlayersPreview() {
+    AtleticoLineupAppTheme {
+        PlayersScreen(
+            uiState = PlayersUiState.Success(
+                players = emptyList(),
+            ),
+            onRetry = {},
+        )
+    }
+}
+
+@Preview(
+    name = "Error players",
+    showBackground = true,
+)
+@Composable
+private fun ErrorPlayersPreview() {
+    AtleticoLineupAppTheme {
+        PlayersScreen(
+            uiState = PlayersUiState.Error(
+                message = "Failed to load players.",
+            ),
+            onRetry = {},
         )
     }
 }
