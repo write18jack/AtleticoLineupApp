@@ -13,10 +13,13 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.whitebeach.presentation.component.ErrorState
 import com.whitebeach.presentation.component.LoadingState
 import com.whitebeach.presentation.theme.AtleticoLineupAppTheme
@@ -27,12 +30,13 @@ import com.whitebeach.presentation.theme.AtleticoLineupAppTheme
 @Composable
 fun MatchesScreen(
     modifier: Modifier = Modifier,
+    viewModel: MatchesViewModel = hiltViewModel(),
 ) {
-    MatchesScreen(
-        uiState = MatchesUiState.Success(
-            matches = dummyMatches,
-        ),
-        onRetry = {},
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    MatchesScreenContent(
+        uiState = uiState,
+        onRetry = viewModel::loadMatches,
         modifier = modifier,
     )
 }
@@ -41,7 +45,7 @@ fun MatchesScreen(
  * UiStateを描画するComposable
  */
 @Composable
-private fun MatchesScreen(
+private fun MatchesScreenContent(
     uiState: MatchesUiState,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
@@ -195,7 +199,7 @@ private fun MatchSectionHeader(
 @Composable
 private fun LoadingMatchesPreview() {
     AtleticoLineupAppTheme {
-        MatchesScreen(
+        MatchesScreenContent(
             uiState = MatchesUiState.Loading,
             onRetry = {},
         )
@@ -209,7 +213,7 @@ private fun LoadingMatchesPreview() {
 @Composable
 private fun SuccessMatchesPreview() {
     AtleticoLineupAppTheme {
-        MatchesScreen(
+        MatchesScreenContent(
             uiState = MatchesUiState.Success(
                 matches = dummyMatches,
             ),
@@ -225,7 +229,7 @@ private fun SuccessMatchesPreview() {
 @Composable
 private fun EmptyMatchesPreview() {
     AtleticoLineupAppTheme {
-        MatchesScreen(
+        MatchesScreenContent(
             uiState = MatchesUiState.Success(
                 matches = emptyList(),
             ),
@@ -241,7 +245,7 @@ private fun EmptyMatchesPreview() {
 @Composable
 private fun ErrorMatchesPreview() {
     AtleticoLineupAppTheme {
-        MatchesScreen(
+        MatchesScreenContent(
             uiState = MatchesUiState.Error(
                 message = "Failed to load matches.",
             ),

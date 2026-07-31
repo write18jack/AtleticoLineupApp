@@ -13,10 +13,13 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.whitebeach.presentation.component.EmptyState
 import com.whitebeach.presentation.component.ErrorState
 import com.whitebeach.presentation.component.LoadingState
@@ -25,18 +28,19 @@ import com.whitebeach.presentation.theme.AtleticoLineupAppTheme
 @Composable
 fun PlayersScreen(
     modifier: Modifier = Modifier,
+    viewModel: PlayersViewModel = hiltViewModel(),
 ) {
-    PlayersScreen(
-        uiState = PlayersUiState.Success(
-            players = dummyPlayers,
-        ),
-        onRetry = {},
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    PlayersScreenContent(
+        uiState = uiState,
+        onRetry = viewModel::loadPlayers,
         modifier = modifier,
     )
 }
 
 @Composable
-private fun PlayersScreen(
+private fun PlayersScreenContent(
     uiState: PlayersUiState,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
@@ -192,7 +196,7 @@ private fun PositionSectionHeader(
 @Composable
 private fun LoadingPlayersPreview() {
     AtleticoLineupAppTheme {
-        PlayersScreen(
+        PlayersScreenContent(
             uiState = PlayersUiState.Loading,
             onRetry = {},
         )
@@ -206,7 +210,7 @@ private fun LoadingPlayersPreview() {
 @Composable
 private fun SuccessPlayersPreview() {
     AtleticoLineupAppTheme {
-        PlayersScreen(
+        PlayersScreenContent(
             uiState = PlayersUiState.Success(
                 players = dummyPlayers,
             ),
@@ -222,7 +226,7 @@ private fun SuccessPlayersPreview() {
 @Composable
 private fun EmptyPlayersPreview() {
     AtleticoLineupAppTheme {
-        PlayersScreen(
+        PlayersScreenContent(
             uiState = PlayersUiState.Success(
                 players = emptyList(),
             ),
@@ -238,7 +242,7 @@ private fun EmptyPlayersPreview() {
 @Composable
 private fun ErrorPlayersPreview() {
     AtleticoLineupAppTheme {
-        PlayersScreen(
+        PlayersScreenContent(
             uiState = PlayersUiState.Error(
                 message = "Failed to load players.",
             ),
