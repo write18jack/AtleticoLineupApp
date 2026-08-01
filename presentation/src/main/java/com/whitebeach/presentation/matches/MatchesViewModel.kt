@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MatchesViewModel @Inject constructor(
-    private val matchesUseCase: GetMatchesUseCase
+    private val getMatchesUseCase: GetMatchesUseCase
 ) : ViewModel() {
 
     private val _uiState =
@@ -30,7 +30,7 @@ class MatchesViewModel @Inject constructor(
             _uiState.value = MatchesUiState.Loading
 
             _uiState.value = try {
-                val matches = matchesUseCase()
+                val matches = getMatchesUseCase()
 
                 MatchesUiState.Success(
                     matches = matches.toUiModels(),
