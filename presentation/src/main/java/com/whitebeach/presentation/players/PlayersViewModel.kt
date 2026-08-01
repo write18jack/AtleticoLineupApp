@@ -2,7 +2,7 @@ package com.whitebeach.presentation.players
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.whitebeach.domain.repository.PlayersRepository
+import com.whitebeach.domain.usecase.GetPlayersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayersViewModel @Inject constructor(
-    private val repository: PlayersRepository
+    private val getPlayersUseCase: GetPlayersUseCase
 ) : ViewModel() {
 
     private val _uiState =
@@ -30,7 +30,7 @@ class PlayersViewModel @Inject constructor(
             _uiState.value = PlayersUiState.Loading
 
             _uiState.value = try {
-                val players = repository.getPlayers()
+                val players = getPlayersUseCase()
 
                 PlayersUiState.Success(
                     players = players.toUiModels(),
