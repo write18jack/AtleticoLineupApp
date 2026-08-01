@@ -212,7 +212,7 @@ private fun SuccessPlayersPreview() {
     AtleticoLineupAppTheme {
         PlayersScreenContent(
             uiState = PlayersUiState.Success(
-                players = dummyPlayers,
+                players = previewPlayers,
             ),
             onRetry = {},
         )

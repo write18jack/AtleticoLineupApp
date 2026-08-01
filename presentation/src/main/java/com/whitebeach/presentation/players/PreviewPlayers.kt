@@ -1,6 +1,6 @@
 package com.whitebeach.presentation.players
 
-internal val dummyPlayers = listOf(
+val previewPlayers = listOf(
     PlayerUiModel(
         id = 1,
         shirtNumber = 13,
@@ -28,26 +28,5 @@ internal val dummyPlayers = listOf(
         name = "Marcos Llorente",
         position = PlayerPositionUi.MIDFIELDER,
         nationality = "Spain",
-    ),
-    PlayerUiModel(
-        id = 5,
-        shirtNumber = 6,
-        name = "Koke",
-        position = PlayerPositionUi.MIDFIELDER,
-        nationality = "Spain",
-    ),
-    PlayerUiModel(
-        id = 6,
-        shirtNumber = 7,
-        name = "Antoine Griezmann",
-        position = PlayerPositionUi.FORWARD,
-        nationality = "France",
-    ),
-    PlayerUiModel(
-        id = 7,
-        shirtNumber = 9,
-        name = "Alexander Sørloth",
-        position = PlayerPositionUi.FORWARD,
-        nationality = "Norway",
-    ),
+    )
 )
