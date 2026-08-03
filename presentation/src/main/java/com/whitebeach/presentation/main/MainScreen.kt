@@ -1,30 +1,27 @@
 package com.whitebeach.presentation.main
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.whitebeach.presentation.component.AtleticoTopAppBar
-import com.whitebeach.presentation.matches.MatchesScreen
-import com.whitebeach.presentation.players.PlayersScreen
 import com.whitebeach.presentation.theme.AtleticoLineupAppTheme
 
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
 ) {
-    var currentDestination by rememberSaveable {
-        mutableStateOf(MainDestination.PLAYERS)
-    }
+    val navController = rememberNavController()
+
+    val backStackEntry by navController.currentBackStackEntryAsState()
+
+    val currentDestination = MainDestination.fromRoute(
+        route = backStackEntry?.destination?.route,
+    )
 
     Scaffold(
         modifier = modifier,
@@ -37,50 +34,25 @@ fun MainScreen(
             MainBottomBar(
                 currentDestination = currentDestination,
                 onDestinationSelected = { destination ->
-                    currentDestination = destination
+                    navController.navigate(destination.route) {
+                        popUpTo(MainDestination.PLAYERS.route) {
+                            // タブを切り替え続けたとき、同じ画面がバックスタックへ大量に積まれるのを防ぐ
+                            saveState = true
+                        }
+
+                        // 現在Players画面なのに、もう一度Playersを押した場合の重複作成を防ぐ
+                        launchSingleTop = true
+                        // 別タブから戻ったとき、保存されている画面状態の復元を試みる
+                        restoreState = true
+                    }
                 },
             )
         },
     ) { innerPadding ->
-        when (currentDestination) {
-            MainDestination.PLAYERS -> {
-                PlayersScreen(
-                    modifier = Modifier.padding(innerPadding),
-                )
-            }
-
-            MainDestination.MATCHES -> {
-                MatchesScreen(
-                    modifier = Modifier.padding(innerPadding),
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun MainBottomBar(
-    currentDestination: MainDestination,
-    onDestinationSelected: (MainDestination) -> Unit,
-) {
-    NavigationBar {
-        MainDestination.entries.forEach { destination ->
-            NavigationBarItem(
-                selected = currentDestination == destination,
-                onClick = {
-                    onDestinationSelected(destination)
-                },
-                icon = {
-                    Icon(
-                        imageVector = destination.icon,
-                        contentDescription = destination.label,
-                    )
-                },
-                label = {
-                    Text(text = destination.label)
-                },
-            )
-        }
+        AtleticoNavHost(
+            navController = navController,
+            modifier = Modifier.padding(innerPadding),
+        )
     }
 }
 
