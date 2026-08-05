@@ -1,4 +1,4 @@
-package com.whitebeach.presentation.players
+package com.whitebeach.presentation.players.model
 
 val previewPlayers = listOf(
     PlayerUiModel(

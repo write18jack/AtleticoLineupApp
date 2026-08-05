@@ -1,4 +1,4 @@
-package com.whitebeach.presentation.players
+package com.whitebeach.presentation.players.list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,10 +23,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.whitebeach.presentation.component.EmptyState
 import com.whitebeach.presentation.component.ErrorState
 import com.whitebeach.presentation.component.LoadingState
+import com.whitebeach.presentation.players.model.PlayerPositionUi
+import com.whitebeach.presentation.players.model.PlayerUiModel
+import com.whitebeach.presentation.players.model.previewPlayers
 import com.whitebeach.presentation.theme.AtleticoLineupAppTheme
 
 @Composable
 fun PlayersScreen(
+    onPlayerClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlayersViewModel = hiltViewModel(),
 ) {
@@ -34,6 +38,7 @@ fun PlayersScreen(
 
     PlayersScreenContent(
         uiState = uiState,
+        onPlayerClick = onPlayerClick,
         onRetry = viewModel::loadPlayers,
         modifier = modifier,
     )
@@ -42,6 +47,7 @@ fun PlayersScreen(
 @Composable
 private fun PlayersScreenContent(
     uiState: PlayersUiState,
+    onPlayerClick: (Int) -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -55,6 +61,7 @@ private fun PlayersScreenContent(
         is PlayersUiState.Success -> {
             PlayersContent(
                 players = uiState.players,
+                onPlayerClick = onPlayerClick,
                 modifier = modifier,
             )
         }
@@ -72,6 +79,7 @@ private fun PlayersScreenContent(
 @Composable
 private fun PlayersContent(
     players: List<PlayerUiModel>,
+    onPlayerClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (players.isEmpty()) {
@@ -80,14 +88,11 @@ private fun PlayersContent(
             description = "Player information is not available.",
             modifier = modifier,
         )
-
         return
     }
 
     val playersByPosition = remember(players) {
-        players.groupBy { player ->
-            player.position
-        }
+        players.groupBy(PlayerUiModel::position)
     }
 
     Column(
@@ -111,6 +116,7 @@ private fun PlayersContent(
                 playerPositionSection(
                     position = position,
                     players = playersByPosition[position].orEmpty(),
+                    onPlayerClick = onPlayerClick,
                 )
             }
         }
@@ -120,6 +126,7 @@ private fun PlayersContent(
 private fun LazyListScope.playerPositionSection(
     position: PlayerPositionUi,
     players: List<PlayerUiModel>,
+    onPlayerClick: (Int) -> Unit,
 ) {
     if (players.isEmpty()) {
         return
@@ -136,12 +143,13 @@ private fun LazyListScope.playerPositionSection(
 
     items(
         items = players,
-        key = { player ->
-            player.id
-        },
+        key = PlayerUiModel::id,
     ) { player ->
         PlayerCard(
             player = player,
+            onClick = {
+                onPlayerClick(player.id)
+            },
         )
     }
 }
@@ -198,6 +206,7 @@ private fun LoadingPlayersPreview() {
     AtleticoLineupAppTheme {
         PlayersScreenContent(
             uiState = PlayersUiState.Loading,
+            onPlayerClick = {},
             onRetry = {},
         )
     }
@@ -214,6 +223,7 @@ private fun SuccessPlayersPreview() {
             uiState = PlayersUiState.Success(
                 players = previewPlayers,
             ),
+            onPlayerClick = {},
             onRetry = {},
         )
     }
@@ -230,6 +240,7 @@ private fun EmptyPlayersPreview() {
             uiState = PlayersUiState.Success(
                 players = emptyList(),
             ),
+            onPlayerClick = {},
             onRetry = {},
         )
     }
@@ -246,6 +257,7 @@ private fun ErrorPlayersPreview() {
             uiState = PlayersUiState.Error(
                 message = "Failed to load players.",
             ),
+            onPlayerClick = {},
             onRetry = {},
         )
     }

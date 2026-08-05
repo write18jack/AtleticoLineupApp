@@ -2,6 +2,8 @@ package com.whitebeach.presentation.matches
 
 import com.whitebeach.domain.model.Match
 import com.whitebeach.domain.model.MatchStatus
+import com.whitebeach.presentation.matches.model.MatchStatusUi
+import com.whitebeach.presentation.matches.model.MatchUiModel
 
 fun Match.toUiModel(): MatchUiModel {
     return MatchUiModel(

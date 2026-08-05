@@ -1,4 +1,6 @@
-package com.whitebeach.presentation.players
+package com.whitebeach.presentation.players.list
+
+import com.whitebeach.presentation.players.model.PlayerUiModel
 
 sealed interface PlayersUiState {
 

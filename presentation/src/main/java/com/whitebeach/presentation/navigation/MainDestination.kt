@@ -1,4 +1,4 @@
-package com.whitebeach.presentation.main
+package com.whitebeach.presentation.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Event

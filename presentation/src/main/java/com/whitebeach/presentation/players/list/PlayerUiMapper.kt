@@ -1,7 +1,9 @@
-package com.whitebeach.presentation.players
+package com.whitebeach.presentation.players.list
 
 import com.whitebeach.domain.model.Player
 import com.whitebeach.domain.model.Position
+import com.whitebeach.presentation.players.model.PlayerPositionUi
+import com.whitebeach.presentation.players.model.PlayerUiModel
 
 fun Player.toUiModel(): PlayerUiModel {
     return PlayerUiModel(

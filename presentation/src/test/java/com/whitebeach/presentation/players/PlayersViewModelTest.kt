@@ -4,6 +4,9 @@ import com.whitebeach.domain.model.Player
 import com.whitebeach.domain.model.Position
 import com.whitebeach.domain.repository.PlayersRepository
 import com.whitebeach.domain.usecase.GetPlayersUseCase
+import com.whitebeach.presentation.players.list.PlayersUiState
+import com.whitebeach.presentation.players.list.PlayersViewModel
+import com.whitebeach.presentation.players.list.toUiModels
 import com.whitebeach.presentation.test.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle

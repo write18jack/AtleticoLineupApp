@@ -1,4 +1,4 @@
-package com.whitebeach.presentation.matches
+package com.whitebeach.presentation.matches.model
 
 val previewMatches = listOf(
     MatchUiModel(

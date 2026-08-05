@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.whitebeach.presentation.matches.model.MatchStatusUi
+import com.whitebeach.presentation.matches.model.MatchUiModel
 import com.whitebeach.presentation.theme.AtleticoLineupAppTheme
 
 @Composable

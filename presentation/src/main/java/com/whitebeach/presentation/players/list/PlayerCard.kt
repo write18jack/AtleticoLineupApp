@@ -1,4 +1,4 @@
-package com.whitebeach.presentation.players
+package com.whitebeach.presentation.players.list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,14 +21,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.whitebeach.presentation.players.model.PlayerUiModel
+import com.whitebeach.presentation.players.model.previewPlayers
 import com.whitebeach.presentation.theme.AtleticoLineupAppTheme
 
 @Composable
 fun PlayerCard(
     player: PlayerUiModel,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
+        onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
@@ -101,13 +105,8 @@ private fun ShirtNumber(
 private fun PlayerCardPreview() {
     AtleticoLineupAppTheme {
         PlayerCard(
-            player = PlayerUiModel(
-                id = 1,
-                shirtNumber = 7,
-                name = "Antoine Griezmann",
-                position = PlayerPositionUi.FORWARD,
-                nationality = "France",
-            ),
+            player = previewPlayers[0],
+            onClick = {},
         )
     }
 }

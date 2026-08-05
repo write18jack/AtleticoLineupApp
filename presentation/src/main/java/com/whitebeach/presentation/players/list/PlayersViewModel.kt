@@ -1,4 +1,4 @@
-package com.whitebeach.presentation.players
+package com.whitebeach.presentation.players.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

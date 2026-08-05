@@ -1,12 +1,4 @@
-package com.whitebeach.presentation.players
-
-data class PlayerUiModel(
-    val id: Int,
-    val shirtNumber: Int?,
-    val name: String,
-    val position: PlayerPositionUi,
-    val nationality: String,
-)
+package com.whitebeach.presentation.players.model
 
 enum class PlayerPositionUi(
     val displayName: String,
