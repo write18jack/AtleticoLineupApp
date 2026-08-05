@@ -22,9 +22,11 @@ import com.whitebeach.presentation.theme.AtleticoLineupAppTheme
 @Composable
 fun MatchCard(
     match: MatchUiModel,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
+        onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
@@ -132,6 +134,7 @@ private fun MatchCardPreview() {
                 awayScore = null,
                 status = MatchStatusUi.UPCOMING,
             ),
+            onClick = {}
         )
     }
 }

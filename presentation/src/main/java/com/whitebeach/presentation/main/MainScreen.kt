@@ -12,6 +12,7 @@ import com.whitebeach.presentation.main.component.AtleticoTopAppBar
 import com.whitebeach.presentation.main.component.MainBottomBar
 import com.whitebeach.presentation.navigation.AtleticoNavHost
 import com.whitebeach.presentation.navigation.MainDestination
+import com.whitebeach.presentation.navigation.MatchDetailDestination
 import com.whitebeach.presentation.navigation.PlayerDetailDestination
 import com.whitebeach.presentation.theme.AtleticoLineupAppTheme
 
@@ -33,9 +34,16 @@ fun MainScreen(
     val isPlayerDetail =
         currentRoute == PlayerDetailDestination.route
 
+    val isMatchDetail =
+        currentRoute == MatchDetailDestination.route
+
+    val isDetailScreen =
+        isPlayerDetail || isMatchDetail
+
     val title = when {
         currentDestination != null -> currentDestination.title
         isPlayerDetail -> "Player Details"
+        isMatchDetail -> "Match Details"
         else -> "Atlético Madrid"
     }
 
@@ -44,7 +52,7 @@ fun MainScreen(
         topBar = {
             AtleticoTopAppBar(
                 title = title,
-                onBackClick = if (isPlayerDetail) {
+                onBackClick = if (isDetailScreen) {
                     {
                         navController.popBackStack()
                     }

@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.whitebeach.presentation.component.EmptyState
 import com.whitebeach.presentation.component.ErrorState
 import com.whitebeach.presentation.component.LoadingState
 import com.whitebeach.presentation.matches.model.MatchStatusUi
@@ -32,6 +33,7 @@ import com.whitebeach.presentation.theme.AtleticoLineupAppTheme
 */
 @Composable
 fun MatchesScreen(
+    onMatchClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MatchesViewModel = hiltViewModel(),
 ) {
@@ -39,6 +41,7 @@ fun MatchesScreen(
 
     MatchesScreenContent(
         uiState = uiState,
+        onMatchClick = onMatchClick,
         onRetry = viewModel::loadMatches,
         modifier = modifier,
     )
@@ -50,6 +53,7 @@ fun MatchesScreen(
 @Composable
 private fun MatchesScreenContent(
     uiState: MatchesUiState,
+    onMatchClick: (Int) -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -63,6 +67,7 @@ private fun MatchesScreenContent(
         is MatchesUiState.Success -> {
             MatchesContent(
                 matches = uiState.matches,
+                onMatchClick = onMatchClick,
                 modifier = modifier,
             )
         }
@@ -80,12 +85,20 @@ private fun MatchesScreenContent(
 @Composable
 private fun MatchesContent(
     matches: List<MatchUiModel>,
+    onMatchClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    if (matches.isEmpty()) {
+        EmptyState(
+            title = "No matches found",
+            description = "Match information is not available.",
+            modifier = modifier,
+        )
+        return
+    }
+
     val matchesByStatus = remember(matches) {
-        matches.groupBy { match ->
-            match.status
-        }
+        matches.groupBy(MatchUiModel::status)
     }
 
     Column(
@@ -109,6 +122,7 @@ private fun MatchesContent(
                 matchStatusSection(
                     status = status,
                     matches = matchesByStatus[status].orEmpty(),
+                    onMatchClick = onMatchClick,
                 )
             }
         }
@@ -118,10 +132,9 @@ private fun MatchesContent(
 private fun LazyListScope.matchStatusSection(
     status: MatchStatusUi,
     matches: List<MatchUiModel>,
+    onMatchClick: (Int) -> Unit,
 ) {
-    if (matches.isEmpty()) {
-        return
-    }
+    if (matches.isEmpty()) return
 
     item(
         key = "header_${status.name}",
@@ -134,12 +147,13 @@ private fun LazyListScope.matchStatusSection(
 
     items(
         items = matches,
-        key = { match ->
-            match.id
-        },
+        key = MatchUiModel::id,
     ) { match ->
         MatchCard(
             match = match,
+            onClick = {
+                onMatchClick(match.id)
+            },
         )
     }
 }
@@ -204,6 +218,7 @@ private fun LoadingMatchesPreview() {
     AtleticoLineupAppTheme {
         MatchesScreenContent(
             uiState = MatchesUiState.Loading,
+            onMatchClick = {},
             onRetry = {},
         )
     }
@@ -220,6 +235,7 @@ private fun SuccessMatchesPreview() {
             uiState = MatchesUiState.Success(
                 matches = previewMatches,
             ),
+            onMatchClick = {},
             onRetry = {},
         )
     }
@@ -236,6 +252,7 @@ private fun EmptyMatchesPreview() {
             uiState = MatchesUiState.Success(
                 matches = emptyList(),
             ),
+            onMatchClick = {},
             onRetry = {},
         )
     }
@@ -252,6 +269,7 @@ private fun ErrorMatchesPreview() {
             uiState = MatchesUiState.Error(
                 message = "Failed to load matches.",
             ),
+            onMatchClick = {},
             onRetry = {},
         )
     }

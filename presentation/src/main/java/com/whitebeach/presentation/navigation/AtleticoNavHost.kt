@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.whitebeach.presentation.matches.MatchesScreen
+import com.whitebeach.presentation.matches.detail.MatchDetailScreen
 import com.whitebeach.presentation.players.detail.PlayerDetailScreen
 import com.whitebeach.presentation.players.list.PlayersScreen
 
@@ -37,7 +38,13 @@ fun AtleticoNavHost(
         composable(
             route = MainDestination.MATCHES.route,
         ) {
-            MatchesScreen()
+            MatchesScreen(
+                onMatchClick = { matchId ->
+                    navController.navigate(
+                        MatchDetailDestination.createRoute(matchId),
+                    )
+                },
+            )
         }
 
         composable(
@@ -51,6 +58,19 @@ fun AtleticoNavHost(
             ),
         ) {
             PlayerDetailScreen()
+        }
+
+        composable(
+            route = MatchDetailDestination.route,
+            arguments = listOf(
+                navArgument(
+                    MatchDetailDestination.MATCH_ID_ARGUMENT,
+                ) {
+                    type = NavType.IntType
+                },
+            ),
+        ) {
+            MatchDetailScreen()
         }
     }
 }
