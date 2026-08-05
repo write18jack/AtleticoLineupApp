@@ -10,4 +10,10 @@ class FakeMatchesRepository @Inject constructor() : MatchesRepository {
     override suspend fun getMatches(): List<Match> {
         return dummyMatches
     }
+
+    override suspend fun getMatchById(matchId: Int): Match? {
+        return dummyMatches.firstOrNull { match ->
+            match.id == matchId
+        }
+    }
 }

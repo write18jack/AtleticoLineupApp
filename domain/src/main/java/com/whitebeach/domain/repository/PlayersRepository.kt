@@ -7,4 +7,5 @@ interface PlayersRepository {
 
     suspend fun getPlayers(): List<Player>
 
+    suspend fun getPlayerById(playerId: Int): Player?
 }

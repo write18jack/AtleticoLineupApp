@@ -3,7 +3,7 @@ package com.whitebeach.presentation.matches.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.whitebeach.domain.usecase.GetMatchesUseCase
+import com.whitebeach.domain.usecase.GetMatchByIdUseCase
 import com.whitebeach.presentation.matches.toUiModel
 import com.whitebeach.presentation.navigation.MatchDetailDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MatchDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getMatchesUseCase: GetMatchesUseCase,
+    private val getMatchByIdUseCase: GetMatchByIdUseCase,
 ) : ViewModel() {
 
     private val matchId: Int = checkNotNull(
@@ -40,9 +40,9 @@ class MatchDetailViewModel @Inject constructor(
             _uiState.value = MatchDetailUiState.Loading
 
             _uiState.value = try {
-                val match = getMatchesUseCase()
-                    .firstOrNull { it.id == matchId }
-                    ?: throw NoSuchElementException("Match not found.")
+                val match = getMatchByIdUseCase(
+                    matchId = matchId
+                )
 
                 MatchDetailUiState.Success(
                     match = match.toUiModel(),

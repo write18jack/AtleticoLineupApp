@@ -134,6 +134,12 @@ private class FakeMatchesRepository(
 
         return matches
     }
+
+    override suspend fun getMatchById(matchId: Int): Match? {
+        return matches.firstOrNull { match ->
+            match.id == matchId
+        }
+    }
 }
 
 private class RetryableMatchesRepository : MatchesRepository {
@@ -162,5 +168,11 @@ private class RetryableMatchesRepository : MatchesRepository {
         }
 
         return matches
+    }
+
+    override suspend fun getMatchById(matchId: Int): Match? {
+        return matches.firstOrNull { match ->
+            match.id == matchId
+        }
     }
 }

@@ -6,4 +6,5 @@ interface MatchesRepository {
 
     suspend fun getMatches(): List<Match>
 
+    suspend fun getMatchById(matchId: Int): Match?
 }

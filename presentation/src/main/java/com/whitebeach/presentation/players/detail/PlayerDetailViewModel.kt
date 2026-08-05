@@ -3,6 +3,7 @@ package com.whitebeach.presentation.players.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.whitebeach.domain.usecase.GetPlayerByIdUseCase
 import com.whitebeach.domain.usecase.GetPlayersUseCase
 import com.whitebeach.presentation.navigation.PlayerDetailDestination
 import com.whitebeach.presentation.players.list.toUiModel
@@ -16,13 +17,14 @@ import javax.inject.Inject
 @HiltViewModel
 class PlayerDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getPlayersUseCase: GetPlayersUseCase,
+    private val getPlayerByIdUseCase: GetPlayerByIdUseCase,
 ) : ViewModel() {
 
-    private val playerId: Int =
-        checkNotNull(
-            savedStateHandle[PlayerDetailDestination.PLAYER_ID_ARGUMENT],
-        )
+    private val playerId: Int = checkNotNull(
+        savedStateHandle[
+            PlayerDetailDestination.PLAYER_ID_ARGUMENT
+        ],
+    )
 
     private val _uiState =
         MutableStateFlow<PlayerDetailUiState>(
@@ -41,11 +43,9 @@ class PlayerDetailViewModel @Inject constructor(
             _uiState.value = PlayerDetailUiState.Loading
 
             _uiState.value = try {
-                val player = getPlayersUseCase()
-                    .firstOrNull { it.id == playerId }
-                    ?: throw NoSuchElementException(
-                        "Player not found.",
-                    )
+                val player = getPlayerByIdUseCase(
+                    playerId = playerId,
+                )
 
                 PlayerDetailUiState.Success(
                     player = player.toUiModel(),

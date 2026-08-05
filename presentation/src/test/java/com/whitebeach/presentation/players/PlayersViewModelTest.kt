@@ -129,6 +129,12 @@ private class FakePlayersRepository(
 
         return players
     }
+
+    override suspend fun getPlayerById(playerId: Int): Player? {
+        return players.firstOrNull { player ->
+            player.id == playerId
+        }
+    }
 }
 
 private class RetryablePlayersRepository : PlayersRepository {
@@ -153,5 +159,11 @@ private class RetryablePlayersRepository : PlayersRepository {
         }
 
         return players
+    }
+
+    override suspend fun getPlayerById(playerId: Int): Player? {
+        return players.firstOrNull { player ->
+            player.id == playerId
+        }
     }
 }

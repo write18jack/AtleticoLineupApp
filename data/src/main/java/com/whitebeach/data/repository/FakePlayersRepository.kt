@@ -10,4 +10,10 @@ class FakePlayersRepository @Inject constructor() : PlayersRepository {
     override suspend fun getPlayers(): List<Player> {
         return dummyPlayers
     }
+
+    override suspend fun getPlayerById(playerId: Int): Player? {
+        return dummyPlayers.firstOrNull { player ->
+            player.id == playerId
+        }
+    }
 }
