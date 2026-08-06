@@ -31,14 +31,12 @@ android {
 dependencies {
     implementation(project(":domain"))
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.converter.gson)
-    implementation(libs.converter.moshi)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
-//    testImplementation(libs.hilt.android.testing)
-//    kspTest(libs.hilt.compiler)
+    testImplementation(libs.androidx.room.testing)
 
 }
