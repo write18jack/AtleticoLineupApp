@@ -4,6 +4,7 @@
 **/build/
 **/lookups.tab
 *.xml
+*.json
 
 # IntelliJ IDEA generated files
 *.iml

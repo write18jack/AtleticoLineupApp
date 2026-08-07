@@ -1,7 +1,7 @@
 package com.whitebeach.data.di
 
 import com.whitebeach.data.repository.FakeMatchesRepository
-import com.whitebeach.data.repository.FakePlayersRepository
+import com.whitebeach.data.repository.LocalPlayersRepository
 import com.whitebeach.domain.repository.MatchesRepository
 import com.whitebeach.domain.repository.PlayersRepository
 import dagger.Binds
@@ -17,7 +17,7 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindPlayersRepository(
-        repository: FakePlayersRepository
+        repository: LocalPlayersRepository
     ): PlayersRepository
 
     @Binds
