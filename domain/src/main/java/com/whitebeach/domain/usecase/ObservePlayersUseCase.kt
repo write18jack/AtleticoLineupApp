@@ -2,12 +2,13 @@ package com.whitebeach.domain.usecase
 
 import com.whitebeach.domain.model.Player
 import com.whitebeach.domain.repository.PlayersRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetPlayersUseCase @Inject constructor(
+class ObservePlayersUseCase @Inject constructor(
     private val repository: PlayersRepository,
 ) {
-    suspend operator fun invoke(): List<Player> {
-        return repository.getPlayers()
+    operator fun invoke(): Flow<List<Player>> {
+        return repository.observePlayers()
     }
 }

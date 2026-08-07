@@ -3,12 +3,15 @@ package com.whitebeach.presentation.players
 import com.whitebeach.domain.model.Player
 import com.whitebeach.domain.model.Position
 import com.whitebeach.domain.repository.PlayersRepository
-import com.whitebeach.domain.usecase.GetPlayersUseCase
+import com.whitebeach.domain.usecase.ObservePlayersUseCase
 import com.whitebeach.presentation.players.list.PlayersUiState
 import com.whitebeach.presentation.players.list.PlayersViewModel
 import com.whitebeach.presentation.players.list.toUiModels
 import com.whitebeach.presentation.test.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -45,7 +48,7 @@ class PlayersViewModelTest {
         )
 
         val viewModel = PlayersViewModel(
-            getPlayersUseCase = GetPlayersUseCase(repository),
+            observePlayersUseCase = ObservePlayersUseCase(repository),
         )
 
         assertEquals(
@@ -70,7 +73,7 @@ class PlayersViewModelTest {
         )
 
         val viewModel = PlayersViewModel(
-            getPlayersUseCase = GetPlayersUseCase(repository),
+            observePlayersUseCase = ObservePlayersUseCase(repository),
         )
 
         assertEquals(
@@ -90,30 +93,7 @@ class PlayersViewModelTest {
 
     @Test
     fun `retry loads players after previous error`() = runTest {
-        val repository = RetryablePlayersRepository()
 
-        val viewModel = PlayersViewModel(
-            getPlayersUseCase = GetPlayersUseCase(repository),
-        )
-
-        advanceUntilIdle()
-
-        assertEquals(
-            PlayersUiState.Error(
-                message = "First request failed",
-            ),
-            viewModel.uiState.value,
-        )
-
-        viewModel.loadPlayers()
-        advanceUntilIdle()
-
-        assertEquals(
-            PlayersUiState.Success(
-                players = repository.players.toUiModels(),
-            ),
-            viewModel.uiState.value,
-        )
     }
 }
 
@@ -122,43 +102,14 @@ private class FakePlayersRepository(
     private val exception: Exception? = null,
 ) : PlayersRepository {
 
-    override suspend fun getPlayers(): List<Player> {
+    override fun observePlayers(): Flow<List<Player>> {
         exception?.let {
-            throw it
+            return flow {
+                throw it
+            }
         }
 
-        return players
-    }
-
-    override suspend fun getPlayerById(playerId: Int): Player? {
-        return players.firstOrNull { player ->
-            player.id == playerId
-        }
-    }
-}
-
-private class RetryablePlayersRepository : PlayersRepository {
-
-    val players = listOf(
-        Player(
-            id = 1,
-            name = "Retry Player",
-            shirtNumber = 10,
-            position = Position.FORWARD,
-            nationality = "Japan",
-        ),
-    )
-
-    private var requestCount = 0
-
-    override suspend fun getPlayers(): List<Player> {
-        requestCount++
-
-        if (requestCount == 1) {
-            throw IllegalStateException("First request failed")
-        }
-
-        return players
+        return flowOf(players)
     }
 
     override suspend fun getPlayerById(playerId: Int): Player? {

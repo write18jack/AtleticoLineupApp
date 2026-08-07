@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.whitebeach.domain.usecase.GetPlayerByIdUseCase
-import com.whitebeach.domain.usecase.GetPlayersUseCase
 import com.whitebeach.presentation.navigation.PlayerDetailDestination
 import com.whitebeach.presentation.players.list.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel

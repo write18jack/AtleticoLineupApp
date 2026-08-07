@@ -7,20 +7,27 @@ import com.whitebeach.data.local.mapper.toDomainModels
 import com.whitebeach.data.local.mapper.toEntities
 import com.whitebeach.domain.model.Player
 import com.whitebeach.domain.repository.PlayersRepository
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class LocalPlayersRepository @Inject constructor(
     private val playerDao: PlayerDao,
 ) : PlayersRepository {
 
-    override suspend fun getPlayers(): List<Player> {
-        seedPlayersIfEmpty()
+    override fun observePlayers(): Flow<List<Player>> {
+        return flow {
+            seedPlayersIfEmpty()
 
-        return playerDao
-            .observePlayers()
-            .first()
-            .toDomainModels()
+            emitAll(
+                playerDao.observePlayers()
+                    .map { entities ->
+                        entities.toDomainModels()
+                    },
+            )
+        }
     }
 
     override suspend fun getPlayerById(

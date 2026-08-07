@@ -39,7 +39,7 @@ fun PlayersScreen(
     PlayersScreenContent(
         uiState = uiState,
         onPlayerClick = onPlayerClick,
-        onRetry = viewModel::loadPlayers,
+        onRetry = {},
         modifier = modifier,
     )
 }

@@ -2,45 +2,44 @@ package com.whitebeach.presentation.players.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.whitebeach.domain.usecase.GetPlayersUseCase
+import com.whitebeach.domain.model.Player
+import com.whitebeach.domain.usecase.ObservePlayersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class PlayersViewModel @Inject constructor(
-    private val getPlayersUseCase: GetPlayersUseCase
+    observePlayersUseCase: ObservePlayersUseCase
 ) : ViewModel() {
 
-    private val _uiState =
-        MutableStateFlow<PlayersUiState>(PlayersUiState.Loading)
-
-    val uiState: StateFlow<PlayersUiState> =
-        _uiState.asStateFlow()
-
-    init {
-        loadPlayers()
-    }
-
-    fun loadPlayers() {
-        viewModelScope.launch {
-            _uiState.value = PlayersUiState.Loading
-
-            _uiState.value = try {
-                val players = getPlayersUseCase()
-
-                PlayersUiState.Success(
-                    players = players.toUiModels(),
-                )
-            } catch (exception: Exception) {
+    // flow一本で値を監視する。load()呼ばない。
+    val uiState = observePlayersUseCase()
+        .map<List<Player>, PlayersUiState> { players ->
+            PlayersUiState.Success(
+                players = players.toUiModels(),
+            )
+        }
+        .onStart {
+            emit(PlayersUiState.Loading)
+        }
+        .catch { exception ->
+            emit(
                 PlayersUiState.Error(
                     message = exception.message
                         ?: "Failed to load players.",
-                )
-            }
+                ),
+            )
         }
-    }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(
+                stopTimeoutMillis = 5_000,
+            ),
+            initialValue = PlayersUiState.Loading
+        )
 }
