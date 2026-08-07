@@ -18,6 +18,7 @@
 .idea/gradle.xml
 .idea/runConfigurations.xml
 .idea/encodings.xml
+misc.xml
 
 # Local environment
 local.properties

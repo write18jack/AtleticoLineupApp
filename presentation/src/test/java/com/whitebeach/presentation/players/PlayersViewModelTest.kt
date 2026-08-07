@@ -9,9 +9,13 @@ import com.whitebeach.presentation.players.list.PlayersViewModel
 import com.whitebeach.presentation.players.list.toUiModels
 import com.whitebeach.presentation.test.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -56,6 +60,12 @@ class PlayersViewModelTest {
             viewModel.uiState.value,
         )
 
+        val job = backgroundScope.launch(
+            UnconfinedTestDispatcher(testScheduler),
+        ) {
+            viewModel.uiState.collect()
+        }
+
         advanceUntilIdle()
 
         assertEquals(
@@ -64,6 +74,8 @@ class PlayersViewModelTest {
             ),
             viewModel.uiState.value,
         )
+
+        job.cancel()
     }
 
     @Test
@@ -81,6 +93,12 @@ class PlayersViewModelTest {
             viewModel.uiState.value,
         )
 
+        val job = backgroundScope.launch(
+            UnconfinedTestDispatcher(testScheduler),
+        ) {
+            viewModel.uiState.collect()
+        }
+
         advanceUntilIdle()
 
         assertEquals(
@@ -89,11 +107,8 @@ class PlayersViewModelTest {
             ),
             viewModel.uiState.value,
         )
-    }
 
-    @Test
-    fun `retry loads players after previous error`() = runTest {
-
+        job.cancel()
     }
 }
 

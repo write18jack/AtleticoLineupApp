@@ -1,6 +1,6 @@
 package com.whitebeach.data.di
 
-import com.whitebeach.data.repository.FakeMatchesRepository
+import com.whitebeach.data.repository.LocalMatchesRepository
 import com.whitebeach.data.repository.LocalPlayersRepository
 import com.whitebeach.domain.repository.MatchesRepository
 import com.whitebeach.domain.repository.PlayersRepository
@@ -23,6 +23,6 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindMatchesRepository(
-        repository: FakeMatchesRepository
+        repository: LocalMatchesRepository
     ): MatchesRepository
 }

@@ -2,45 +2,41 @@ package com.whitebeach.presentation.matches
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.whitebeach.domain.usecase.GetMatchesUseCase
+import com.whitebeach.domain.model.Match
+import com.whitebeach.domain.usecase.ObserveMatchesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class MatchesViewModel @Inject constructor(
-    private val getMatchesUseCase: GetMatchesUseCase
+    observeMatchesUseCase: ObserveMatchesUseCase,
 ) : ViewModel() {
 
-    private val _uiState =
-        MutableStateFlow<MatchesUiState>(MatchesUiState.Loading)
-
-    val uiState: StateFlow<MatchesUiState> =
-        _uiState.asStateFlow()
-
-    init {
-        loadMatches()
-    }
-
-    fun loadMatches() {
-        viewModelScope.launch {
-            _uiState.value = MatchesUiState.Loading
-
-            _uiState.value = try {
-                val matches = getMatchesUseCase()
-
-                MatchesUiState.Success(
-                    matches = matches.toUiModels(),
-                )
-            } catch (exception: Exception) {
+    val uiState = observeMatchesUseCase()
+        .map<List<Match>, MatchesUiState> { matches ->
+            MatchesUiState.Success(
+                matches = matches.toUiModels(),
+            )
+        }
+        .onStart {
+            emit(MatchesUiState.Loading)
+        }
+        .catch { exception ->
+            emit(
                 MatchesUiState.Error(
                     message = exception.message
                         ?: "Failed to load matches.",
-                )
-            }
+                ),
+            )
         }
-    }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = MatchesUiState.Loading,
+        )
 }

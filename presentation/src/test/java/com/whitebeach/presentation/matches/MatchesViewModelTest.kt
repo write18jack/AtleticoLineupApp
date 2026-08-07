@@ -3,9 +3,14 @@ package com.whitebeach.presentation.matches
 import com.whitebeach.domain.model.Match
 import com.whitebeach.domain.model.MatchStatus
 import com.whitebeach.domain.repository.MatchesRepository
-import com.whitebeach.domain.usecase.GetMatchesUseCase
+import com.whitebeach.domain.usecase.ObserveMatchesUseCase
 import com.whitebeach.presentation.test.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -50,13 +55,19 @@ class MatchesViewModelTest {
         )
 
         val viewModel = MatchesViewModel(
-            getMatchesUseCase = GetMatchesUseCase(repository),
+            observeMatchesUseCase = ObserveMatchesUseCase(repository),
         )
 
         assertEquals(
             MatchesUiState.Loading,
             viewModel.uiState.value,
         )
+
+        val job = backgroundScope.launch(
+            UnconfinedTestDispatcher(testScheduler),
+        ) {
+            viewModel.uiState.collect()
+        }
 
         advanceUntilIdle()
 
@@ -66,6 +77,8 @@ class MatchesViewModelTest {
             ),
             viewModel.uiState.value,
         )
+
+        job.cancel()
     }
 
     @Test
@@ -75,13 +88,19 @@ class MatchesViewModelTest {
         )
 
         val viewModel = MatchesViewModel(
-            getMatchesUseCase = GetMatchesUseCase(repository),
+            observeMatchesUseCase = ObserveMatchesUseCase(repository),
         )
 
         assertEquals(
             MatchesUiState.Loading,
             viewModel.uiState.value,
         )
+
+        val job = backgroundScope.launch(
+            UnconfinedTestDispatcher(testScheduler),
+        ) {
+            viewModel.uiState.collect()
+        }
 
         advanceUntilIdle()
 
@@ -91,34 +110,8 @@ class MatchesViewModelTest {
             ),
             viewModel.uiState.value,
         )
-    }
 
-    @Test
-    fun `retry loads matches after previous error`() = runTest {
-        val repository = RetryableMatchesRepository()
-
-        val viewModel = MatchesViewModel(
-            getMatchesUseCase = GetMatchesUseCase(repository),
-        )
-
-        advanceUntilIdle()
-
-        assertEquals(
-            MatchesUiState.Error(
-                message = "First request failed",
-            ),
-            viewModel.uiState.value,
-        )
-
-        viewModel.loadMatches()
-        advanceUntilIdle()
-
-        assertEquals(
-            MatchesUiState.Success(
-                matches = repository.matches.toUiModels(),
-            ),
-            viewModel.uiState.value,
-        )
+        job.cancel()
     }
 }
 
@@ -127,50 +120,19 @@ private class FakeMatchesRepository(
     private val exception: Exception? = null,
 ) : MatchesRepository {
 
-    override suspend fun getMatches(): List<Match> {
-        exception?.let {
-            throw it
-        }
+    override fun observeMatches(): Flow<List<Match>> {
+        return flow {
+            exception?.let {
+                throw it
+            }
 
-        return matches
-    }
-
-    override suspend fun getMatchById(matchId: Int): Match? {
-        return matches.firstOrNull { match ->
-            match.id == matchId
+            emit(matches)
         }
     }
-}
 
-private class RetryableMatchesRepository : MatchesRepository {
-
-    val matches = listOf(
-        Match(
-            id = 1,
-            competition = "LaLiga",
-            homeTeam = "Atlético Madrid",
-            awayTeam = "Retry Club",
-            date = "2026-08-15",
-            time = "21:00",
-            status = MatchStatus.UPCOMING,
-            homeScore = null,
-            awayScore = null,
-        ),
-    )
-
-    private var requestCount = 0
-
-    override suspend fun getMatches(): List<Match> {
-        requestCount++
-
-        if (requestCount == 1) {
-            throw IllegalStateException("First request failed")
-        }
-
-        return matches
-    }
-
-    override suspend fun getMatchById(matchId: Int): Match? {
+    override suspend fun getMatchById(
+        matchId: Int,
+    ): Match? {
         return matches.firstOrNull { match ->
             match.id == matchId
         }

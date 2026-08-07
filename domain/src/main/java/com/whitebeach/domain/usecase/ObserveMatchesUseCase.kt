@@ -2,12 +2,13 @@ package com.whitebeach.domain.usecase
 
 import com.whitebeach.domain.model.Match
 import com.whitebeach.domain.repository.MatchesRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetMatchesUseCase @Inject constructor(
+class ObserveMatchesUseCase @Inject constructor(
     private val repository: MatchesRepository,
 ) {
-    suspend operator fun invoke(): List<Match> {
-        return repository.getMatches()
+    operator fun invoke(): Flow<List<Match>> {
+        return repository.observeMatches()
     }
 }

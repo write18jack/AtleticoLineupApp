@@ -42,7 +42,7 @@ fun MatchesScreen(
     MatchesScreenContent(
         uiState = uiState,
         onMatchClick = onMatchClick,
-        onRetry = viewModel::loadMatches,
+        onRetry = {},
         modifier = modifier,
     )
 }

@@ -2,6 +2,7 @@ package com.whitebeach.data.di
 
 import android.content.Context
 import androidx.room.Room
+import com.whitebeach.data.local.dao.MatchDao
 import com.whitebeach.data.local.dao.PlayerDao
 import com.whitebeach.data.local.database.AtleticoDatabase
 import dagger.Module
@@ -34,5 +35,12 @@ object DatabaseModule {
         database: AtleticoDatabase,
     ): PlayerDao {
         return database.playerDao()
+    }
+
+    @Provides
+    fun provideMatchDao(
+        database: AtleticoDatabase,
+    ): MatchDao {
+        return database.matchDao()
     }
 }

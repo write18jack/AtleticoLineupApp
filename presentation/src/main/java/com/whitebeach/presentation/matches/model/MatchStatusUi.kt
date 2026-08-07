@@ -9,4 +9,7 @@ enum class MatchStatusUi(
     FINISHED(
         sectionTitle = "Finished Matches",
     ),
+    UNKNOWN(
+        sectionTitle = "Other Matches",
+    ),
 }

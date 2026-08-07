@@ -27,5 +27,6 @@ private fun MatchStatus.toUiModel(): MatchStatusUi {
     return when (this) {
         MatchStatus.UPCOMING -> MatchStatusUi.UPCOMING
         MatchStatus.FINISHED -> MatchStatusUi.FINISHED
+        MatchStatus.UNKNOWN -> MatchStatusUi.UNKNOWN
     }
 }
