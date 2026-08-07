@@ -28,6 +28,11 @@ android {
     }
 }
 
+ksp {
+    // Room schemaの出力先を設定
+    arg("room.schemaLocation", "$projectDir/schemas",)
+}
+
 dependencies {
     implementation(project(":domain"))
 

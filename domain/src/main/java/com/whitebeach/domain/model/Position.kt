@@ -5,4 +5,5 @@ enum class Position {
     DEFENDER,
     MIDFIELDER,
     FORWARD,
+    UNKNOWN,
 }

@@ -20,4 +20,8 @@ enum class PlayerPositionUi(
         displayName = "Forward",
         sectionTitle = "Forwards",
     ),
+    UNKNOWN(
+        displayName = "Unknown",
+        sectionTitle = "Others",
+    ),
 }

@@ -25,5 +25,6 @@ private fun Position.toUiModel(): PlayerPositionUi {
         Position.DEFENDER -> PlayerPositionUi.DEFENDER
         Position.MIDFIELDER -> PlayerPositionUi.MIDFIELDER
         Position.FORWARD -> PlayerPositionUi.FORWARD
+        Position.UNKNOWN -> PlayerPositionUi.UNKNOWN
     }
 }

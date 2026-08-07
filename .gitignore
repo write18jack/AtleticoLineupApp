@@ -3,9 +3,11 @@
 .kotlin/
 **/build/
 **/lookups.tab
+*.xml
 
 # IntelliJ IDEA generated files
 *.iml
+*.idea
 .idea/caches/
 .idea/libraries/
 .idea/modules.xml
