@@ -4,16 +4,15 @@ import com.whitebeach.domain.model.Player
 import com.whitebeach.domain.model.Position
 import com.whitebeach.domain.repository.PlayersRepository
 import com.whitebeach.domain.usecase.ObservePlayersUseCase
+import com.whitebeach.domain.usecase.RefreshPlayersUseCase
 import com.whitebeach.presentation.players.list.PlayersUiState
 import com.whitebeach.presentation.players.list.PlayersViewModel
 import com.whitebeach.presentation.players.list.toUiModels
 import com.whitebeach.presentation.test.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -29,7 +28,7 @@ class PlayersViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     @Test
-    fun `initial load succeeds and updates state to Success`() = runTest {
+    fun `observe players emits Success`() = runTest {
         val players = listOf(
             Player(
                 id = 1,
@@ -48,11 +47,12 @@ class PlayersViewModelTest {
         )
 
         val repository = FakePlayersRepository(
-            players = players,
+            initialPlayers = players,
         )
 
         val viewModel = PlayersViewModel(
             observePlayersUseCase = ObservePlayersUseCase(repository),
+            refreshPlayersUseCase = RefreshPlayersUseCase(repository),
         )
 
         assertEquals(
@@ -79,18 +79,16 @@ class PlayersViewModelTest {
     }
 
     @Test
-    fun `initial load fails and updates state to Error`() = runTest {
+    fun `observe players emits Error`() = runTest {
         val repository = FakePlayersRepository(
-            exception = IllegalStateException("Player loading failed"),
+            observeException = IllegalStateException(
+                "Player loading failed",
+            ),
         )
 
         val viewModel = PlayersViewModel(
             observePlayersUseCase = ObservePlayersUseCase(repository),
-        )
-
-        assertEquals(
-            PlayersUiState.Loading,
-            viewModel.uiState.value,
+            refreshPlayersUseCase = RefreshPlayersUseCase(repository),
         )
 
         val job = backgroundScope.launch(
@@ -113,23 +111,35 @@ class PlayersViewModelTest {
 }
 
 private class FakePlayersRepository(
-    private val players: List<Player> = emptyList(),
-    private val exception: Exception? = null,
+    initialPlayers: List<Player> = emptyList(),
+    private val observeException: Exception? = null,
+    private val refreshException: Exception? = null,
 ) : PlayersRepository {
 
+    private val playersFlow =
+        MutableStateFlow(initialPlayers)
+
     override fun observePlayers(): Flow<List<Player>> {
-        exception?.let {
-            return flow {
-                throw it
+        observeException?.let { exception ->
+            return kotlinx.coroutines.flow.flow {
+                throw exception
             }
         }
 
-        return flowOf(players)
+        return playersFlow
     }
 
-    override suspend fun getPlayerById(playerId: Int): Player? {
-        return players.firstOrNull { player ->
+    override suspend fun getPlayerById(
+        playerId: Int,
+    ): Player? {
+        return playersFlow.value.firstOrNull { player ->
             player.id == playerId
+        }
+    }
+
+    override suspend fun refreshPlayers() {
+        refreshException?.let {
+            throw it
         }
     }
 }

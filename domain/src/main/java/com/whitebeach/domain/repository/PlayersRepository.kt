@@ -9,4 +9,6 @@ interface PlayersRepository {
     fun observePlayers(): Flow<List<Player>>
 
     suspend fun getPlayerById(playerId: Int): Player?
+
+    suspend fun refreshPlayers()
 }

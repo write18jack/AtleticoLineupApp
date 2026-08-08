@@ -8,4 +8,6 @@ interface MatchesRepository {
     fun observeMatches(): Flow<List<Match>>
 
     suspend fun getMatchById(matchId: Int): Match?
+
+    suspend fun refreshMatches()
 }

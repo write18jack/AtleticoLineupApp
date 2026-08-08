@@ -4,6 +4,7 @@ import com.whitebeach.domain.model.Match
 import com.whitebeach.domain.model.MatchStatus
 import com.whitebeach.domain.repository.MatchesRepository
 import com.whitebeach.domain.usecase.ObserveMatchesUseCase
+import com.whitebeach.domain.usecase.RefreshMatchesUseCase
 import com.whitebeach.presentation.test.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +25,7 @@ class MatchesViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     @Test
-    fun `initial load succeeds and updates state to Success`() = runTest {
+    fun `observe matches emits Success`() = runTest {
         val matches = listOf(
             Match(
                 id = 1,
@@ -56,6 +57,7 @@ class MatchesViewModelTest {
 
         val viewModel = MatchesViewModel(
             observeMatchesUseCase = ObserveMatchesUseCase(repository),
+            refreshMatchesUseCase = RefreshMatchesUseCase(repository),
         )
 
         assertEquals(
@@ -82,13 +84,14 @@ class MatchesViewModelTest {
     }
 
     @Test
-    fun `initial load fails and updates state to Error`() = runTest {
+    fun `observe matches emits Error`() = runTest {
         val repository = FakeMatchesRepository(
             exception = IllegalStateException("Match loading failed"),
         )
 
         val viewModel = MatchesViewModel(
             observeMatchesUseCase = ObserveMatchesUseCase(repository),
+            refreshMatchesUseCase = RefreshMatchesUseCase(repository),
         )
 
         assertEquals(
@@ -136,5 +139,9 @@ private class FakeMatchesRepository(
         return matches.firstOrNull { match ->
             match.id == matchId
         }
+    }
+
+    override suspend fun refreshMatches() {
+        // 今は何もしない
     }
 }
