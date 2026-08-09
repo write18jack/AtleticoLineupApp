@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import com.whitebeach.data.local.entity.MatchEntity
+import com.whitebeach.data.local.entity.PlayerEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,6 +18,11 @@ interface MatchDao {
         """
     )
     fun observeMatches(): Flow<List<MatchEntity>>
+
+    @Query("""SELECT * FROM matches WHERE id = :matchId LIMIT 1""" )
+    fun observeMatchById(
+        matchId: Int,
+    ): Flow<MatchEntity?>
 
     @Query(
         """

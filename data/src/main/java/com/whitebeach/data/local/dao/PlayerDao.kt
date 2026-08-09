@@ -9,11 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PlayerDao {
 
-    @Query(
-        """
-        SELECT *
-        FROM players
-        ORDER BY
+    @Query("""SELECT * FROM players ORDER BY
             CASE position
                 WHEN 'GOALKEEPER' THEN 1
                 WHEN 'DEFENDER' THEN 2
@@ -21,32 +17,15 @@ interface PlayerDao {
                 WHEN 'FORWARD' THEN 4
                 ELSE 5
             END,
-            shirtNumber ASC,
-            name ASC
-        """,
-    )
+            shirtNumber ASC, name ASC""")
     fun observePlayers(): Flow<List<PlayerEntity>>
 
-    @Query(
-        """
-        SELECT *
-        FROM players
-        WHERE id = :playerId
-        LIMIT 1
-        """,
-    )
+    @Query("""SELECT * FROM players WHERE id = :playerId LIMIT 1""" )
     fun observePlayerById(
         playerId: Int,
     ): Flow<PlayerEntity?>
 
-    @Query(
-        """
-        SELECT *
-        FROM players
-        WHERE id = :playerId
-        LIMIT 1
-        """,
-    )
+    @Query("""SELECT * FROM players WHERE id = :playerId LIMIT 1""" )
     suspend fun getPlayerById(
         playerId: Int,
     ): PlayerEntity?
