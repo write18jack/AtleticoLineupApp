@@ -10,7 +10,7 @@ data class PlayerEntity(
     @PrimaryKey
     val id: Int,
     val name: String,
-    val shirtNumber: Int,
+    val shirtNumber: Int?,
     val position: String,
     val nationality: String,
 )
