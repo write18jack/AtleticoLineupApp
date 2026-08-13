@@ -11,8 +11,10 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -31,16 +33,25 @@ import com.whitebeach.presentation.theme.AtleticoLineupAppTheme
 @Composable
 fun PlayersScreen(
     onPlayerClick: (Int) -> Unit,
-    modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     viewModel: PlayersViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val refreshError = (uiState as? PlayersUiState.Success)?.refreshError
+
+    LaunchedEffect(refreshError) {
+        refreshError?.let { message ->
+            snackbarHostState.showSnackbar(
+                message = message,
+            )
+        }
+    }
 
     PlayersScreenContent(
         uiState = uiState,
         onPlayerClick = onPlayerClick,
         onRetry = viewModel::refreshPlayers,
-        modifier = modifier,
     )
 }
 
@@ -49,12 +60,16 @@ private fun PlayersScreenContent(
     uiState: PlayersUiState,
     onPlayerClick: (Int) -> Unit,
     onRetry: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     when (uiState) {
         PlayersUiState.Loading -> {
-            LoadingState(
-                modifier = modifier,
+            LoadingState()
+        }
+
+        is PlayersUiState.Error -> {
+            ErrorState(
+                message = uiState.message,
+                onRetry = onRetry,
             )
         }
 
@@ -62,15 +77,6 @@ private fun PlayersScreenContent(
             PlayersContent(
                 players = uiState.players,
                 onPlayerClick = onPlayerClick,
-                modifier = modifier,
-            )
-        }
-
-        is PlayersUiState.Error -> {
-            ErrorState(
-                message = uiState.message,
-                onRetry = onRetry,
-                modifier = modifier,
             )
         }
     }

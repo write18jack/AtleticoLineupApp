@@ -1,5 +1,6 @@
 package com.whitebeach.presentation.navigation
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -17,6 +18,7 @@ fun AtleticoNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     startDestination: String = MainDestination.PLAYERS.route,
+    snackbarHostState: SnackbarHostState,
 ) {
     NavHost(
         navController = navController,
@@ -28,10 +30,9 @@ fun AtleticoNavHost(
         ) {
             PlayersScreen(
                 onPlayerClick = { playerId ->
-                    navController.navigate(
-                        PlayerDetailDestination.createRoute(playerId),
-                    )
+                    navController.navigate(PlayerDetailDestination.createRoute(playerId))
                 },
+                snackbarHostState = snackbarHostState,
             )
         }
 
@@ -40,9 +41,7 @@ fun AtleticoNavHost(
         ) {
             MatchesScreen(
                 onMatchClick = { matchId ->
-                    navController.navigate(
-                        MatchDetailDestination.createRoute(matchId),
-                    )
+                    navController.navigate(MatchDetailDestination.createRoute(matchId),)
                 },
             )
         }

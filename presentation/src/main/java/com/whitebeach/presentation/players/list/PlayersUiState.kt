@@ -8,6 +8,8 @@ sealed interface PlayersUiState {
 
     data class Success(
         val players: List<PlayerUiModel>,
+        val isRefreshing: Boolean = false,
+        val refreshError: String? = null,
     ) : PlayersUiState
 
     data class Error(

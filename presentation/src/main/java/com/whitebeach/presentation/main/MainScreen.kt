@@ -2,8 +2,11 @@ package com.whitebeach.presentation.main
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -31,14 +34,11 @@ fun MainScreen(
             destination.route == currentRoute
         }
 
-    val isPlayerDetail =
-        currentRoute == PlayerDetailDestination.route
+    val isPlayerDetail = currentRoute == PlayerDetailDestination.route
 
-    val isMatchDetail =
-        currentRoute == MatchDetailDestination.route
+    val isMatchDetail = currentRoute == MatchDetailDestination.route
 
-    val isDetailScreen =
-        isPlayerDetail || isMatchDetail
+    val isDetailScreen = isPlayerDetail || isMatchDetail
 
     val title = when {
         currentDestination != null -> currentDestination.title
@@ -46,6 +46,8 @@ fun MainScreen(
         isMatchDetail -> "Match Details"
         else -> "Atlético Madrid"
     }
+
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         modifier = modifier,
@@ -81,10 +83,16 @@ fun MainScreen(
                 )
             }
         },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+            )
+        }
     ) { innerPadding ->
         AtleticoNavHost(
             navController = navController,
             modifier = Modifier.padding(innerPadding),
+            snackbarHostState = snackbarHostState,
         )
     }
 }
