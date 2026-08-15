@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,9 +43,15 @@ fun PlayersScreen(
 
     LaunchedEffect(refreshError) {
         refreshError?.let { message ->
-            snackbarHostState.showSnackbar(
+            val result = snackbarHostState.showSnackbar(
                 message = message,
+                actionLabel = "再試行",
+                withDismissAction = true,
             )
+
+            if (result == SnackbarResult.ActionPerformed) {
+                viewModel.refreshPlayers()
+            }
         }
     }
 

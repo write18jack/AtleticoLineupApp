@@ -43,6 +43,7 @@ fun AtleticoNavHost(
                 onMatchClick = { matchId ->
                     navController.navigate(MatchDetailDestination.createRoute(matchId),)
                 },
+                snackbarHostState = snackbarHostState,
             )
         }
 

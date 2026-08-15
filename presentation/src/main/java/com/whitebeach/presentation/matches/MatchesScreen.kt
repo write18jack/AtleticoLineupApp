@@ -11,8 +11,10 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -34,16 +36,25 @@ import com.whitebeach.presentation.theme.AtleticoLineupAppTheme
 @Composable
 fun MatchesScreen(
     onMatchClick: (Int) -> Unit,
-    modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     viewModel: MatchesViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val refreshError = (uiState as? MatchesUiState.Success)?.refreshError
+
+    LaunchedEffect(refreshError) {
+        refreshError?.let { message ->
+            snackbarHostState.showSnackbar(
+                message = message,
+            )
+        }
+    }
 
     MatchesScreenContent(
         uiState = uiState,
         onMatchClick = onMatchClick,
         onRetry = viewModel::refreshMatches,
-        modifier = modifier,
     )
 }
 
@@ -51,7 +62,7 @@ fun MatchesScreen(
  * UiStateを描画するComposable
  */
 @Composable
-private fun MatchesScreenContent(
+fun MatchesScreenContent(
     uiState: MatchesUiState,
     onMatchClick: (Int) -> Unit,
     onRetry: () -> Unit,
@@ -64,18 +75,18 @@ private fun MatchesScreenContent(
             )
         }
 
-        is MatchesUiState.Success -> {
-            MatchesContent(
-                matches = uiState.matches,
-                onMatchClick = onMatchClick,
-                modifier = modifier,
-            )
-        }
-
         is MatchesUiState.Error -> {
             ErrorState(
                 message = uiState.message,
                 onRetry = onRetry,
+                modifier = modifier,
+            )
+        }
+
+        is MatchesUiState.Success -> {
+            MatchesContent(
+                matches = uiState.matches,
+                onMatchClick = onMatchClick,
                 modifier = modifier,
             )
         }

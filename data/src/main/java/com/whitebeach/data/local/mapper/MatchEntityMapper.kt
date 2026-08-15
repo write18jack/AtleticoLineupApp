@@ -12,7 +12,16 @@ fun MatchEntity.toDomain(): Match {
         awayTeam = awayTeam,
         date = date,
         time = time,
-        status = status.toDomainStatus(),
+        status = when (status) {
+            MatchStatus.UPCOMING.name ->
+                MatchStatus.UPCOMING
+
+            MatchStatus.FINISHED.name ->
+                MatchStatus.FINISHED
+
+            else ->
+                MatchStatus.UNKNOWN
+        },
         homeScore = homeScore,
         awayScore = awayScore,
     )

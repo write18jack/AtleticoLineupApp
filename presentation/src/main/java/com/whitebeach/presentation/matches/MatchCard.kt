@@ -41,17 +41,25 @@ fun MatchCard(
             MatchHeader(
                 competitionName = match.competitionName,
                 dateText = match.dateText,
-                timeText = match.timeText,
+                timeText = when (match.status) {
+                    MatchStatusUi.UPCOMING -> match.timeText.ifBlank { "TBD" }
+
+                    MatchStatusUi.FINISHED -> "FT"
+
+                    MatchStatusUi.UNKNOWN -> ""
+                },
             )
 
             TeamRow(
                 teamName = match.homeTeamName,
                 score = match.homeScore,
+                showScore = match.status == MatchStatusUi.FINISHED,
             )
 
             TeamRow(
                 teamName = match.awayTeamName,
                 score = match.awayScore,
+                showScore = match.status == MatchStatusUi.FINISHED,
             )
         }
     }
@@ -97,6 +105,7 @@ private fun MatchHeader(
 private fun TeamRow(
     teamName: String,
     score: Int?,
+    showScore: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -110,31 +119,54 @@ private fun TeamRow(
             modifier = Modifier.weight(1f),
         )
 
-        Text(
-            text = score?.toString() ?: "-",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
+        if (showScore) {
+            Text(
+                text = score?.toString() ?: "-",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UpcomingMatchCardPreview() {
+    AtleticoLineupAppTheme {
+        MatchCard(
+            match = MatchUiModel(
+                id = 2,
+                competitionName = "LALIGA EA SPORTS",
+                dateText = "Aug 19, 2026",
+                timeText = "19:00",
+                homeTeamName = "Atlético de Madrid",
+                awayTeamName = "Málaga CF",
+                homeScore = null,
+                awayScore = null,
+                status = MatchStatusUi.UPCOMING,
+            ),
+            onClick = {},
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun MatchCardPreview() {
+private fun FinishedMatchCardPreview() {
     AtleticoLineupAppTheme {
         MatchCard(
             match = MatchUiModel(
                 id = 1,
-                competitionName = "LaLiga",
-                dateText = "Aug 17, 2026",
-                timeText = "21:00",
-                homeTeamName = "Atlético Madrid",
-                awayTeamName = "Villarreal",
-                homeScore = null,
-                awayScore = null,
-                status = MatchStatusUi.UPCOMING,
+                competitionName = "LALIGA EA SPORTS",
+                dateText = "Feb 8, 2026",
+                timeText = "17:30",
+                homeTeamName = "Atlético de Madrid",
+                awayTeamName = "Real Betis",
+                homeScore = 0,
+                awayScore = 1,
+                status = MatchStatusUi.FINISHED,
             ),
-            onClick = {}
+            onClick = {},
         )
     }
 }

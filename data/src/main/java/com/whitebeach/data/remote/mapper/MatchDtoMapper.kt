@@ -23,9 +23,9 @@ fun List<MatchDto>.toDomainModels(): List<Match> {
 }
 
 private fun String.toMatchStatus(): MatchStatus {
-    return runCatching {
-        MatchStatus.valueOf(uppercase())
-    }.getOrDefault(
-        MatchStatus.UNKNOWN,
-    )
+    return when (this) {
+        "UPCOMING" -> MatchStatus.UPCOMING
+        "FINISHED" -> MatchStatus.FINISHED
+        else -> MatchStatus.UNKNOWN
+    }
 }

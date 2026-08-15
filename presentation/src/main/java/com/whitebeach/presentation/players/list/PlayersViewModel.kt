@@ -1,6 +1,5 @@
 package com.whitebeach.presentation.players.list
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.whitebeach.domain.usecase.ObservePlayersUseCase

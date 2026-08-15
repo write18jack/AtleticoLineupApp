@@ -8,9 +8,9 @@ sealed interface MatchesUiState {
 
     data class Success(
         val matches: List<MatchUiModel>,
+        val isRefreshing: Boolean = false,
+        val refreshError: String? = null,
     ) : MatchesUiState
 
-    data class Error(
-        val message: String,
-    ) : MatchesUiState
+    data class Error(val message: String) : MatchesUiState
 }

@@ -4,42 +4,22 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import com.whitebeach.data.local.entity.MatchEntity
-import com.whitebeach.data.local.entity.PlayerEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MatchDao {
 
-    @Query(
-        """
-        SELECT *
-        FROM matches
-        ORDER BY date ASC, time ASC
-        """
-    )
+    @Query("""SELECT * FROM matches ORDER BY date ASC, time ASC""")
     fun observeMatches(): Flow<List<MatchEntity>>
 
-    @Query("""SELECT * FROM matches WHERE id = :matchId LIMIT 1""" )
-    fun observeMatchById(
-        matchId: Int,
-    ): Flow<MatchEntity?>
+    @Query("""SELECT * FROM matches WHERE id = :matchId LIMIT 1""")
+    fun observeMatchById(matchId: Int): Flow<MatchEntity?>
 
-    @Query(
-        """
-        SELECT *
-        FROM matches
-        WHERE id = :matchId
-        LIMIT 1
-        """
-    )
-    suspend fun getMatchById(
-        matchId: Int,
-    ): MatchEntity?
+    @Query("""SELECT * FROM matches WHERE id = :matchId LIMIT 1""")
+    suspend fun getMatchById(matchId: Int): MatchEntity?
 
     @Upsert
-    suspend fun upsertMatches(
-        matches: List<MatchEntity>,
-    )
+    suspend fun upsertMatches(matches: List<MatchEntity>)
 
     @Query("DELETE FROM matches")
     suspend fun deleteAllMatches()
