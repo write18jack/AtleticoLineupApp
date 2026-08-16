@@ -8,11 +8,13 @@ fun MatchDto.toDomain(): Match {
     return Match(
         id = id,
         competition = competition,
-        homeTeam = homeTeam,
-        awayTeam = awayTeam,
         date = date,
         time = time,
         status = status.toMatchStatus(),
+        homeTeam = homeTeam,
+        awayTeam = awayTeam,
+        homeTeamImageUrl = homeTeamImageUrl,
+        awayTeamImageUrl = awayTeamImageUrl,
         homeScore = homeScore,
         awayScore = awayScore,
     )

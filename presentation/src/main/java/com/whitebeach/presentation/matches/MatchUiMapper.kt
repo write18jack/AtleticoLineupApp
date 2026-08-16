@@ -11,9 +11,11 @@ fun Match.toUiModel(): MatchUiModel {
         competitionName = competition,
         dateText = date,
         timeText = time,
+        status = status.toUiModel(),
         homeTeamName = homeTeam,
         awayTeamName = awayTeam,
-        status = status.toUiModel(),
+        homeTeamImageUrl = homeTeamImageUrl,
+        awayTeamImageUrl = awayTeamImageUrl,
         homeScore = homeScore,
         awayScore = awayScore,
     )

@@ -7,6 +7,8 @@ data class MatchUiModel(
     val timeText: String,
     val homeTeamName: String,
     val awayTeamName: String,
+    val homeTeamImageUrl: String?,
+    val awayTeamImageUrl: String?,
     val homeScore: Int?,
     val awayScore: Int?,
     val status: MatchStatusUi,

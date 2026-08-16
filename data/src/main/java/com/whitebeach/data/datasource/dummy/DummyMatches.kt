@@ -12,6 +12,8 @@ internal val dummyMatches = listOf(
         homeTeam = "Atlético Madrid",
         awayTeam = "Villarreal",
         status = MatchStatus.UPCOMING,
+        homeTeamImageUrl = "",
+        awayTeamImageUrl = "",
         homeScore = null,
         awayScore = null,
     ),
@@ -23,6 +25,8 @@ internal val dummyMatches = listOf(
         homeTeam = "Real Betis",
         awayTeam = "Atlético Madrid",
         status = MatchStatus.UPCOMING,
+        homeTeamImageUrl = "",
+        awayTeamImageUrl = "",
         homeScore = null,
         awayScore = null
     ),
@@ -34,6 +38,8 @@ internal val dummyMatches = listOf(
         homeTeam = "Atlético Madrid",
         awayTeam = "Inter",
         status = MatchStatus.FINISHED,
+        homeTeamImageUrl = "",
+        awayTeamImageUrl = "",
         homeScore = 2,
         awayScore = 1
     ),
@@ -45,6 +51,8 @@ internal val dummyMatches = listOf(
         homeTeam = "Arsenal",
         awayTeam = "Atlético Madrid",
         status = MatchStatus.FINISHED,
+        homeTeamImageUrl = "",
+        awayTeamImageUrl = "",
         homeScore = 1,
         awayScore = 1
     ),

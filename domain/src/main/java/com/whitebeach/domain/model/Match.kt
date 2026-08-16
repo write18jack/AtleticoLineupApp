@@ -5,9 +5,11 @@ data class Match(
     val competition: String,
     val date: String,
     val time: String,
+    val status: MatchStatus,
     val homeTeam: String,
     val awayTeam: String,
-    val status: MatchStatus,
+    val homeTeamImageUrl: String?,
+    val awayTeamImageUrl: String?,
     val homeScore: Int?,
     val awayScore: Int?,
 )

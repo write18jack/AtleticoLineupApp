@@ -41,6 +41,7 @@ android {
         implementation(libs.androidx.lifecycle.runtime.compose)
         implementation(libs.androidx.hilt.navigation.compose)
         implementation(libs.androidx.navigation.compose)
+        implementation(libs.coil.compose)
 
         testImplementation(libs.junit)
         testImplementation(libs.kotlinx.coroutines.test)
