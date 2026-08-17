@@ -10,6 +10,7 @@ internal val dummyPlayers = listOf(
         name = "Jan Oblak",
         position = Position.GOALKEEPER,
         nationality = "Slovenia",
+        imageUrl = ""
     ),
     Player(
         id = 2,
@@ -17,6 +18,7 @@ internal val dummyPlayers = listOf(
         name = "José María Giménez",
         position = Position.DEFENDER,
         nationality = "Uruguay",
+        imageUrl = ""
     ),
     Player(
         id = 3,
@@ -24,6 +26,7 @@ internal val dummyPlayers = listOf(
         name = "Clément Lenglet",
         position = Position.DEFENDER,
         nationality = "France",
+        imageUrl = ""
     ),
     Player(
         id = 4,
@@ -31,6 +34,7 @@ internal val dummyPlayers = listOf(
         name = "Marcos Llorente",
         position = Position.MIDFIELDER,
         nationality = "Spain",
+        imageUrl = ""
     ),
     Player(
         id = 5,
@@ -38,6 +42,7 @@ internal val dummyPlayers = listOf(
         name = "Koke",
         position = Position.MIDFIELDER,
         nationality = "Spain",
+        imageUrl = ""
     ),
     Player(
         id = 6,
@@ -45,6 +50,7 @@ internal val dummyPlayers = listOf(
         name = "Antoine Griezmann",
         position = Position.FORWARD,
         nationality = "France",
+        imageUrl = ""
     ),
     Player(
         id = 7,
@@ -52,5 +58,6 @@ internal val dummyPlayers = listOf(
         name = "Alexander Sørloth",
         position = Position.FORWARD,
         nationality = "Norway",
+        imageUrl = ""
     ),
 )

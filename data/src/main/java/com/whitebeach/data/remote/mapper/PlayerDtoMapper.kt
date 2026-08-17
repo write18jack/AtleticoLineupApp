@@ -11,6 +11,7 @@ fun PlayerDto.toDomain(): Player {
         shirtNumber = shirtNumber,
         position = position.toPosition(),
         nationality = nationality,
+        imageUrl = imageUrl
     )
 }
 

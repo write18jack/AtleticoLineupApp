@@ -6,4 +6,5 @@ data class Player(
     val shirtNumber: Int?,
     val position: Position,
     val nationality: String,
+    val imageUrl: String?
 )

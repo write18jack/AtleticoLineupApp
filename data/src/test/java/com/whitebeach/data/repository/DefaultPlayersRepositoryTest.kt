@@ -28,6 +28,7 @@ class DefaultPlayersRepositoryTest {
                     shirtNumber = 13,
                     position = "GOALKEEPER",
                     nationality = "Slovenia",
+                    imageUrl = ""
                 ),
             ),
         )
@@ -57,6 +58,7 @@ class DefaultPlayersRepositoryTest {
                     shirtNumber = 13,
                     position = "GOALKEEPER",
                     nationality = "Slovenia",
+                    imageUrl = ""
                 ),
             ),
         )
@@ -86,6 +88,7 @@ class DefaultPlayersRepositoryTest {
                     shirtNumber = 7,
                     position = "FORWARD",
                     nationality = "Spain",
+                    imageUrl = ""
                 ),
             ),
         )
@@ -108,6 +111,7 @@ class DefaultPlayersRepositoryTest {
                 shirtNumber = 7,
                 position = "FORWARD",
                 nationality = "Spain",
+                imageUrl = ""
             ),
             savedPlayers.first(),
         )

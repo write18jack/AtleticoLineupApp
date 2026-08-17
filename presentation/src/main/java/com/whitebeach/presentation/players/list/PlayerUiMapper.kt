@@ -12,6 +12,7 @@ fun Player.toUiModel(): PlayerUiModel {
         name = name,
         position = position.toUiModel(),
         nationality = nationality,
+        imageUrl = imageUrl
     )
 }
 

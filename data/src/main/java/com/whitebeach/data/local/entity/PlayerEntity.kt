@@ -13,4 +13,5 @@ data class PlayerEntity(
     val shirtNumber: Int?,
     val position: String,
     val nationality: String,
+    val imageUrl: String?
 )
