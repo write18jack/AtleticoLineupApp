@@ -11,7 +11,9 @@ fun PlayerEntity.toDomain(): Player {
         shirtNumber = shirtNumber,
         position = position.toDomainPosition(),
         nationality = nationality,
-        imageUrl = imageUrl
+        imageUrl = imageUrl,
+        birthDate = birthDate,
+        birthPlace = birthPlace
     )
 }
 
@@ -22,7 +24,9 @@ fun Player.toEntity(): PlayerEntity {
         shirtNumber = shirtNumber,
         position = position.name,
         nationality = nationality,
-        imageUrl = imageUrl
+        imageUrl = imageUrl,
+        birthDate = birthDate,
+        birthPlace = birthPlace
     )
 }
 

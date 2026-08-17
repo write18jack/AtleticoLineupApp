@@ -7,7 +7,9 @@ val previewPlayers = listOf(
         name = "Jan Oblak",
         position = PlayerPositionUi.GOALKEEPER,
         nationality = "Slovenia",
-        imageUrl = ""
+        imageUrl = "",
+        birthDate = "",
+        birthPlace = null
     ),
     PlayerUiModel(
         id = 2,
@@ -15,7 +17,9 @@ val previewPlayers = listOf(
         name = "José María Giménez",
         position = PlayerPositionUi.DEFENDER,
         nationality = "Uruguay",
-        imageUrl = ""
+        imageUrl = "",
+        birthDate = "",
+        birthPlace = null
     ),
     PlayerUiModel(
         id = 3,
@@ -23,7 +27,9 @@ val previewPlayers = listOf(
         name = "Clément Lenglet",
         position = PlayerPositionUi.DEFENDER,
         nationality = "France",
-        imageUrl = ""
+        imageUrl = "",
+        birthDate = "",
+        birthPlace = null
     ),
     PlayerUiModel(
         id = 4,
@@ -31,6 +37,8 @@ val previewPlayers = listOf(
         name = "Marcos Llorente",
         position = PlayerPositionUi.MIDFIELDER,
         nationality = "Spain",
-        imageUrl = ""
+        imageUrl = "",
+        birthDate = "",
+        birthPlace = null
     )
 )

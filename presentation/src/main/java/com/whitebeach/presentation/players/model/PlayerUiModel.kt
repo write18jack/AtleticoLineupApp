@@ -6,5 +6,7 @@ data class PlayerUiModel(
     val name: String,
     val position: PlayerPositionUi,
     val nationality: String,
-    val imageUrl: String?
+    val imageUrl: String?,
+    val birthDate: String?,
+    val birthPlace: String?,
 )

@@ -11,8 +11,10 @@ fun Player.toUiModel(): PlayerUiModel {
         shirtNumber = shirtNumber,
         name = name,
         position = position.toUiModel(),
-        nationality = nationality,
-        imageUrl = imageUrl
+        nationality = nationality.toCountryName(),
+        imageUrl = imageUrl,
+        birthDate = birthDate,
+        birthPlace = birthPlace
     )
 }
 
@@ -27,5 +29,26 @@ private fun Position.toUiModel(): PlayerPositionUi {
         Position.MIDFIELDER -> PlayerPositionUi.MIDFIELDER
         Position.FORWARD -> PlayerPositionUi.FORWARD
         Position.UNKNOWN -> PlayerPositionUi.UNKNOWN
+    }
+}
+
+fun String.toCountryName(): String {
+    return when (uppercase()) {
+        "SI" -> "Slovenia"
+        "ES" -> "Spain"
+        "AR" -> "Argentina"
+        "BR" -> "Brazil"
+        "FR" -> "France"
+        "IT" -> "Italy"
+        "PT" -> "Portugal"
+        "NO" -> "Norway"
+        "GB" -> "United Kingdom"
+        "US" -> "United States"
+        "MX" -> "Mexico"
+        "UY" -> "Uruguay"
+        "SK" -> "Slovakia"
+        "DK" -> "Denmark"
+        "NG" -> "Nigeria"
+        else -> this
     }
 }
