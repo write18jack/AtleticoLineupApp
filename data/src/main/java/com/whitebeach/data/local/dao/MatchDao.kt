@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MatchDao {
 
-    @Query("""SELECT * FROM matches ORDER BY date ASC, time ASC""")
+    @Query("""SELECT * FROM matches ORDER BY scheduledDate ASC, kickoffAt ASC""")
     fun observeMatches(): Flow<List<MatchEntity>>
 
     @Query("""SELECT * FROM matches WHERE id = :matchId LIMIT 1""")

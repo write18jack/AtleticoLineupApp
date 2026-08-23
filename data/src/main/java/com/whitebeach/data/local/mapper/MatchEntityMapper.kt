@@ -8,22 +8,16 @@ fun MatchEntity.toDomain(): Match {
     return Match(
         id = id,
         competition = competition,
-        date = date,
-        time = time,
-        status = when (status) {
-            MatchStatus.UPCOMING.name ->
-                MatchStatus.UPCOMING
-
-            MatchStatus.FINISHED.name ->
-                MatchStatus.FINISHED
-
-            else ->
-                MatchStatus.UNKNOWN
-        },
+        matchDay = matchDay,
+        scheduledDate = scheduledDate,
+        kickoffAt = kickoffAt,
         homeTeam = homeTeam,
         awayTeam = awayTeam,
         homeTeamImageUrl = homeTeamImageUrl,
         awayTeamImageUrl = awayTeamImageUrl,
+        venueName = venueName,
+        venueCity = venueCity,
+        status = status.toDomainMatchStatus(),
         homeScore = homeScore,
         awayScore = awayScore,
     )
@@ -33,19 +27,22 @@ fun Match.toEntity(): MatchEntity {
     return MatchEntity(
         id = id,
         competition = competition,
+        matchDay = matchDay,
+        scheduledDate = scheduledDate,
+        kickoffAt = kickoffAt,
         homeTeam = homeTeam,
         awayTeam = awayTeam,
-        date = date,
-        time = time,
-        status = status.name,
         homeTeamImageUrl = homeTeamImageUrl,
         awayTeamImageUrl = awayTeamImageUrl,
+        venueName = venueName,
+        venueCity = venueCity,
+        status = status.name,
         homeScore = homeScore,
         awayScore = awayScore,
     )
 }
 
-fun List<MatchEntity>.toDomainModels(): List<Match> {
+fun List<MatchEntity>.toDomainMatches(): List<Match> {
     return map(MatchEntity::toDomain)
 }
 
@@ -53,7 +50,7 @@ fun List<Match>.toEntities(): List<MatchEntity> {
     return map(Match::toEntity)
 }
 
-private fun String.toDomainStatus(): MatchStatus {
+private fun String.toDomainMatchStatus(): MatchStatus {
     return runCatching {
         MatchStatus.valueOf(this)
     }.getOrDefault(MatchStatus.UNKNOWN)

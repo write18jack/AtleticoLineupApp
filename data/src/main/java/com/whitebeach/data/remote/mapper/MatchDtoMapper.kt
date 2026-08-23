@@ -8,19 +8,22 @@ fun MatchDto.toDomain(): Match {
     return Match(
         id = id,
         competition = competition,
-        date = date,
-        time = time,
-        status = status.toMatchStatus(),
+        matchDay = matchDay,
+        scheduledDate = scheduledDate,
+        kickoffAt = kickoffAt,
         homeTeam = homeTeam,
         awayTeam = awayTeam,
         homeTeamImageUrl = homeTeamImageUrl,
         awayTeamImageUrl = awayTeamImageUrl,
+        venueName = venueName,
+        venueCity = venueCity,
+        status = status.toMatchStatus(),
         homeScore = homeScore,
         awayScore = awayScore,
     )
 }
 
-fun List<MatchDto>.toDomainModels(): List<Match> {
+fun List<MatchDto>.toDomainMatches(): List<Match> {
     return map(MatchDto::toDomain)
 }
 

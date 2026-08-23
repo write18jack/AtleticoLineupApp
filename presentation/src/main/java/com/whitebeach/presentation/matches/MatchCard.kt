@@ -126,7 +126,6 @@ private fun TeamRow(
             contentScale = ContentScale.Fit,
         )
 
-
         Text(
             text = teamName,
             style = MaterialTheme.typography.titleMedium,
@@ -147,22 +146,22 @@ private fun TeamRow(
 @Composable
 private fun UpcomingMatchCardPreview() {
     AtleticoLineupAppTheme {
-        MatchCard(
-            match = MatchUiModel(
-                id = 2,
-                competitionName = "LALIGA EA SPORTS",
-                dateText = "Aug 19, 2026",
-                timeText = "19:00",
-                homeTeamName = "Atlético de Madrid",
-                awayTeamName = "Málaga CF",
-                homeTeamImageUrl = "",
-                awayTeamImageUrl = "",
-                homeScore = null,
-                awayScore = null,
-                status = MatchStatusUi.UPCOMING,
-            ),
-            onClick = {},
-        )
+//        MatchCard(
+//            match = MatchUiModel(
+//                id = 2,
+//                competitionName = "LALIGA EA SPORTS",
+//                dateText = "Aug 19, 2026",
+//                timeText = "19:00",
+//                homeTeamName = "Atlético de Madrid",
+//                awayTeamName = "Málaga CF",
+//                homeTeamImageUrl = "",
+//                awayTeamImageUrl = "",
+//                homeScore = null,
+//                awayScore = null,
+//                status = MatchStatusUi.UPCOMING,
+//            ),
+//            onClick = {},
+//        )
     }
 }
 
@@ -170,21 +169,21 @@ private fun UpcomingMatchCardPreview() {
 @Composable
 private fun FinishedMatchCardPreview() {
     AtleticoLineupAppTheme {
-        MatchCard(
-            match = MatchUiModel(
-                id = 1,
-                competitionName = "LALIGA EA SPORTS",
-                dateText = "Feb 8, 2026",
-                timeText = "17:30",
-                homeTeamName = "Atlético de Madrid",
-                awayTeamName = "Real Betis",
-                homeTeamImageUrl = "",
-                awayTeamImageUrl = "",
-                homeScore = 0,
-                awayScore = 1,
-                status = MatchStatusUi.FINISHED,
-            ),
-            onClick = {},
-        )
+//        MatchCard(
+//            match = MatchUiModel(
+//                id = 1,
+//                competitionName = "LALIGA EA SPORTS",
+//                dateText = "Feb 8, 2026",
+//                timeText = "17:30",
+//                homeTeamName = "Atlético de Madrid",
+//                awayTeamName = "Real Betis",
+//                homeTeamImageUrl = "",
+//                awayTeamImageUrl = "",
+//                homeScore = 0,
+//                awayScore = 1,
+//                status = MatchStatusUi.FINISHED,
+//            ),
+//            onClick = {},
+//        )
     }
 }

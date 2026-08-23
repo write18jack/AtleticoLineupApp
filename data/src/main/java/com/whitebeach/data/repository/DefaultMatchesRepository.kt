@@ -2,10 +2,10 @@ package com.whitebeach.data.repository
 
 import com.whitebeach.data.local.dao.MatchDao
 import com.whitebeach.data.local.mapper.toDomain
-import com.whitebeach.data.local.mapper.toDomainModels as entitiesToDomain
+import com.whitebeach.data.local.mapper.toDomainMatches
 import com.whitebeach.data.local.mapper.toEntities
 import com.whitebeach.data.remote.datasource.MatchesRemoteDataSource
-import com.whitebeach.data.remote.mapper.toDomainModels as dtoToDomain
+import com.whitebeach.data.remote.mapper.toDomainMatches
 import com.whitebeach.domain.model.Match
 import com.whitebeach.domain.repository.MatchesRepository
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +20,7 @@ class DefaultMatchesRepository @Inject constructor(
     override fun observeMatches(): Flow<List<Match>> {
         return matchDao.observeMatches()
             .map { entities ->
-                entities.entitiesToDomain()
+                entities.toDomainMatches()
             }
     }
 
@@ -35,7 +35,7 @@ class DefaultMatchesRepository @Inject constructor(
     override suspend fun refreshMatches() {
         val remoteMatches = remoteDataSource
             .getMatches()
-            .dtoToDomain()
+            .toDomainMatches()
 
         matchDao.upsertMatches(
             matches = remoteMatches.toEntities(),
