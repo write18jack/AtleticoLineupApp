@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,48 +45,54 @@ fun PlayersScreen(
 
     LaunchedEffect(refreshError) {
         refreshError?.let { message ->
-            val result = snackbarHostState.showSnackbar(
+            snackbarHostState.showSnackbar(
                 message = message,
-                actionLabel = "再試行",
-                withDismissAction = true,
             )
-
-            if (result == SnackbarResult.ActionPerformed) {
-                viewModel.refreshPlayers()
-            }
         }
     }
 
     PlayersScreenContent(
         uiState = uiState,
         onPlayerClick = onPlayerClick,
-        onRetry = viewModel::refreshPlayers,
+        onRefresh = viewModel::refreshPlayers,
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PlayersScreenContent(
     uiState: PlayersUiState,
     onPlayerClick: (Int) -> Unit,
-    onRetry: () -> Unit,
+    onRefresh: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     when (uiState) {
         PlayersUiState.Loading -> {
-            LoadingState()
+            LoadingState(
+                modifier = modifier,
+            )
         }
 
         is PlayersUiState.Error -> {
             ErrorState(
                 message = uiState.message,
-                onRetry = onRetry,
+                onRetry = onRefresh,
+                modifier = modifier,
             )
         }
 
         is PlayersUiState.Success -> {
-            PlayersContent(
-                players = uiState.players,
-                onPlayerClick = onPlayerClick,
-            )
+            PullToRefreshBox(
+                isRefreshing = uiState.isRefreshing,
+                onRefresh = onRefresh,
+                modifier = modifier.fillMaxSize(),
+            ) {
+                PlayersContent(
+                    players = uiState.players,
+                    onPlayerClick = onPlayerClick,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
         }
     }
 }
@@ -220,7 +228,7 @@ private fun LoadingPlayersPreview() {
         PlayersScreenContent(
             uiState = PlayersUiState.Loading,
             onPlayerClick = {},
-            onRetry = {},
+            onRefresh = {},
         )
     }
 }
@@ -237,7 +245,7 @@ private fun SuccessPlayersPreview() {
                 players = previewPlayers,
             ),
             onPlayerClick = {},
-            onRetry = {},
+            onRefresh = {},
         )
     }
 }
@@ -254,7 +262,7 @@ private fun EmptyPlayersPreview() {
                 players = emptyList(),
             ),
             onPlayerClick = {},
-            onRetry = {},
+            onRefresh = {},
         )
     }
 }
@@ -271,7 +279,7 @@ private fun ErrorPlayersPreview() {
                 message = "Failed to load players.",
             ),
             onPlayerClick = {},
-            onRetry = {},
+            onRefresh = {},
         )
     }
 }

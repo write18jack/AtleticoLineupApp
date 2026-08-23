@@ -68,7 +68,6 @@ class MatchesViewModel @Inject constructor(
 
             try {
                 refreshMatchesUseCase()
-
                 refreshState.value = RefreshState.Idle
             } catch (exception: Exception) {
                 refreshState.value = RefreshState.Error

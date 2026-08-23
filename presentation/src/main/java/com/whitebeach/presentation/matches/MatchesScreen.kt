@@ -9,10 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -54,18 +56,19 @@ fun MatchesScreen(
     MatchesScreenContent(
         uiState = uiState,
         onMatchClick = onMatchClick,
-        onRetry = viewModel::refreshMatches,
+        onRefresh = viewModel::refreshMatches,
     )
 }
 
 /*
  * UiStateを描画するComposable
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MatchesScreenContent(
+private fun MatchesScreenContent(
     uiState: MatchesUiState,
     onMatchClick: (Int) -> Unit,
-    onRetry: () -> Unit,
+    onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (uiState) {
@@ -78,17 +81,23 @@ fun MatchesScreenContent(
         is MatchesUiState.Error -> {
             ErrorState(
                 message = uiState.message,
-                onRetry = onRetry,
+                onRetry = onRefresh,
                 modifier = modifier,
             )
         }
 
         is MatchesUiState.Success -> {
-            MatchesContent(
-                matches = uiState.matches,
-                onMatchClick = onMatchClick,
-                modifier = modifier,
-            )
+            PullToRefreshBox(
+                isRefreshing = uiState.isRefreshing,
+                onRefresh = onRefresh,
+                modifier = modifier.fillMaxSize(),
+            ) {
+                MatchesContent(
+                    matches = uiState.matches,
+                    onMatchClick = onMatchClick,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
         }
     }
 }
@@ -230,7 +239,7 @@ private fun LoadingMatchesPreview() {
         MatchesScreenContent(
             uiState = MatchesUiState.Loading,
             onMatchClick = {},
-            onRetry = {},
+            onRefresh = {},
         )
     }
 }
@@ -247,7 +256,7 @@ private fun SuccessMatchesPreview() {
                 matches = previewMatches,
             ),
             onMatchClick = {},
-            onRetry = {},
+            onRefresh = {},
         )
     }
 }
@@ -264,7 +273,7 @@ private fun EmptyMatchesPreview() {
                 matches = emptyList(),
             ),
             onMatchClick = {},
-            onRetry = {},
+            onRefresh = {},
         )
     }
 }
@@ -281,7 +290,7 @@ private fun ErrorMatchesPreview() {
                 message = "Failed to load matches.",
             ),
             onMatchClick = {},
-            onRetry = {},
+            onRefresh = {},
         )
     }
 }
