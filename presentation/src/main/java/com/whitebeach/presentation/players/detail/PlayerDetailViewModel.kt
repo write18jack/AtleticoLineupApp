@@ -20,9 +20,7 @@ class PlayerDetailViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val playerId: Int = checkNotNull(
-        savedStateHandle[
-            PlayerDetailDestination.PLAYER_ID_ARGUMENT
-        ],
+        savedStateHandle[PlayerDetailDestination.PLAYER_ID_ARGUMENT],
     )
 
     private val _uiState =
@@ -30,8 +28,7 @@ class PlayerDetailViewModel @Inject constructor(
             PlayerDetailUiState.Loading,
         )
 
-    val uiState: StateFlow<PlayerDetailUiState> =
-        _uiState.asStateFlow()
+    val uiState: StateFlow<PlayerDetailUiState> = _uiState.asStateFlow()
 
     init {
         loadPlayer()

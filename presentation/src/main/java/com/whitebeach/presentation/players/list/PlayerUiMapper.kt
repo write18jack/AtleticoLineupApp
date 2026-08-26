@@ -49,6 +49,7 @@ fun String.toCountryName(): String {
         "SK" -> "Slovakia"
         "DK" -> "Denmark"
         "NG" -> "Nigeria"
+        "KR" -> "Korea"
         else -> this
     }
 }

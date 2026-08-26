@@ -1,4 +1,4 @@
-package com.whitebeach.presentation.matches
+package com.whitebeach.presentation.matches.list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -65,7 +65,7 @@ fun MatchesScreen(
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MatchesScreenContent(
+internal fun MatchesScreenContent(
     uiState: MatchesUiState,
     onMatchClick: (Int) -> Unit,
     onRefresh: () -> Unit,

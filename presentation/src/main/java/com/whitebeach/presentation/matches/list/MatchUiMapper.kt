@@ -1,4 +1,4 @@
-package com.whitebeach.presentation.matches
+package com.whitebeach.presentation.matches.list
 
 import com.whitebeach.domain.model.Match
 import com.whitebeach.domain.model.MatchStatus

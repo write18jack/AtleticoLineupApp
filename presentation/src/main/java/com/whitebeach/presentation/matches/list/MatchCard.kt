@@ -1,4 +1,4 @@
-package com.whitebeach.presentation.matches
+package com.whitebeach.presentation.matches.list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

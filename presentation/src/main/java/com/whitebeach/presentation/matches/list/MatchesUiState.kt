@@ -1,4 +1,4 @@
-package com.whitebeach.presentation.matches
+package com.whitebeach.presentation.matches.list
 
 import com.whitebeach.presentation.matches.model.MatchUiModel
 

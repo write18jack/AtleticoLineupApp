@@ -60,7 +60,7 @@ fun PlayersScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PlayersScreenContent(
+internal fun PlayersScreenContent(
     uiState: PlayersUiState,
     onPlayerClick: (Int) -> Unit,
     onRefresh: () -> Unit,

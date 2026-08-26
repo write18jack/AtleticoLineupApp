@@ -8,7 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.whitebeach.presentation.matches.MatchesScreen
+import com.whitebeach.presentation.matches.list.MatchesScreen
 import com.whitebeach.presentation.matches.detail.MatchDetailScreen
 import com.whitebeach.presentation.players.detail.PlayerDetailScreen
 import com.whitebeach.presentation.players.list.PlayersScreen
