@@ -1,6 +1,7 @@
 package com.whitebeach.support
 
 import com.android.build.api.dsl.CommonExtension
+import org.gradle.api.GradleException
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
@@ -36,7 +37,7 @@ internal fun Project.configureKotlinAndroid(
     configureKotlin<KotlinAndroidProjectExtension>()
 
     dependencies {
-        "coreLibraryDesugaring"(libs.findLibrary("android.desugarJdkLibs").get())
+        "coreLibraryDesugaring"(libs.findLibrary("android-desugar-jdk-libs").get())
     }
 }
 

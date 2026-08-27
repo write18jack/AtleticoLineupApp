@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.Packaging
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.atletico.android.application)
@@ -11,10 +12,11 @@ android {
     namespace = "com.whitebeach.atleticolineupapp"
     defaultConfig {
         applicationId = "com.whitebeach.atleticolineupapp"
-        versionCode = 4
-        versionName = "1.0.2"
+        versionCode = 7
+        versionName = "1.0.4"
 
         testInstrumentationRunner = ("androidx.test.runner.AndroidJUnitRunner")
+
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -46,33 +48,10 @@ android {
 }
 
 dependencies {
-    implementation(libs.core.ktx)
-    implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.activity.compose)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.transport.runtime)
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
-    implementation(libs.okhttp)
-    implementation(libs.hilt.android)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.retrofit2.kotlin.coroutines.adapter)
-    implementation(libs.converter.moshi)
-    implementation(libs.moshi.kotlin)
-    implementation(libs.play.services.ads)
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.google.services)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.ui.test.junit4)
-    debugImplementation(libs.ui.tooling)
-    debugImplementation(libs.ui.test.manifest)
-
-    implementation(project(":data"))
     implementation(project(":presentation"))
+    implementation(project(":data"))
+
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.google.material)
 }

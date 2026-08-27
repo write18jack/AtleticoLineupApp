@@ -1,0 +1,131 @@
+# GitHub Actions上で表示されるWorkflow名
+name: Android CI
+
+# ------------------------------------------------------------
+# いつCIを実行するか
+# ------------------------------------------------------------
+on:
+  # mainブランチにpushされたとき
+  push:
+    branches:
+      - main
+
+  # mainブランチ向けのPull Requestが作成・更新されたとき
+  pull_request:
+    branches:
+      - main
+
+  # GitHub Actions画面から手動実行もできるようにする
+  workflow_dispatch:
+
+# ------------------------------------------------------------
+# このWorkflowがGitHubリポジトリに対して持つ権限
+#
+# 今回はコードを読むだけなので read のみ。
+# CIからcommit/push等はしない。
+# ------------------------------------------------------------
+permissions:
+  contents: read
+
+# ------------------------------------------------------------
+# 同じブランチで古いCIが動いている途中に新しいpushが来た場合、
+# 古いCIをキャンセルして新しいCIを優先する。
+# ------------------------------------------------------------
+concurrency:
+  group: android-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ----------------------------------------------------------
+  # CIのメインJob
+  # ----------------------------------------------------------
+  build-and-test:
+    name: Build, Test and Lint
+
+    # GitHubが用意するLinuxマシン上で実行
+    runs-on: ubuntu-latest
+
+    steps:
+      # ------------------------------------------------------
+      # 1. GitHub RepositoryのソースコードをRunnerに取得
+      # ------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      # ------------------------------------------------------
+      # 2. Java 17をセットアップ
+      #
+      # AtleticoLineupAppはJava/Kotlin 17を使用しているため
+      # CI環境もローカル環境に合わせる。
+      # ------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      # ------------------------------------------------------
+      # 3. GradleをGitHub Actions向けにセットアップ
+      #
+      # Gradle Wrapperを使用する。
+      # setup-gradleはGradleのキャッシュ等も管理してくれる。
+      # ------------------------------------------------------
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      # ------------------------------------------------------
+      # 4. gradlewに実行権限を付与
+      #
+      # macOSでは問題なくてもLinux CIでは
+      # executable permissionが必要になるケースがある。
+      # ------------------------------------------------------
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      # ------------------------------------------------------
+      # 5. Unit Test
+      #
+      # Emulatorを必要としないJVM上のテストを実行。
+      #
+      # 現在ここで主に実行されるもの:
+      #
+      # presentation:
+      # - PlayersViewModelTest
+      # - MatchesViewModelTest
+      # - PlayerMapperTest
+      # - MatchMapperTest
+      #
+      # data:
+      # - DefaultPlayersRepositoryTest
+      # - DefaultMatchesRepositoryTest
+      # - PlayersRemoteDataSourceTest
+      # - MatchesRemoteDataSourceTest
+      #
+      # domain:
+      # - 今後追加するUseCase等のUnit Test
+      # ------------------------------------------------------
+      - name: Run unit tests
+        run: |
+          ./gradlew \
+            :domain:test \
+            :data:testDebugUnitTest \
+            :presentation:testDebugUnitTest \
+            :app:testDebugUnitTest
+
+      # ------------------------------------------------------
+      # 6. Android Lint
+      #
+      # Androidコードの静的解析。
+      # コンパイルは通るけど問題になりそうなコード等も検出する。
+      # ------------------------------------------------------
+      - name: Run Android Lint
+        run: ./gradlew lintDebug
+
+      # ------------------------------------------------------
+      # 7. Debug APKをビルド
+      #
+      # テストが通るだけでなく、
+      # 実際にアプリ全体がビルド可能かを確認する。
+      # ------------------------------------------------------
+      - name: Build debug APK
+        run: ./gradlew :app:assembleDebug

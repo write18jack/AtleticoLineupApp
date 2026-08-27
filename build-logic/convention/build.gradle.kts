@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `kotlin-dsl`
@@ -20,8 +19,8 @@ kotlin {
 dependencies {
     compileOnly(libs.android.gradle.plugin)
     compileOnly(libs.kotlin.gradle.plugin)
-    compileOnly(libs.compose.gradlePlugin)
-    compileOnly(libs.ksp.gradlePlugin)
+    compileOnly(libs.compose.gradle.plugin)
+    compileOnly(libs.ksp.gradle.plugin)
 }
 
 tasks {
