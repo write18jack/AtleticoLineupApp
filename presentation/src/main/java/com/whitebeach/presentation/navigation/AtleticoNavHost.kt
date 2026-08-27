@@ -1,0 +1,76 @@
+package com.whitebeach.presentation.navigation
+
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.whitebeach.presentation.matches.list.MatchesScreen
+import com.whitebeach.presentation.matches.detail.MatchDetailScreen
+import com.whitebeach.presentation.players.detail.PlayerDetailScreen
+import com.whitebeach.presentation.players.list.PlayersScreen
+
+@Composable
+fun AtleticoNavHost(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    startDestination: String = MainDestination.PLAYERS.route,
+    snackbarHostState: SnackbarHostState,
+) {
+    NavHost(
+        navController = navController,
+        startDestination = startDestination,
+        modifier = modifier,
+    ) {
+        composable(
+            route = MainDestination.PLAYERS.route,
+        ) {
+            PlayersScreen(
+                onPlayerClick = { playerId ->
+                    navController.navigate(PlayerDetailDestination.createRoute(playerId))
+                },
+                snackbarHostState = snackbarHostState,
+            )
+        }
+
+        composable(
+            route = MainDestination.MATCHES.route,
+        ) {
+            MatchesScreen(
+                onMatchClick = { matchId ->
+                    navController.navigate(MatchDetailDestination.createRoute(matchId),)
+                },
+                snackbarHostState = snackbarHostState,
+            )
+        }
+
+        composable(
+            route = PlayerDetailDestination.route,
+            arguments = listOf(
+                navArgument(
+                    PlayerDetailDestination.PLAYER_ID_ARGUMENT,
+                ) {
+                    type = NavType.IntType
+                },
+            ),
+        ) {
+            PlayerDetailScreen()
+        }
+
+        composable(
+            route = MatchDetailDestination.route,
+            arguments = listOf(
+                navArgument(
+                    MatchDetailDestination.MATCH_ID_ARGUMENT,
+                ) {
+                    type = NavType.IntType
+                },
+            ),
+        ) {
+            MatchDetailScreen()
+        }
+    }
+}

@@ -5,11 +5,9 @@ plugins {
 
 android {
     namespace = "com.whitebeach.presentation"
-    compileSdk = 35
 
     defaultConfig {
         minSdk = 26
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -17,27 +15,44 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile(
+                    "proguard-android-optimize.txt",
+                ),
+                "proguard-rules.pro",
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    buildFeatures {
-        compose = true
-    }
+}
 
-    dependencies {
-        implementation(project(":domain"))
+dependencies {
 
-        implementation(libs.androidx.compose.material3)
-        implementation(libs.androidx.constraintlayout.compose)
-        implementation(libs.androidx.lifecycle.viewmodel.compose)
-        implementation(libs.androidx.lifecycle.runtime.compose)
+    // Domain
+    implementation(project(":domain"))
 
-    }
+    // Compose / UI
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.constraintlayout.compose)
+
+    // Lifecycle
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+
+    // Navigation / Hilt
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
+
+    // Image
+    implementation(libs.coil.compose)
+
+    // Unit Test
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    // Instrumented Test
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.test.runner)
 }

@@ -1,0 +1,36 @@
+package com.whitebeach.presentation.matches.model
+
+val previewMatches = listOf(
+    MatchUiModel(
+        id = 1,
+        competitionName = "LaLiga",
+        matchDayText = "Matchday 1",
+        dateText = "2026-08-15",
+        timeText = "20:00",
+        homeTeamName = "Atlético Madrid",
+        awayTeamName = "Barcelona",
+        homeTeamImageUrl = "",
+        awayTeamImageUrl = "",
+        venueName = "Riyadh Air Metropolitano",
+        venueCity = "Madrid",
+        homeScore = null,
+        awayScore = null,
+        status = MatchStatusUi.UPCOMING,
+    ),
+    MatchUiModel(
+        id = 2,
+        competitionName = "LaLiga",
+        matchDayText = "Matchday 2",
+        dateText = "2026-08-08",
+        timeText = "20:00",
+        homeTeamName = "Atlético Madrid",
+        awayTeamName = "Sevilla",
+        homeTeamImageUrl = "",
+        awayTeamImageUrl = "",
+        venueName = "Riyadh Air Metropolitano",
+        venueCity = "Madrid",
+        homeScore = 2,
+        awayScore = 1,
+        status = MatchStatusUi.FINISHED,
+    ),
+)

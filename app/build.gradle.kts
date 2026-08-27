@@ -49,6 +49,7 @@ android {
 
 dependencies {
     implementation(project(":presentation"))
+    implementation(project(":data"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.splashscreen)
