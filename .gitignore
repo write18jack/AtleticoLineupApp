@@ -17,12 +17,9 @@
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
-.DS_Store
 /build
-/captures
 .externalNativeBuild
 .cxx
-local.properties
 .idea/gradle.xml
 .idea/runConfigurations.xml
 .idea/encodings.xml
@@ -30,8 +27,8 @@ misc.xml
 
 # Local environment
 local.properties
-.kotlin/
-/data/schemas/com.whitebeach.data.local.database.AtleticoDatabase/2.json
+
+/.idea/*.xml
 
 # Native build
 .externalNativeBuild/
