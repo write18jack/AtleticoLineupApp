@@ -8,11 +8,13 @@ on:
   # mainブランチにpushされたとき
   push:
     branches:
+      - develop
       - main
 
   # mainブランチ向けのPull Requestが作成・更新されたとき
   pull_request:
     branches:
+      - develop
       - main
 
   # GitHub Actions画面から手動実行もできるようにする
@@ -185,7 +187,4 @@ jobs:
             -camera-back none
             -camera-front none
 
-          script: |
-            ./gradlew \
-              :data:connectedDebugAndroidTest \
-              :presentation:connectedDebugAndroidTest
+          script: ./gradlew :data:connectedDebugAndroidTest :presentation:connectedDebugAndroidTest --stacktrace --info
