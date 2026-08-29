@@ -39,6 +39,8 @@ jobs:
   # ----------------------------------------------------------
   # CIのメインJob
   # ----------------------------------------------------------
+
+  # Unit Test / Lint / Build
   build-and-test:
     name: Build, Test and Lint
 
@@ -130,6 +132,7 @@ jobs:
       - name: Build debug APK
         run: ./gradlew :app:assembleDebug
 
+  # androidTest
   android-test:
     name: Android Instrumented Tests
 
