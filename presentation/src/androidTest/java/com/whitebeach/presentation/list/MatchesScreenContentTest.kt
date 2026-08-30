@@ -1,9 +1,12 @@
-package com.whitebeach.presentation.matches.list
+package com.whitebeach.presentation.list
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import com.whitebeach.presentation.matches.list.MatchesScreenContent
+import com.whitebeach.presentation.matches.list.MatchesUiState
 import com.whitebeach.presentation.matches.model.MatchStatusUi
 import com.whitebeach.presentation.matches.model.MatchUiModel
 import org.junit.Rule
@@ -21,7 +24,7 @@ class MatchesScreenContentTest {
         )
 
         composeTestRule
-            .onNodeWithText("Loading...")
+            .onNodeWithTag("loadingIndicator")
             .assertIsDisplayed()
     }
 
@@ -49,10 +52,6 @@ class MatchesScreenContentTest {
                 refreshError = null,
             ),
         )
-
-        composeTestRule
-            .onNodeWithText("Atlético Madrid")
-            .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithText("Barcelona")

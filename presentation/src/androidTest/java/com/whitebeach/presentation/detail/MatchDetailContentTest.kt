@@ -1,8 +1,9 @@
-package com.whitebeach.presentation.matches.detail
+package com.whitebeach.presentation.detail
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import com.whitebeach.presentation.matches.detail.MatchDetailContent
 import com.whitebeach.presentation.matches.model.MatchStatusUi
 import com.whitebeach.presentation.matches.model.MatchUiModel
 import com.whitebeach.presentation.theme.AtleticoLineupAppTheme

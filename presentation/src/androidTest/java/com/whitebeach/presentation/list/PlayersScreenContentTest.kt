@@ -1,9 +1,11 @@
-package com.whitebeach.presentation.players.list
+package com.whitebeach.presentation.list
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import com.whitebeach.presentation.players.list.PlayersScreenContent
+import com.whitebeach.presentation.players.list.PlayersUiState
 import com.whitebeach.presentation.players.model.PlayerPositionUi
 import com.whitebeach.presentation.players.model.PlayerUiModel
 import org.junit.Rule
@@ -74,10 +76,6 @@ class PlayersScreenContentTest {
         composeTestRule
             .onNodeWithText("Jan Oblak")
             .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithText("13")
-            .assertIsDisplayed()
     }
 
     @Test
@@ -97,7 +95,7 @@ class PlayersScreenContentTest {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("19")
+            .onNodeWithText("Argentina")
             .assertIsDisplayed()
     }
 
@@ -140,7 +138,6 @@ class PlayersScreenContentTest {
             PlayerUiModel(
                 id = 1,
                 name = "Jan Oblak",
-                shirtNumber = 13,
                 position = PlayerPositionUi.GOALKEEPER,
                 nationality = "Slovenia",
                 imageUrl = null,
@@ -152,7 +149,6 @@ class PlayersScreenContentTest {
             PlayerUiModel(
                 id = 2,
                 name = "Julián Álvarez",
-                shirtNumber = 19,
                 position = PlayerPositionUi.FORWARD,
                 nationality = "Argentina",
                 imageUrl = null,
