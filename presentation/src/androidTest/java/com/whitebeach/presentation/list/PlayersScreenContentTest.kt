@@ -3,6 +3,7 @@ package com.whitebeach.presentation.list
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import com.whitebeach.presentation.players.list.PlayersScreenContent
 import com.whitebeach.presentation.players.list.PlayersUiState
@@ -23,7 +24,7 @@ class PlayersScreenContentTest {
         )
 
         composeTestRule
-            .onNodeWithText("Loading...")
+            .onNodeWithTag("loadingIndicator")
             .assertIsDisplayed()
     }
 
