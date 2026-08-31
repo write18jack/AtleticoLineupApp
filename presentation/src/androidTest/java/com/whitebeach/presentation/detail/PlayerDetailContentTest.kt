@@ -8,12 +8,16 @@ import androidx.compose.ui.test.performScrollTo
 import com.whitebeach.presentation.players.detail.PlayerDetailContent
 import com.whitebeach.presentation.players.model.PlayerPositionUi
 import com.whitebeach.presentation.players.model.PlayerUiModel
+import com.whitebeach.presentation.test.FailureScreenshotRule
 import org.junit.Rule
 import org.junit.Test
 
 class PlayerDetailContentTest {
 
-    @get:Rule
+    @get:Rule(order = 0)
+    val failureScreenshotRule = FailureScreenshotRule()
+
+    @get:Rule(order = 1)
     val composeTestRule = createComposeRule()
 
     @Test

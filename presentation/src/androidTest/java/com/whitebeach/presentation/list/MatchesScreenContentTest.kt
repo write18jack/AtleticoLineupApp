@@ -9,12 +9,16 @@ import com.whitebeach.presentation.matches.list.MatchesScreenContent
 import com.whitebeach.presentation.matches.list.MatchesUiState
 import com.whitebeach.presentation.matches.model.MatchStatusUi
 import com.whitebeach.presentation.matches.model.MatchUiModel
+import com.whitebeach.presentation.test.FailureScreenshotRule
 import org.junit.Rule
 import org.junit.Test
 
 class MatchesScreenContentTest {
 
-    @get:Rule
+    @get:Rule(order = 0)
+    val failureScreenshotRule = FailureScreenshotRule()
+
+    @get:Rule(order = 1)
     val composeTestRule = createComposeRule()
 
     @Test

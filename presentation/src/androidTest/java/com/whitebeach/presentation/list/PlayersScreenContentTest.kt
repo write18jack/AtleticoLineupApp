@@ -9,12 +9,16 @@ import com.whitebeach.presentation.players.list.PlayersScreenContent
 import com.whitebeach.presentation.players.list.PlayersUiState
 import com.whitebeach.presentation.players.model.PlayerPositionUi
 import com.whitebeach.presentation.players.model.PlayerUiModel
+import com.whitebeach.presentation.test.FailureScreenshotRule
 import org.junit.Rule
 import org.junit.Test
 
 class PlayersScreenContentTest {
 
-    @get:Rule
+    @get:Rule(order = 0)
+    val failureScreenshotRule = FailureScreenshotRule()
+
+    @get:Rule(order = 1)
     val composeTestRule = createComposeRule()
 
     @Test
