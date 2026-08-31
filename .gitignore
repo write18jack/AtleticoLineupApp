@@ -1,20 +1,21 @@
-# Gradle / Kotlin generated files
-.gradle/
-.kotlin/
+*.iml
+.idea
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
 **/build/
-**/lookups.tab
-*.xml
 *.json
 
-# IntelliJ IDEA generated files
-*.iml
-*.idea
-.idea/caches/
-.idea/libraries/
-.idea/modules.xml
-.idea/workspace.xml
-.idea/navEditor.xml
-.idea/assetWizardSettings.xml
+/captures
+.externalNativeBuild
+.cxx
 .idea/gradle.xml
 .idea/runConfigurations.xml
 .idea/encodings.xml
@@ -23,10 +24,4 @@ misc.xml
 # Local environment
 local.properties
 
-# Native build
-.externalNativeBuild/
-.cxx/
-
-# Misc
-.DS_Store
-captures/
+/.idea/*.xml

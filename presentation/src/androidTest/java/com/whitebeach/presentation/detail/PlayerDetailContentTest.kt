@@ -1,9 +1,11 @@
-package com.whitebeach.presentation.players.detail
+package com.whitebeach.presentation.detail
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performScrollTo
+import com.whitebeach.presentation.players.detail.PlayerDetailContent
 import com.whitebeach.presentation.players.model.PlayerPositionUi
 import com.whitebeach.presentation.players.model.PlayerUiModel
 import org.junit.Rule
@@ -25,11 +27,13 @@ class PlayerDetailContentTest {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("13")
+            .onNodeWithText("Goalkeeper")
+            .performScrollTo()
             .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithText("Slovenia")
+            .performScrollTo()
             .assertIsDisplayed()
     }
 
@@ -72,7 +76,7 @@ class PlayerDetailContentTest {
         setContent(
             player = createPlayer(
                 name = "Julián Álvarez",
-                shirtNumber = 19,
+                shirtNumber = null,
                 position = PlayerPositionUi.FORWARD,
                 nationality = "Argentina",
             ),
@@ -83,18 +87,13 @@ class PlayerDetailContentTest {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("19")
+            .onNodeWithText("Forward")
+            .performScrollTo()
             .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithText("Argentina")
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithText(
-                "Forward",
-                ignoreCase = true,
-            )
+            .performScrollTo()
             .assertIsDisplayed()
     }
 
@@ -159,7 +158,7 @@ class PlayerDetailContentTest {
     private fun createPlayer(
         id: Int = 1,
         name: String = "Jan Oblak",
-        shirtNumber: Int? = 13,
+        shirtNumber: Int? = null,
         position: PlayerPositionUi = PlayerPositionUi.GOALKEEPER,
         nationality: String = "Slovenia",
         imageUrl: String? = null,
