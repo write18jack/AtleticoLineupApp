@@ -268,7 +268,9 @@ jobs:
       - android-test
 
     # main ブランチのときだけ実行
-    if: github.ref == 'refs/heads/main'
+    if: >
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main'
 
     steps:
       - name: Checkout repository
